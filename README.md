@@ -1,24 +1,35 @@
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21592698)
+# 🗺️ Mapa dos Rolezinhos
 
-# Trabalho Prático 07 - Semanas 13 e 14
+![Project Banner](public/imgs/logoMapaDosRolezinhos.png)
 
-A partir dos dados cadastrados na etapa anterior, vamos trabalhar formas de apresentação que representem de forma clara e interativa as informações do seu projeto. Você poderá usar gráficos (barra, linha, pizza), mapas, calendários ou outras formas de visualização. Seu desafio é entregar uma página Web que organize, processe e exiba os dados de forma compreensível e esteticamente agradável.
+> Uma plataforma interativa para descoberta e gestão de eventos culturais, festas e lazer em Belo Horizonte.
 
-Com base nos tipos de projetos escohidos, você deve propor **visualizações que estimulem a interpretação, agrupamento e exibição criativa dos dados**, trabalhando tanto a lógica quanto o design da aplicação.
+## 💻 Sobre o Projeto
 
-Sugerimos o uso das seguintes ferramentas acessíveis: [FullCalendar](https://fullcalendar.io/), [Chart.js](https://www.chartjs.org/), [Mapbox](https://docs.mapbox.com/api/), para citar algumas.
+O **Mapa dos Rolezinhos** é uma aplicação web desenvolvida para conectar pessoas aos melhores eventos da cidade. O objetivo é centralizar a agenda cultural de BH, permitindo filtrar eventos por categorias como Vida Noturna, Cultura, Gastronomia e Esportes.
 
-## Informações do trabalho
+A aplicação conta com um sistema de gestão (CRUD) onde é possível visualizar destaques, buscar eventos e gerenciar o cadastro de novos "rolês".
 
-- Nome:
-- Matricula:
-- Proposta de projeto escolhida:
-- Breve descrição sobre seu projeto:
+## 🛠️ Tecnologias Utilizadas
 
-**Print da tela com a implementação**
+* **Frontend:** HTML5, CSS3, JavaScript (ES6+).
+* **Framework UI:** Bootstrap 5.
+* **Backend (Simulado):** JSON Server (API RESTful).
+* **Bibliotecas:** SweetAlert2 (Alertas).
 
-<< Coloque aqui uma breve explicação da implementação feita nessa etapa>>
+## ✨ Funcionalidades
 
-<<  COLOQUE A IMAGEM TELA 1 AQUI >>
+* 🚀 **Carrossel de Destaques:** Visualização dinâmica dos principais eventos da semana.
+* 📂 **Categorização:** Filtragem inteligente de eventos.
+* 🔍 **Busca:** Sistema de pesquisa por nome do evento.
+* 📝 **Gestão de Conteúdo:** Formulários para cadastrar, editar e excluir eventos.
+* 📱 **Responsividade:** Layout adaptável para Mobile e Desktop.
 
-<<  COLOQUE A IMAGEM TELA 2 AQUI >>
+## 👨‍💻 Desenvolvedor
+
+**Marcelo Gomes**
+* [LinkedIn](https://www.linkedin.com/in/marcelogojunior)
+* [GitHub](https://github.com/engsoftmarcelo)
+
+---
+*Desenvolvido em Belo Horizonte, MG.*
