@@ -1,0 +1,743 @@
+{
+  "usuarios": [
+    {
+      "id": "187cb7e5-e097-4224-8bc7-b610c855e2b1",
+      "login": "admin",
+      "senha": "123",
+      "nome": "Administrador do Sistema",
+      "email": "admin@abc.com"
+    },
+    {
+      "id": "ec37c83d-4b7f-458d-9e10-3fda7d37cd3e",
+      "login": "user",
+      "senha": "123",
+      "nome": "Usuario Comum",
+      "email": "user@abc.com"
+    }
+  ],
+  "categorias_principais": [
+    {
+      "id": 1,
+      "nome": "Festas e Vida Noturna",
+      "descricao": "Eventos que acontecem à noite, como baladas, shows e bares."
+    },
+    {
+      "id": 2,
+      "nome": "Cultura e Arte",
+      "descricao": "Rolês com foco em arte, música ao vivo, museus e exposições."
+    },
+    {
+      "id": 3,
+      "nome": "Ao Ar Livre e Lazer",
+      "descricao": "Atividades diurnas e ao ar livre, como piqueniques e encontros em parques."
+    },
+    {
+      "id": 4,
+      "nome": "Gastronomia",
+      "descricao": "Eventos onde a comida e a bebida são a atração principal."
+    },
+    {
+      "id": 5,
+      "nome": "Jogos e Esportes",
+      "descricao": "Encontros para jogar, desde board games até esportes e e-sports."
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "nome": "Festa da Atlética",
+      "imagem_principal": "imgs/atletica_foto1.jpg",
+      "descricao": "A maior festa universitária do semestre!",
+      "conteudo": "Prepare-se para a festa mais épica da sua vida. Muita música, integração e open bar. Não perca!",
+      "local": "Espaço de Eventos Principal",
+      "horario": "Das 22h às 05h",
+      "atracoes_principais": "DJ K, Banda M, DJ Surpresa",
+      "ingressos": "R$ 40 (Lote 2)",
+      "destaque": true,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        101,
+        102
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/atletica_foto2.jpg",
+          "legenda": "Visão do Palco"
+        },
+        {
+          "imagem": "imgs/atletica_foto3.jpg",
+          "legenda": "Público"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Piquenique Cultural",
+      "imagem_principal": "imgs/piquenique_foto2.jpg",
+      "descricao": "Traga sua canga, um lanche e venha curtir!",
+      "conteudo": "Um encontro relaxante no parque para compartilhar comida, música e arte. Teremos violão livre e espaço para exposições.",
+      "local": "Parque da Cidade",
+      "horario": "Sábado, 15h",
+      "atracoes_principais": "Violão livre, Poesia",
+      "ingressos": "Gratuito",
+      "destaque": true,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [
+        106,
+        105
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/piquenique_foto1.jpg.jpg",
+          "legenda": "Nossa galera"
+        },
+        {
+          "imagem": "imgs/piquenique_foto3.jpg",
+          "legenda": "Mais um ângulo"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "Noite dos Jogos",
+      "imagem_principal": "imgs/jogos_foto2.jpg",
+      "descricao": "Noite de jogos de tabuleiro e boa comida.",
+      "conteudo": "Venha testar suas habilidades estratégicas e dar boas risadas. Temos mais de 50 títulos de board games disponíveis!",
+      "local": "Cafeteria 'O Tabuleiro'",
+      "horario": "Sexta, 19h",
+      "atracoes_principais": "Catan, War, Dixit",
+      "ingressos": "R$ 15 (Consumíveis)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [
+        108
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/jogos_foto1.jpg",
+          "legenda": "Mesa de jogo"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "nome": "Hype Sensation - Edição Neon",
+      "imagem_principal": "imgs/Hype1.jpg",
+      "descricao": "A festa neon que vai parar a Savassi.",
+      "conteudo": "Venha brilhar na Hype Sensation! Luz negra, tinta neon, e os melhores DJs da cena eletrônica de BH. Prepare sua roupa branca!",
+      "local": "Hype Club (R. Alberto Capanema, Savassi)",
+      "horario": "Sexta, 23h",
+      "atracoes_principais": "DJ KVSH, DJ Radd",
+      "ingressos": "R$ 60 (Lote 2)",
+      "destaque": true,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        102
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/Hype2.jpg",
+          "legenda": "Bar lotado"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "nome": "Duelo de MCs no Viaduto",
+      "imagem_principal": "imgs/viaduto_foto1.jpg",
+      "descricao": "A clássica batalha de rima debaixo do Viaduto.",
+      "conteudo": "Toda semana, a cultura Hip Hop toma conta do Viaduto Santa Tereza. Venha assistir as batalhas de free style que revelam os maiores talentos da cidade.",
+      "local": "Viaduto Santa Tereza, Centro",
+      "horario": "Sexta, 20h",
+      "atracoes_principais": "MCs locais, Batalha de Rima",
+      "ingressos": "Gratuito",
+      "destaque": true,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        105
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/viaduto_foto2.jpg",
+          "legenda": "Palco"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "nome": "Piquenique Coletivo no Municipal",
+      "imagem_principal": "imgs/Hype3.jpg",
+      "descricao": "Traga sua toalha e um lanche para compartilhar!",
+      "conteudo": "Vamos aproveitar o sol no parque mais central de BH. Um encontro casual para relaxar, conversar e fazer novos amigos. Todos são bem-vindos.",
+      "local": "Parque Municipal Américo Renné Giannetti, Centro",
+      "horario": "Domingo, 14h",
+      "atracoes_principais": "Sol, Gramado, Boa conversa",
+      "ingressos": "Gratuito (levar lanche)",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [
+        106
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 7,
+      "nome": "Feira Gastronômica da Pium-í",
+      "imagem_principal": "imgs/Hype4.jpg",
+      "descricao": "O melhor da comida de rua em um só lugar.",
+      "conteudo": "A rua Pium-í se fecha para carros e se abre para os melhores food trucks e barracas da cidade. Música ao vivo e o melhor da culinária local.",
+      "local": "Rua Pium-í, Sion",
+      "horario": "Sábado, 12h às 20h",
+      "atracoes_principais": "Food Trucks, Cervejas Artesanais",
+      "ingressos": "Entrada Gratuita",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [
+        107
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 8,
+      "nome": "Torneio de Catan na Funtasy",
+      "imagem_principal": "imgs/jogos_foto2.jpg",
+      "descricao": "Mostre que você é o mestre dos recursos!",
+      "conteudo": "Inscrições abertas para o torneio mensal de Catan no Funtasy. Venha competir, ganhar prêmios e se divertir. Vagas limitadas!",
+      "local": "Funtasy Bar e Jogos, Savassi",
+      "horario": "Domingo, 15h",
+      "atracoes_principais": "Torneio de Catan, Vales-prêmio",
+      "ingressos": "R$ 20 (Inscrição)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [
+        108
+      ],
+      "fotos_extras": [
+        {
+          "imagem": "imgs/jogos_foto1.jpg",
+          "legenda": "Mesas de Jogo"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "nome": "FAROFA! A Festa",
+      "imagem_principal": "imgs/Role3.jpg",
+      "descricao": "A festa mais tropical e brasileira de BH.",
+      "conteudo": "Muito funk, piseiro e brasilidades no Mirante Beagá. Vista sua roupa mais colorida e venha curtir o pôr do sol com a gente.",
+      "local": "Mirante Beagá, Buritis",
+      "horario": "Sábado, 16h",
+      "atracoes_principais": "DJ Xuxu, Bloco 'Então Brilha'",
+      "ingressos": "R$ 50 (Lote 1)",
+      "destaque": true,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        102
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 10,
+      "nome": "Sexta Black no Bafo",
+      "imagem_principal": "imgs/Hype2.jpg",
+      "descricao": "Aquele happy hour clássico no Bafo de Baco.",
+      "conteudo": "Música boa, cerveja gelada e o melhor da noite alternativa de BH. Rock e indie a noite toda.",
+      "local": "Bafo de Baco, Savassi",
+      "horario": "Sexta, 19h",
+      "atracoes_principais": "Banda da casa (Rock)",
+      "ingressos": "R$ 10 (Couvert)",
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 11,
+      "nome": "Calourada da Engenharia",
+      "imagem_principal": "imgs/atletica_foto3.jpg",
+      "descricao": "A maior calourada de todos os tempos. Open Bar!",
+      "conteudo": "Integração dos calouros da UFMG. Open bar completo e atrações de peso. Proibida a entrada de menores de 18 anos.",
+      "local": "Mineirinho, Pampulha",
+      "horario": "Sábado, 14h às 22h",
+      "atracoes_principais": "DJ Marlboro, Bateria da Atlética",
+      "ingressos": "R$ 70 (Alunos), R$ 90 (Externos)",
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        101
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 12,
+      "nome": "Quinta Brega na 'A Obra'",
+      "imagem_principal": "imgs/Role1.jpg",
+      "descricao": "A noite mais democrática de BH. Só clássicos.",
+      "conteudo": "Para de sofrer em casa e vem sofrer na pista! A noite toda dedicada aos clássicos da música brega. O porão mais famoso da cidade.",
+      "local": "A Obra, Savassi",
+      "horario": "Quinta, 22h",
+      "atracoes_principais": "DJ Vini Brega",
+      "ingressos": "R$ 15",
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 13,
+      "nome": "Samba no Quintal",
+      "imagem_principal": "imgs/Role3.jpg",
+      "descricao": "Roda de samba no bairro Santa Tereza.",
+      "conteudo": "Samba de raiz, cerveja gelada e petiscos de boteco. O verdadeiro clima de quintal de casa no coração de Santa Tereza.",
+      "local": "Quintal do Lapa, Santa Tereza",
+      "horario": "Domingo, 13h",
+      "atracoes_principais": "Grupo 'Samba de Tradição'",
+      "ingressos": "R$ 20",
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        103,
+        105
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 14,
+      "nome": "Baile do Viaduto (Funk)",
+      "imagem_principal": "imgs/viaduto_foto1.jpg",
+      "descricao": "O baile funk de rua mais tradicional de BH.",
+      "conteudo": "Fechando a rua debaixo do viaduto, o baile traz os melhores DJs de funk da capital. Respeite o local e o público.",
+      "local": "Viaduto Santa Tereza, Centro",
+      "horario": "Sábado, 23h",
+      "atracoes_principais": "DJs de Funk local",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "subcategoria_ids": [
+        102
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 15,
+      "nome": "Exposição 'Mundos Indígenas' no CCBB",
+      "imagem_principal": "imgs/Role4.jpg",
+      "descricao": "Arte e cultura dos povos originários do Brasil.",
+      "conteudo": "Uma imersão na cosmologia, arte e saberes dos povos indígenas. A exposição conta com instalações, vídeos e artefatos.",
+      "local": "CCBB - Centro Cultural Banco do Brasil",
+      "horario": "Quarta a Segunda, 10h às 22h",
+      "atracoes_principais": "Arte Indígena Contemporânea",
+      "ingressos": "Gratuito (retirar ingresso)",
+      "destaque": true,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        104
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 16,
+      "nome": "Cine-Debate: 'Deus e o Diabo na Terra do Sol'",
+      "imagem_principal": "imgs/Role2.jpg",
+      "descricao": "Exibição do clássico de Glauber Rocha.",
+      "conteudo": "Exibição do filme em película seguida de um debate com professores de cinema da UFMG. Uma noite de reflexão sobre o Cinema Novo.",
+      "local": "Cine Humberto Mauro, Palácio das Artes",
+      "horario": "Terça, 19h",
+      "atracoes_principais": "Filme + Debate",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        104
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 17,
+      "nome": "Sarau de Poesia 'Vozes da Rua'",
+      "imagem_principal": "imgs/viaduto_foto2.jpg",
+      "descricao": "Microfone aberto para poesia e performance.",
+      "conteudo": "Um espaço de livre expressão poética no Baixo Centro Cultural. Traga seu texto ou apenas venha ouvir. Arte, resistência e café.",
+      "local": "Baixo Centro Cultural, Centro",
+      "horario": "Quarta, 19h",
+      "atracoes_principais": "Microfone Aberto",
+      "ingressos": "Contribuição consciente",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        105
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 18,
+      "nome": "Show Acústico: Lô Borges",
+      "imagem_principal": "imgs/atletica_foto2.jpg",
+      "descricao": "Clássicos do Clube da Esquina em formato íntimo.",
+      "conteudo": "Um dos maiores nomes da música mineira apresenta seus sucessos, como 'O Trem Azul' e 'Paisagem da Janela', em um show voz e violão.",
+      "local": "Teatro de Bolso Sesc Palladium",
+      "horario": "Sábado, 21h",
+      "atracoes_principais": "Lô Borges (Voz e Violão)",
+      "ingressos": "R$ 80 (Inteira)",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        102,
+        105
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 19,
+      "nome": "Visita Guiada: Circuito Liberdade",
+      "imagem_principal": "imgs/Role4.jpg",
+      "descricao": "Conheça a história dos prédios da Praça da Liberdade.",
+      "conteudo": "Um tour a pé pelos museus e espaços culturais que compõem o Circuito Liberdade, explorando a arquitetura e história de cada um.",
+      "local": "Praça da Liberdade (Ponto de Encontro: Coreto)",
+      "horario": "Sábado, 10h",
+      "atracoes_principais": "Tour Histórico e Arquitetônico",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        104
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 20,
+      "nome": "Stand-up: Noite da Comédia",
+      "imagem_principal": "imgs/Hype2.jpg",
+      "descricao": "Os melhores comediantes locais no Pork's.",
+      "conteudo": "Show de comédia stand-up com microfone aberto e convidados especiais. Venha dar risada e tomar um chopp barato.",
+      "local": "Pork's, Unidade Savassi",
+      "horario": "Quarta, 20h",
+      "atracoes_principais": "Comediantes de BH",
+      "ingressos": "R$ 10",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 21,
+      "nome": "Peça: 'O Auto da Compadecida'",
+      "imagem_principal": "imgs/Spoiler3.jpg",
+      "descricao": "A obra-prima de Ariano Suassuna no teatro.",
+      "conteudo": "A aclamada companhia de teatro 'Grupo Galpão' apresenta sua montagem do clássico 'O Auto da Compadecida'. Imperdível!",
+      "local": "Teatro Marília, Centro",
+      "horario": "Sexta e Sábado, 20h",
+      "atracoes_principais": "Grupo Galpão",
+      "ingressos": "R$ 30 (Inteira)",
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 22,
+      "nome": "Feira de Antiguidades Tom Jobim",
+      "imagem_principal": "imgs/Hype4.jpg",
+      "descricao": "Móveis, vinis e raridades na Av. Carandaí.",
+      "conteudo": "A tradicional feira de antiguidades de BH. Um ótimo passeio de sábado de manhã para garimpar objetos únicos e tomar um caldo de cana.",
+      "local": "Avenida Carandaí, Funcionários",
+      "horario": "Sábado, 09h às 15h",
+      "atracoes_principais": "Antiguidades, LPs, Móveis",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [
+        107
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 23,
+      "nome": "Yoga no Parque (Pampulha)",
+      "imagem_principal": "imgs/Hype3.jpg",
+      "descricao": "Prática de Hatha Yoga ao ar livre.",
+      "conteudo": "Comece seu domingo renovando as energias com uma aula de yoga gratuita no gramado em frente à Igrejinha da Pampulha. Traga seu tapetinho!",
+      "local": "Gramado da Igrejinha da Pampulha",
+      "horario": "Domingo, 09h",
+      "atracoes_principais": "Aula de Hatha Yoga",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 24,
+      "nome": "Passeio Fotográfico: Mangabeiras",
+      "imagem_principal": "imgs/Role2.jpg",
+      "descricao": "Capture a melhor vista de BH.",
+      "conteudo": "Encontro de fotógrafos (amadores e profissionais) para explorar as trilhas e mirantes do Parque das Mangabeiras. Traga sua câmera ou celular.",
+      "local": "Parque das Mangabeiras (Entrada Sul)",
+      "horario": "Sábado, 09h",
+      "atracoes_principais": "Fotografia, Trilha",
+      "ingressos": "Entrada gratuita no parque",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 25,
+      "nome": "Volta de Bike na Pampulha",
+      "imagem_principal": "imgs/Hype3.jpg",
+      "descricao": "O rolê clássico de bicicleta na orla.",
+      "conteudo": "Grupo de pedal para dar a volta completa na Lagoa da Pampulha (18km). Ritmo leve, ideal para iniciantes e para curtir a paisagem.",
+      "local": "Ponto de Encontro: Pista de Skate (atrás do Mineirão)",
+      "horario": "Sábado, 08h",
+      "atracoes_principais": "Pedal em grupo",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 26,
+      "nome": "Noite do Terror no Guanabara",
+      "imagem_principal": "imgs/falencia.jpg",
+      "descricao": "O parque de diversões mais amado de BH.",
+      "conteudo": "Edição especial 'Noite do Terror' do Parque Guanabara. Venha gritar na 'Catacumba' e na roda-gigante com a melhor vista da Pampulha.",
+      "local": "Parque Guanabara, Pampulha",
+      "horario": "Sexta e Sábado, 18h às 23h",
+      "atracoes_principais": "Montanha-Russa, Catacumba",
+      "ingressos": "Passaporte (R$ 50)",
+      "destaque": true,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 27,
+      "nome": "Trilha do Mirante na Serra do Curral",
+      "imagem_principal": "imgs/Spoiler1.jpg",
+      "descricao": "Trilha com vista panorâmica da cidade.",
+      "conteudo": "Trilha de nível médio subindo a Serra do Curral até o mirante principal. Necessário agendamento prévio no site da prefeitura.",
+      "local": "Serra do Curral (Entrada pelo Parque)",
+      "horario": "Domingo, 09h",
+      "atracoes_principais": "Trilha, Vista Panorâmica",
+      "ingressos": "Gratuito (com agendamento)",
+      "destaque": false,
+      "categoria_principal_id": 3,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 28,
+      "nome": "Festival 'Comida di Buteco'",
+      "imagem_principal": "imgs/Role1.jpg",
+      "descricao": "O maior concurso de botecos do Brasil.",
+      "conteudo": "Durante um mês, os melhores botecos de BH competem pelo título de melhor petisco. Pegue seu mapa e comece o tour!",
+      "local": "Vários Botecos de BH",
+      "horario": "Durante todo o mês",
+      "atracoes_principais": "Petiscos concorrentes",
+      "ingressos": "Preço do prato (aprox. R$ 30)",
+      "destaque": true,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 29,
+      "nome": "Tour Cervejeiro na Backer",
+      "imagem_principal": "imgs/Role1.jpg",
+      "descricao": "Visita guiada pela fábrica com degustação.",
+      "conteudo": "Conheça o processo de fabricação das cervejas artesanais da Backer e termine com uma degustação harmonizada no Templo Cervejeiro.",
+      "local": "Cervejaria Backer, Buritis",
+      "horario": "Sábado, 11h",
+      "atracoes_principais": "Tour na Fábrica, Degustação",
+      "ingressos": "R$ 70 (com agendamento)",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 30,
+      "nome": "Rodízio de Japa no 'Japa San'",
+      "imagem_principal": "imgs/piquenique_foto1.jpg.jpg",
+      "descricao": "Rodízio de sushi e sashimi à vontade.",
+      "conteudo": "Rodízio completo, incluindo peças quentes, temakis e os clássicos da culinária japonesa. Ideal para ir com a galera.",
+      "local": "Japa San, Savassi",
+      "horario": "Terça a Domingo, 19h",
+      "atracoes_principais": "Rodízio Japonês",
+      "ingressos": "R$ 99 (por pessoa)",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 31,
+      "nome": "Café e Prosa no 'Kahlúa'",
+      "imagem_principal": "imgs/Role2.jpg",
+      "descricao": "O melhor café coado do Maletta.",
+      "conteudo": "Um clássico de BH. Pegue um café especial, um pão de queijo e sente-se para ler um livro ou conversar fiado no Edifício Maletta.",
+      "local": "Kahlúa Café, Edifício Maletta, Centro",
+      "horario": "Segunda a Sábado, 09h às 20h",
+      "atracoes_principais": "Cafés Especiais, Pão de Queijo",
+      "ingressos": "Preço do consumo",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 32,
+      "nome": "Feira de Orgânicos da Savassi",
+      "imagem_principal": "imgs/Hype4.jpg",
+      "descricao": "Produtos frescos direto do produtor.",
+      "conteudo": "Feira semanal com frutas, legumes e verduras orgânicas. Ótimo para quem busca alimentação saudável e apoia o pequeno produtor.",
+      "local": "Praça da Savassi",
+      "horario": "Domingo, 08h às 13h",
+      "atracoes_principais": "Produtos Orgânicos",
+      "ingressos": "Gratuito",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [
+        107
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 33,
+      "nome": "Aula de Culinária Mineira",
+      "imagem_principal": "imgs/jogos_foto2.jpg",
+      "descricao": "Aprenda a fazer o verdadeiro Pão de Queijo.",
+      "conteudo": "Aula prática de culinária dentro do Mercado Central. Aprenda os segredos do pão de queijo, tutu de feijão e frango com quiabo.",
+      "local": "Mercado Central (Cozinha Show)",
+      "horario": "Sábado, 10h",
+      "atracoes_principais": "Aula de Culinária",
+      "ingressos": "R$ 120 (inscrição)",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 34,
+      "nome": "Happy Hour no 'Porks'",
+      "imagem_principal": "imgs/Hype2.jpg",
+      "descricao": "Chopp barato e petiscos de porco.",
+      "conteudo": "O happy hour mais movimentado da cidade. Chopp pilsen a preço justo e um cardápio recheado de torresmo e outras delícias.",
+      "local": "Pork's, Unidade Castelo",
+      "horario": "Diariamente, 17h às 20h",
+      "atracoes_principais": "Chopp, Torresmo",
+      "ingressos": "Preço do consumo",
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "subcategoria_ids": [
+        103
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 35,
+      "nome": "Campeonato de FIFA 25 (PS5)",
+      "imagem_principal": "imgs/atletica_foto2.jpg",
+      "descricao": "Torneio de E-sports com prêmio em dinheiro.",
+      "conteudo": "Campeonato de FIFA no modo 1x1. Inscrições abertas, vagas limitadas. O campeão leva R$ 500.",
+      "local": "We Luv Games, Savassi",
+      "horario": "Sábado, 14h",
+      "atracoes_principais": "Torneio de FIFA",
+      "ingressos": "R$ 30 (Inscrição)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 36,
+      "nome": "Clássico: Cruzeiro x Atlético",
+      "imagem_principal": "imgs/Hype1.jpg",
+      "descricao": "O maior clássico de Minas no Mineirão.",
+      "conteudo": "Jogo válido pelo Campeonato Brasileiro. A rivalidade que para a cidade. Garanta seu ingresso e venha apoiar seu time.",
+      "local": "Estádio Mineirão, Pampulha",
+      "horario": "Domingo, 16h",
+      "atracoes_principais": "Jogo de Futebol",
+      "ingressos": "A partir de R$ 80",
+      "destaque": true,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 37,
+      "nome": "RPG: 'A Masmorra do Dragão'",
+      "imagem_principal": "imgs/jogos_foto1.jpg",
+      "descricao": "Mesa de Dungeons & Dragons para iniciantes.",
+      "conteudo": "A Funtasy organiza mesas de RPG para quem nunca jogou. O mestre guia a aventura 'A Masmorra do Dragão'. Fichas prontas no local.",
+      "local": "Funtasy Bar e Jogos, Savassi",
+      "horario": "Domingo, 16h",
+      "atracoes_principais": "Mesa de D&D (RPG)",
+      "ingressos": "R$ 20 (consumíveis)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [
+        108
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 38,
+      "nome": "Campeonato de Vôlei de Areia",
+      "imagem_principal": "imgs/Hype3.jpg",
+      "descricao": "Torneio de duplas na orla da Pampulha.",
+      "conteudo": "Torneio amador de vôlei de praia (duplas mistas). Inscrições abertas, prêmio de troféu e medalhas para os vencedores.",
+      "local": "Quadras da Pampulha (próx. Mineirão)",
+      "horario": "Sábado, 09h",
+      "atracoes_principais": "Torneio de Vôlei",
+      "ingressos": "R$ 50 (por dupla)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    },
+    {
+      "id": 39,
+      "nome": "Noite de Poker (Texas Hold'em)",
+      "imagem_principal": "imgs/jogos_foto1.jpg",
+      "descricao": "Torneio semanal no Sierra Poker.",
+      "conteudo": "Torneio 'Texas Hold'em' com buy-in de R$ 50 e R$ 5.000 garantidos em premiação. Para amadores e profissionais.",
+      "local": "Sierra Poker Sports, Sion",
+      "horario": "Terça, 19h",
+      "atracoes_principais": "Torneio de Poker",
+      "ingressos": "R$ 50 (Buy-in)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [
+        108
+      ],
+      "fotos_extras": []
+    },
+    {
+      "id": 40,
+      "nome": "Aula Experimental de Escalada",
+      "imagem_principal": "imgs/Spoiler1.jpg",
+      "descricao": "Descubra a escalada indoor no Rokaz.",
+      "conteudo": "Aula experimental (Day Use) com instrutor. Todo o equipamento necessário (sapatilha, cadeirinha) está incluso. Não precisa de experiência.",
+      "local": "Rokaz Escalada, São Pedro",
+      "horario": "Sábado, 15h",
+      "atracoes_principais": "Aula de Escalada",
+      "ingressos": "R$ 60 (Aula avulsa)",
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "subcategoria_ids": [],
+      "fotos_extras": []
+    }
+  ]
+}
