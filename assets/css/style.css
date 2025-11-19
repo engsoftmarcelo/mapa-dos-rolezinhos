@@ -399,3 +399,45 @@ label { color: var(--text-muted); font-weight: 500; }
         opacity: 0.2;
     }
 }
+
+/* =========================================
+   CORREÇÕES DE LEGIBILIDADE (High Contrast)
+   ========================================= */
+
+/* Força texto branco em todos os cards */
+.card-role, .card, .card-body-custom {
+    color: var(--text-main) !important;
+}
+
+/* Títulos e descrições dentro dos cards */
+.card-title {
+    color: #fff !important;
+}
+.card-desc {
+    color: #ccc !important; /* Cinza claro para leitura fácil */
+}
+
+/* Inputs e Selects (Fundo escuro, texto claro) */
+.form-control, .form-select {
+    background-color: #2c2c2c !important;
+    border: 1px solid #444 !important;
+    color: #fff !important;
+}
+
+/* Placeholder dos inputs (ex: "Digite aqui...") */
+.form-control::placeholder {
+    color: #bbb !important;
+}
+
+/* Ao clicar no input */
+.form-control:focus, .form-select:focus {
+    background-color: #333 !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25) !important;
+}
+
+/* Textos mudos do Bootstrap (ex: "small text") */
+.text-muted {
+    color: #a0a0a0 !important;
+}

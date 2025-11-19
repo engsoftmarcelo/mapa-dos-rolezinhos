@@ -33,6 +33,30 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="assets/scripts/app.js"></script>
+    <script src="assets/scripts/app.js"></script>
+
+    <script>
+    // Script específico para a página "Todos"
+    document.addEventListener('DOMContentLoaded', async () => {
+        const container = document.getElementById('lista-roles-por-categoria');
+        const titulo = document.getElementById('categoria-titulo');
+        const desc = document.getElementById('categoria-descricao');
+
+        titulo.textContent = "Todos os Rolês";
+        desc.textContent = "Confira a agenda completa de BH.";
+
+        // Usa a função que já existe no seu app.js
+        const roles = await fetchRoles(); 
+        
+        container.innerHTML = '';
+        if(roles.length > 0) {
+            for (const r of roles) {
+                container.innerHTML += await renderCardHTML(r);
+            }
+        } else {
+            container.innerHTML = '<p class="text-white">Nenhum rolê encontrado.</p>';
+        }
+    });
+</script>
 </body>
 </html>
