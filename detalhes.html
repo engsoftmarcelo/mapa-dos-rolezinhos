@@ -1,66 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Rolê</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        #map-detail { height: 300px; width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .detail-header { position: relative; }
+        .detail-badge { position: absolute; top: 20px; left: 20px; z-index: 10; }
+    </style>
 </head>
-
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">
-                  <img src="imgs/logoMapaDosRolezinhos.png" alt="Logo Mapa dos Rolezinhos" height="100">
-                </a>
-            </div>
-        </nav>
-    </header>
-
-    <main class="container my-4">
-    <section id="detalhe-do-evento">
-        <h1 id="detalhe-titulo" class="fw-bold mb-4">Carregando...</h1>
-        <div class="row">
-            <div class="col-lg-7 mb-4">
-                <img id="detalhe-imagem" src="" class="img-fluid rounded shadow-sm w-100" alt="Imagem principal do rolê">
-            </div>
-            <div class="col-lg-5">
-                <p id="detalhe-descricao" class="fst-italic fs-5">...</p>
-                <ul class="list-group">
-                    <li class="list-group-item"><strong>📍 Local:</strong> <span id="detalhe-local"></span></li>
-                    <li class="list-group-item"><strong>⏰ Horário:</strong> <span id="detalhe-horario"></span></li>
-                    <li class="list-group-item"><strong>🎤 Atrações:</strong> <span id="detalhe-atracoes"></span></li>
-                    <li class="list-group-item"><strong>🎟️ Ingressos:</strong> <span id="detalhe-ingressos"></span></li>
-                    <li class="list-group-item"><strong>🏷️ Categoria:</strong> <span id="detalhe-tipo"></span></li>
-                </ul>
-                
-                <div class="mt-4">
-                    <a href="#" id="btn-editar" class="btn btn-warning">Editar</a>
-                    <button id="btn-excluir" class="btn btn-danger">Excluir</button>
-                </div>
-                
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="imgs/logoMapaDosRolezinhos.png" height="50"></a>
+            <div class="ms-auto">
+                <a href="index.html" class="btn btn-outline-light rounded-pill">Voltar</a>
             </div>
         </div>
-        <p id="detalhe-conteudo" class="mt-4 lead">...</p>
-    </section>
+    </nav>
 
-        <hr class="my-5">
-
-        <section id="fotos-vinculadas">
-            <h3 class="fw-bold mb-4">📸 Galeria de Fotos</h3>
-            <div id="galeria-fotos" class="row row-cols-1 row-cols-md-3 g-4">
+    <main class="container" style="margin-top: 100px;">
+        <section id="detalhe-do-evento" class="p-0 bg-transparent border-0">
+            
+            <div id="loading-msg" class="text-center py-5">
+                <div class="spinner-border text-warning" style="width: 4rem; height: 4rem;" role="status">
+                    <span class="visually-hidden">Carregando...</span>
                 </div>
+                <h3 class="mt-3 text-white fw-light animate-pulse">Preparando o rolê...</h3>
+            </div>
+
+            <div id="content-area" style="display: none;">
+                <div class="row">
+                    <div class="col-lg-6 mb-4 detail-header">
+                        <span id="detalhe-categoria" class="badge bg-primary detail-badge">Categoria</span>
+                        <img id="detalhe-imagem" src="" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover" style="max-height: 500px;" alt="Imagem do rolê">
+                    </div>
+
+                    <div class="col-lg-6 text-white">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h1 id="detalhe-titulo" class="fw-bold display-5 mb-3">Nome do Evento</h1>
+                            <button id="btn-fav-detail" class="btn btn-outline-danger rounded-circle ms-2" style="width: 50px; height: 50px;">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                        </div>
+
+                        <p id="detalhe-descricao" class="fs-5 text-light opacity-75 fst-italic">Descrição curta...</p>
+                        
+                        <div class="card bg-dark border-secondary mb-4">
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><i class="bi bi-calendar-event text-primary me-2"></i> <strong>Data:</strong> <span id="detalhe-data"></span></li>
+                                    <li class="mb-2"><i class="bi bi-clock text-primary me-2"></i> <strong>Horário:</strong> <span id="detalhe-horario"></span></li>
+                                    <li class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i> <strong>Local:</strong> <span id="detalhe-local"></span></li>
+                                    <li class="mb-2"><i class="bi bi-ticket-perforated text-primary me-2"></i> <strong>Ingressos:</strong> <span id="detalhe-ingressos"></span></li>
+                                    <li><i class="bi bi-music-note-beamed text-primary me-2"></i> <strong>Atrações:</strong> <span id="detalhe-atracoes"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="fw-bold border-bottom border-secondary pb-2 mb-3">Sobre o Rolê</h4>
+                            <p id="detalhe-conteudo" class="text-light opacity-75" style="line-height: 1.8;">Conteúdo detalhado...</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="fw-bold border-bottom border-secondary pb-2 mb-3">Como Chegar</h4>
+                            <div id="map-detail"></div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-5">
+                            <a href="#" id="btn-editar" class="btn btn-warning flex-grow-1"><i class="bi bi-pencil"></i> Editar</a>
+                            <button id="btn-excluir" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-5 border-secondary">
+                <h3 class="text-white fw-bold mb-4">📸 Galeria</h3>
+                <div id="galeria-fotos" class="row row-cols-2 row-cols-md-4 g-3"></div>
+            </div>
         </section>
     </main>
 
-<footer class="text-center mt-5 py-4 bg-light">
-    <p class="mb-0 text-muted">&copy; 2025 Mapa dos Rolezinhos. Desenvolvido por <strong>Marcelo Gomes</strong>.</p>
-</footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/scripts/app.js"></script>
 </body>
-
 </html>

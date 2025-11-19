@@ -29,9 +29,11 @@
                     <label for="nome" class="form-label">Nome do Evento</label>
                     <input type="text" class="form-control" id="nome" required>
                 </div>
+                
                 <div class="col-md-6">
-                    <label for="imagem_principal" class="form-label">URL da Imagem Principal</label>
-                    <input type="text" class="form-control" id="imagem_principal" placeholder="Ex: imgs/foto.jpg" required>
+                    <label for="imagem_upload" class="form-label">Imagem do Evento</label>
+                    <input type="file" class="form-control" id="imagem_upload" accept="image/*" required>
+                    <div class="form-text text-light opacity-50">Formatos: JPG, PNG.</div>
                 </div>
 
                 <div class="col-12">
@@ -62,11 +64,11 @@
                     <input type="text" class="form-control" id="ingressos" placeholder="Ex: R$ 25" required>
                 </div>
                 <div class="col-md-4">
-    <label for="categoria_principal_id" class="form-label">Categoria</label>
-    <select id="categoria_principal_id" class="form-select" required>
-        <option value="">Carregando categorias...</option>
-        </select>
-</div>
+                    <label for="categoria_principal_id" class="form-label">Categoria</label>
+                    <select id="categoria_principal_id" class="form-select" required>
+                        <option value="">Carregando categorias...</option>
+                    </select>
+                </div>
                 
                 <div class="col-12">
                     <div class="form-check">
@@ -84,11 +86,11 @@
         </section>
     </main>
 
-<footer class="text-center mt-5 py-4 bg-light">
-    <p class="mb-0 text-muted">&copy; 2025 Mapa dos Rolezinhos. Desenvolvido por <strong>Marcelo Gomes</strong>.</p>
-</footer>
+    <footer class="text-center mt-5 py-4 bg-light">
+        <p class="mb-0 text-muted">&copy; 2025 Mapa dos Rolezinhos. Desenvolvido por <strong>Marcelo Gomes</strong>.</p>
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/scripts/app.js"></script>
 </body>
-
 </html>

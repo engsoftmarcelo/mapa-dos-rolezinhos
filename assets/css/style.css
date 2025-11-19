@@ -1,181 +1,401 @@
-/* Importa a fonte Poppins do Google Fonts */
+/* Importa a fonte Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-/* 1. Variáveis de Cor e Fonte (Baseado no Logo) */
 :root {
-    /* Define o roxo do logo como a cor primária do Bootstrap */
-    --bs-primary: #6f42c1; 
-    --bs-primary-rgb: 111, 66, 193;
+    /* Cores Base - Night Mode */
+    --bg-body: #121212;       /* Cinza muito escuro, quase preto */
+    --bg-card: #1e1e1e;       /* Cinza um pouco mais claro para cards */
+    --bg-glass: rgba(30, 30, 30, 0.65); /* Translúcido para glassmorphism */
     
-    /* Define uma fonte nova para todo o site */
-    --bs-font-sans-serif: 'Poppins', sans-serif;
+    /* Cores de Destaque */
+    --primary: #6f42c1;       /* Roxo Original */
+    --primary-hover: #855bc9;
+    --neon-accent: #00ff9d;   /* Verde Neon para detalhes vibrantes */
+    --text-main: #ffffff;
+    --text-muted: #b0b3b8;
     
-    /* Cores de apoio */
-    --bs-dark-custom: #343a40;
-    --bs-light-gray: #f9f9f9;
+    /* Efeitos */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glow-shadow: 0 0 15px rgba(111, 66, 193, 0.4);
 }
 
 body {
-    font-family: var(--bs-font-sans-serif);
-    background-color: var(--bs-light-gray); /* Um fundo cinza bem claro */
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    overflow-x: hidden; /* Evita rolagem lateral indesejada */
 }
 
-/* 2. Componentes Globais */
-
-/* Títulos */
-h1, h3 {
-    color: var(--bs-dark-custom);
-    font-weight: 700; /* Títulos mais fortes */
-}
-
-/* Botão Primário (Roxo) */
-.btn-primary {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
-    font-weight: 600;
+/* --- 1. Glassmorphism Navbar --- */
+.navbar {
+    background: rgba(18, 18, 18, 0.8) !important; /* Fundo escuro translúcido */
+    backdrop-filter: blur(12px); /* O efeito de desfoque */
+    border-bottom: var(--glass-border);
+    padding: 1rem 0;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.2);
-}
-.btn-primary:hover {
-    background-color: #5a359e; /* Tom mais escuro no hover */
-    border-color: #5a359e;
-    transform: translateY(-2px); /* Efeito de "levantar" */
-    box-shadow: 0 6px 15px rgba(var(--bs-primary-rgb), 0.3);
 }
 
-/* Botão de Busca (Verde) */
-.btn-outline-success {
-    /* Troca o verde padrão pelo nosso roxo */
-    --bs-btn-color: var(--bs-primary);
-    --bs-btn-border-color: var(--bs-primary);
-    --bs-btn-hover-bg: var(--bs-primary);
-    --bs-btn-hover-border-color: var(--bs-primary);
-    --bs-btn-hover-color: #fff;
-}
-
-/* Navbar */
-.navbar.bg-light {
-    background-color: #fff !important; /* Navbar sempre branca */
-    box-shadow: 0 2px 15px rgba(0,0,0,0.05); /* Sombra suave */
-}
 .navbar-brand img {
-    height: 80px; /* Logo um pouco menor */
+    height: 60px;
+    filter: drop-shadow(0 0 5px rgba(111, 66, 193, 0.5)); /* Brilho no logo */
 }
+
 .nav-link {
-    font-weight: 600;
-    color: #555;
-    transition: color 0.2s ease;
-}
-.nav-link:hover, .nav-link.active {
-    color: var(--bs-primary) !important;
+    color: var(--text-main) !important;
+    font-weight: 500;
+    position: relative;
 }
 
-/* Formulários (Inputs) */
+.nav-link:hover {
+    color: var(--primary) !important;
+    text-shadow: 0 0 8px rgba(111, 66, 193, 0.6);
+}
+
+/* Campo de busca estilo Neon */
+.form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: var(--glass-border);
+    color: #fff;
+    border-radius: 20px;
+}
 .form-control:focus {
-    border-color: var(--bs-primary);
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(111, 66, 193, 0.3);
+    border-color: var(--primary);
+    color: #fff;
 }
-.form-check-input:checked {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
-}
+.form-control::placeholder { color: #6c757d; }
 
-/* Footer */
-footer {
-    background-color: var(--bs-dark-custom); /* Rodapé escuro */
-    color: var(--bs-light-gray);
-    padding: 2.5rem 0;
-}
-
-
-/* 3. Estilos por Página */
-
-/* --- index.html --- */
-
-/* Carrossel */
-#meuCarrossel .carousel-item img {
-    border-radius: 0.5rem; /* Cantos arredondados */
-}
-#meuCarrossel .carousel-caption {
-    /* Legenda com gradiente para melhor leitura */
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding-bottom: 1.5rem;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-}
-#meuCarrossel .carousel-indicators button {
-    background-color: var(--bs-primary); /* Indicadores roxos */
-}
-
-/* Cards dos Rolês */
-#lista-de-roles .card {
-    border: none;
-    border-radius: 0.75rem; /* Cantos mais arredondados */
-    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
-    transition: all 0.3s ease;
-    background-color: #fff;
-}
-#lista-de-roles .card:hover {
-    transform: translateY(-5px); /* Efeito de "levantar" no hover */
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-#lista-de-roles .card-img-top {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-}
-#lista-de-roles .card-title {
-    color: var(--bs-primary); /* Título do card roxo */
+.btn-outline-success {
+    border-color: var(--neon-accent);
+    color: var(--neon-accent);
+    border-radius: 20px;
     font-weight: 600;
 }
-
-/* Seção Sobre */
-#sobre {
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+.btn-outline-success:hover {
+    background-color: var(--neon-accent);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-accent);
 }
 
-/* --- detalhes.html --- */
+/* --- 2. Hero Section (Substitui Carrossel) --- */
+.hero-section {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Imagem de fundo estática impactante */
+    background: url('../../imgs/Hype1.jpg') no-repeat center center/cover;
+    border-radius: 0 0 2rem 2rem; /* Curva na parte inferior */
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
 
-#detalhe-imagem {
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-.list-group {
-    border-radius: 0.5rem;
-    overflow: hidden; /* Garante que os cantos fiquem arredondados */
-}
-.list-group-item {
-    border-color: #eee;
+/* Overlay escuro para o texto aparecer */
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(18,18,18,0.3), rgba(18,18,18,0.9));
 }
 
-/* Galeria de Fotos (Detalhes) */
-#galeria-fotos .card {
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    /* Gradiente no texto */
+    background: linear-gradient(90deg, #fff, var(--primary), var(--neon-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 3s infinite alternate;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+}
+
+.btn-cta {
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
     border: none;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+    box-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-#galeria-fotos .card-img-top {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-}
-
-/* --- cadastro.html & editar.html --- */
-
-/* Estiliza a seção do formulário como um card */
-#cadastro-evento,
-#edicao-evento {
-    background-color: #fff;
-    padding: 2.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+.btn-cta:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: var(--primary-hover);
+    box-shadow: 0 0 30px rgba(111, 66, 193, 0.8);
 }
 
+/* --- 3. Cards Modernos (Glassmorphism) --- */
+.card-role {
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: var(--glass-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    position: relative;
+}
+
+.card-role:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+}
+
+.card-img-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-role img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-role:hover img {
+    transform: scale(1.1); /* Zoom suave na imagem */
+}
+
+/* Badges Flutuantes */
+.card-badges {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 2;
+}
+
+.badge-custom {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.badge-category {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Conteúdo do Card */
+.card-body-custom {
+    padding: 1.2rem;
+    position: relative;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Ícone de Calendário Visual */
+.date-box {
+    background: rgba(255,255,255,0.08);
+    border: var(--glass-border);
+    border-radius: 10px;
+    min-width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.date-day {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--neon-accent);
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.date-time {
+    font-size: 0.8rem;
+    color: #fff;
+    margin-top: 2px;
+}
+
+.card-info {
+    flex: 1;
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    color: #fff;
+}
+
+.card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- 4. Categorias (Navegação) --- */
+.card-category {
+    background: linear-gradient(145deg, #1e1e1e, #252525);
+    border: none;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.card-category:hover {
+    background: #2a2a2a;
+    border-color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.card-category h5 {
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.card-category:hover h5 {
+    color: var(--neon-accent);
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+}
+
+/* --- 5. Footer & Textos Gerais --- */
+h3 {
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+footer {
+    background-color: #0a0a0a;
+    border-top: var(--glass-border);
+    color: var(--text-muted);
+}
+
+/* Página Detalhes e Cadastro */
+#detalhe-do-evento, #cadastro-evento, #edicao-evento, #sobre {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    border: var(--glass-border);
+}
+
+label { color: var(--text-muted); font-weight: 500; }
+.list-group-item {
+    background-color: transparent;
+    border-color: rgba(255,255,255,0.1);
+    color: #ddd;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(111, 66, 193, 0.2); }
+    to { text-shadow: 0 0 20px rgba(111, 66, 193, 0.8), 0 0 10px rgba(0, 255, 157, 0.5); }
+}
+
+/* Ajuste Responsivo Hero */
 @media (max-width: 768px) {
-    #cadastro-evento,
-    #edicao-evento {
-        padding: 1.5rem;
+    .hero-title { font-size: 2.5rem; }
+    .hero-section { height: 400px; }
+}
+
+/* Botão de Favoritar no Card (Home) */
+.btn-fav-card {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Posicionado à esquerda para não brigar com os badges */
+    z-index: 10; /* Garante que fique acima do link e da imagem */
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.btn-fav-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.btn-fav-card i {
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+/* Animação de "Pop" ao clicar */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.anim-pop {
+    animation: pop 0.3s ease;
+}
+
+/* --- UX: Loading Animations (NOVO) --- */
+
+/* Animação de pulso para o texto "Carregando..." */
+@keyframes pulseOpacity {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.animate-pulse {
+    animation: pulseOpacity 1.5s infinite ease-in-out;
+}
+
+/* Ajuste dos Placeholders do Bootstrap para o Tema Escuro */
+.placeholder {
+    border-radius: 4px;
+}
+
+/* Garante que o brilho (glow) apareça sobre o fundo escuro */
+.placeholder-glow .placeholder {
+    animation: placeholder-glow 2s ease-in-out infinite;
+}
+
+@keyframes placeholder-glow {
+    50% {
+        opacity: 0.2;
     }
 }
