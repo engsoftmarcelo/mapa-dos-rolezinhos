@@ -1,4 +1,4 @@
-// --- IMPORTAÇÕES DO FIREBASE (Versão Modular via CDN) ---
+// 1. Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
     getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
@@ -6,6 +6,9 @@ import {
 import { 
     getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// 2. SweetAlert2 (Adicione esta linha para corrigir o erro!)
+import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/+esm";
 
 // --- SUA CONFIGURAÇÃO (JÁ INSERIDA) ---
 const firebaseConfig = {
