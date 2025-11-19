@@ -24,7 +24,8 @@
       "lat": -19.9191,
       "lng": -43.9386,
       "destaque": true,
-      "categoria_principal_id": 1
+      "categoria_principal_id": 1,
+      "conteudo": "Prepare-se para a noite mais insana do ano! Open bar, 3 pistas de dança e as melhores atrações universitárias. Traga sua caneca e venha curtir com a gente até o amanhecer."
     },
     {
       "id": 2,
@@ -40,7 +41,8 @@
       "lat": -19.9246,
       "lng": -43.9363,
       "destaque": true,
-      "categoria_principal_id": 3
+      "categoria_principal_id": 3,
+      "conteudo": "Um dia de sol, grama verde e muita cultura. Traga sua canga, seu lanche e aproveite shows acústicos de artistas locais, oficinas de pintura e yoga ao pôr do sol."
     },
     {
       "id": 3,
@@ -56,7 +58,8 @@
       "lat": -19.9724,
       "lng": -43.9638,
       "destaque": true,
-      "categoria_principal_id": 1
+      "categoria_principal_id": 1,
+      "conteudo": "Muita luz negra, tintas neon e o melhor da cena eletrônica de BH. DJs convidados de SP e RJ para fazer a pista tremer."
     },
     {
       "id": 4,
@@ -72,7 +75,8 @@
       "lat": -19.9393,
       "lng": -43.9334,
       "destaque": false,
-      "categoria_principal_id": 5
+      "categoria_principal_id": 5,
+      "conteudo": "Venha desafiar seus amigos nos melhores board games modernos enquanto come aquele burger artesanal delicioso. Temos monitores para ensinar as regras!"
     },
     {
       "id": 5,
@@ -88,7 +92,144 @@
       "lat": -19.8586,
       "lng": -43.9783,
       "destaque": false,
-      "categoria_principal_id": 3
+      "categoria_principal_id": 3,
+      "conteudo": "Energia lá em cima para começar o domingo. Ponto de encontro na Igrejinha. Traga sua bike, patins ou venha correndo. Hidratação por conta da organização."
+    },
+    {
+      "id": 6,
+      "nome": "Feira Gastronômica de Rua",
+      "imagem_principal": "imgs/Hype4.jpg",
+      "descricao": "Comidas típicas e música ao vivo.",
+      "local": "Av. Getúlio Vargas, Savassi",
+      "horario": "Domingo, 10h",
+      "data": "2023-11-26",
+      "zona": "savassi",
+      "preco": 0,
+      "ingressos": "Gratuito",
+      "lat": -19.9333,
+      "lng": -43.9371,
+      "destaque": true,
+      "categoria_principal_id": 4,
+      "conteudo": "O melhor da comida de rua de BH! Barracas com pratos mineiros, hambúrgueres, cervejas artesanais e muito mais. Show de chorinho a partir das 13h."
+    },
+    {
+      "id": 7,
+      "nome": "Baile do Viaduto",
+      "imagem_principal": "imgs/viaduto_foto2.jpg",
+      "descricao": "Rap e cultura urbana embaixo do viaduto.",
+      "local": "Viaduto Santa Tereza, Centro",
+      "horario": "Sexta, 20h",
+      "data": "2023-12-01",
+      "zona": "centro",
+      "preco": 0,
+      "ingressos": "Gratuito",
+      "lat": -19.9195,
+      "lng": -43.9346,
+      "destaque": true,
+      "categoria_principal_id": 1,
+      "conteudo": "A tradicional batalha de MCs seguida de shows locais. Ocupação urbana com muita arte, grafite e música boa. Espaço democrático para todos."
+    },
+    {
+      "id": 8,
+      "nome": "Exposição 'Olhares Modernos'",
+      "imagem_principal": "imgs/Role4.jpg",
+      "descricao": "Arte contemporânea no CCBB.",
+      "local": "CCBB, Praça da Liberdade",
+      "horario": "Ter a Dom, 10h às 20h",
+      "data": "2023-11-28",
+      "zona": "centro",
+      "preco": 0,
+      "ingressos": "Retirada no Site",
+      "lat": -19.9322,
+      "lng": -43.9381,
+      "destaque": false,
+      "categoria_principal_id": 2,
+      "conteudo": "Uma curadoria impecável de artistas novos da cena brasileira. Quadros, esculturas e instalações imersivas que vão mudar sua percepção de arte."
+    },
+    {
+      "id": 9,
+      "nome": "Café & Prosa",
+      "imagem_principal": "imgs/Role2.jpg",
+      "descricao": "Clube do livro e cafés especiais.",
+      "local": "Café com Letras, Savassi",
+      "horario": "Quinta, 19h",
+      "data": "2023-11-30",
+      "zona": "savassi",
+      "preco": 15,
+      "ingressos": "Consumação",
+      "lat": -19.9355,
+      "lng": -43.9328,
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "conteudo": "Para quem ama o cheiro de café e de livro novo. Traga sua leitura atual para discutir ou apenas relaxe tomando um cappuccino premiado."
+    },
+    {
+      "id": 10,
+      "nome": "Happy Hour da Crise",
+      "imagem_principal": "imgs/Role1.jpg",
+      "descricao": "Cerveja barata e conversa fiada.",
+      "local": "Maletta, Centro",
+      "horario": "Sexta, 18h",
+      "data": "2023-12-01",
+      "zona": "centro",
+      "preco": 10,
+      "ingressos": "Entrada Franca",
+      "lat": -19.9230,
+      "lng": -43.9405,
+      "destaque": false,
+      "categoria_principal_id": 4,
+      "conteudo": "Aquele rolê raiz no Edifício Maletta. Litrão barato, varanda com vista pro centro e aquela vibe caótica que a gente ama."
+    },
+    {
+      "id": 11,
+      "nome": "Pub Crawl BH",
+      "imagem_principal": "imgs/Hype2.jpg",
+      "descricao": "Tour pelos melhores bares.",
+      "local": "Ponto de Encontro: Praça da Savassi",
+      "horario": "Sábado, 20h",
+      "data": "2023-12-02",
+      "zona": "savassi",
+      "preco": 80,
+      "ingressos": "R$ 80 (Inclui shots)",
+      "lat": -19.9400,
+      "lng": -43.9340,
+      "destaque": false,
+      "categoria_principal_id": 1,
+      "conteudo": "Conheça 4 bares em uma noite só! O ingresso inclui um shot em cada bar e guia turístico da boemia. Ótimo para fazer novos amigos."
+    },
+    {
+      "id": 12,
+      "nome": "Festival de Cores",
+      "imagem_principal": "imgs/Spoiler1.jpg",
+      "descricao": "Música, pó colorido e alegria.",
+      "local": "Esplanada do Mineirão, Pampulha",
+      "horario": "Domingo, 14h",
+      "data": "2023-12-03",
+      "zona": "pampulha",
+      "preco": 120,
+      "ingressos": "R$ 120",
+      "lat": -19.8659,
+      "lng": -43.9711,
+      "destaque": true,
+      "categoria_principal_id": 3,
+      "conteudo": "O festival mais colorido do mundo chega a BH! DJs internacionais, contagem regressiva para explosão de cores a cada hora e muita energia positiva."
+    },
+    {
+      "id": 13,
+      "nome": "Parque Retrô",
+      "imagem_principal": "imgs/falencia.jpg",
+      "descricao": "Diversão nostálgica.",
+      "local": "Parque Guanabara, Pampulha",
+      "horario": "Domingo, 10h às 22h",
+      "data": "2023-12-03",
+      "zona": "pampulha",
+      "preco": 50,
+      "ingressos": "Passaporte R$ 50",
+      "lat": -19.8556,
+      "lng": -43.9797,
+      "destaque": false,
+      "categoria_principal_id": 5,
+      "conteudo": "Venha curtir os brinquedos clássicos, roda gigante com vista pra lagoa e aquele carrinho de bate-bate que marcou infância."
     }
   ]
 }
