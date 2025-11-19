@@ -1,0 +1,181 @@
+/* Importa a fonte Poppins do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* 1. Variáveis de Cor e Fonte (Baseado no Logo) */
+:root {
+    /* Define o roxo do logo como a cor primária do Bootstrap */
+    --bs-primary: #6f42c1; 
+    --bs-primary-rgb: 111, 66, 193;
+    
+    /* Define uma fonte nova para todo o site */
+    --bs-font-sans-serif: 'Poppins', sans-serif;
+    
+    /* Cores de apoio */
+    --bs-dark-custom: #343a40;
+    --bs-light-gray: #f9f9f9;
+}
+
+body {
+    font-family: var(--bs-font-sans-serif);
+    background-color: var(--bs-light-gray); /* Um fundo cinza bem claro */
+}
+
+/* 2. Componentes Globais */
+
+/* Títulos */
+h1, h3 {
+    color: var(--bs-dark-custom);
+    font-weight: 700; /* Títulos mais fortes */
+}
+
+/* Botão Primário (Roxo) */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.2);
+}
+.btn-primary:hover {
+    background-color: #5a359e; /* Tom mais escuro no hover */
+    border-color: #5a359e;
+    transform: translateY(-2px); /* Efeito de "levantar" */
+    box-shadow: 0 6px 15px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+/* Botão de Busca (Verde) */
+.btn-outline-success {
+    /* Troca o verde padrão pelo nosso roxo */
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #fff;
+}
+
+/* Navbar */
+.navbar.bg-light {
+    background-color: #fff !important; /* Navbar sempre branca */
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05); /* Sombra suave */
+}
+.navbar-brand img {
+    height: 80px; /* Logo um pouco menor */
+}
+.nav-link {
+    font-weight: 600;
+    color: #555;
+    transition: color 0.2s ease;
+}
+.nav-link:hover, .nav-link.active {
+    color: var(--bs-primary) !important;
+}
+
+/* Formulários (Inputs) */
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* Footer */
+footer {
+    background-color: var(--bs-dark-custom); /* Rodapé escuro */
+    color: var(--bs-light-gray);
+    padding: 2.5rem 0;
+}
+
+
+/* 3. Estilos por Página */
+
+/* --- index.html --- */
+
+/* Carrossel */
+#meuCarrossel .carousel-item img {
+    border-radius: 0.5rem; /* Cantos arredondados */
+}
+#meuCarrossel .carousel-caption {
+    /* Legenda com gradiente para melhor leitura */
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 1.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+#meuCarrossel .carousel-indicators button {
+    background-color: var(--bs-primary); /* Indicadores roxos */
+}
+
+/* Cards dos Rolês */
+#lista-de-roles .card {
+    border: none;
+    border-radius: 0.75rem; /* Cantos mais arredondados */
+    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+#lista-de-roles .card:hover {
+    transform: translateY(-5px); /* Efeito de "levantar" no hover */
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+#lista-de-roles .card-img-top {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+#lista-de-roles .card-title {
+    color: var(--bs-primary); /* Título do card roxo */
+    font-weight: 600;
+}
+
+/* Seção Sobre */
+#sobre {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+}
+
+/* --- detalhes.html --- */
+
+#detalhe-imagem {
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.list-group {
+    border-radius: 0.5rem;
+    overflow: hidden; /* Garante que os cantos fiquem arredondados */
+}
+.list-group-item {
+    border-color: #eee;
+}
+
+/* Galeria de Fotos (Detalhes) */
+#galeria-fotos .card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+}
+#galeria-fotos .card-img-top {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+
+/* --- cadastro.html & editar.html --- */
+
+/* Estiliza a seção do formulário como um card */
+#cadastro-evento,
+#edicao-evento {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    #cadastro-evento,
+    #edicao-evento {
+        padding: 1.5rem;
+    }
+}
