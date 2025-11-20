@@ -4,35 +4,44 @@
 :root {
     /* === Nova Paleta - Manual da Marca v2.0 === */
     --bg-body: #10002B;       /* Ultra Dark Purple */
-    --bg-card: rgba(36, 0, 70, 0.6); /* Roxo escuro translúcido */
-    --bg-glass: rgba(60, 9, 108, 0.4); /* Vidro mais claro para interações */
+    --bg-card: rgba(36, 0, 70, 0.85); /* Roxo escuro mais opaco para leitura */
+    --bg-glass: rgba(60, 9, 108, 0.6); /* Vidro mais visível */
     
     /* Cores de Destaque */
     --primary: #7B2CBF;       /* Roxo Brand */
     --primary-hover: #9D4EDD;
     --neon-accent: #00F5D4;   /* Verde Neon Brand */
-    --hot-pink: #F72585;      /* Novo: Rosa Quente para detalhes */
+    --hot-pink: #F72585;      /* Rosa Quente para detalhes */
     
     --text-main: #FFFFFF;
-    --text-muted: #E0AAFF;    /* Lilás claro para texto secundário */
+    /* WCAG: Alterado de #E0AAFF para #d1d1d1 para alto contraste */
+    --text-muted: #d1d1d1;    
     
     /* Efeitos */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.2); /* Borda levemente mais forte */
     --glow-shadow: 0 0 20px rgba(123, 44, 191, 0.4);
+}
+
+/* === Acessibilidade: Foco Visível para Navegação via Teclado === */
+:focus-visible {
+    outline: 3px solid var(--neon-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-body);
     color: var(--text-main);
-    background-image: radial-gradient(circle at 50% 0%, #240046 0%, #10002B 60%); /* Gradiente sutil no topo */
+    background-image: radial-gradient(circle at 50% 0%, #240046 0%, #10002B 60%);
     min-height: 100vh;
+    line-height: 1.6; /* Melhora legibilidade */
 }
 
 /* --- 1. Glassmorphism Navbar --- */
 .navbar {
-    background: rgba(18, 18, 18, 0.8) !important; /* Fundo escuro translúcido */
-    backdrop-filter: blur(12px); /* O efeito de desfoque */
+    background: rgba(18, 18, 18, 0.95) !important; /* Mais opaco para leitura */
+    backdrop-filter: blur(12px);
     border-bottom: var(--glass-border);
     padding: 1rem 0;
     transition: all 0.3s ease;
@@ -40,65 +49,64 @@ body {
 
 .navbar-brand img {
     height: 60px;
-    filter: drop-shadow(0 0 5px rgba(111, 66, 193, 0.5)); /* Brilho no logo */
+    filter: drop-shadow(0 0 5px rgba(111, 66, 193, 0.5));
 }
 
 .nav-link {
     color: var(--text-main) !important;
     font-weight: 500;
     position: relative;
+    padding: 0.5rem 1rem; /* Área de clique maior */
 }
 
-.nav-link:hover {
-    color: var(--primary) !important;
+.nav-link:hover, .nav-link:focus {
+    color: var(--primary-hover) !important;
     text-shadow: 0 0 8px rgba(111, 66, 193, 0.6);
 }
 
 /* Campo de busca estilo Neon */
 .form-control {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.1); /* Mais contraste no input */
     border: var(--glass-border);
     color: #fff;
     border-radius: 20px;
 }
 .form-control:focus {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 10px rgba(111, 66, 193, 0.3);
     border-color: var(--primary);
     color: #fff;
 }
-.form-control::placeholder { color: #6c757d; }
+.form-control::placeholder { color: #cccccc; } /* Placeholder mais claro */
 
 .btn-outline-success {
     border-color: var(--neon-accent);
     color: var(--neon-accent);
 }
 
-.btn-outline-success:hover {
+.btn-outline-success:hover, .btn-outline-success:focus {
     background-color: var(--neon-accent);
-    color: #10002B; /* Texto escuro para contraste */
+    color: #10002B;
     box-shadow: 0 0 15px var(--neon-accent);
 }
 
-/* --- 2. Hero Section (Substitui Carrossel) --- */
+/* --- 2. Hero Section --- */
 .hero-section {
     position: relative;
     height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Imagem de fundo estática impactante */
     background: url('../../imgs/Hype1.jpg') no-repeat center center/cover;
-    border-radius: 0 0 2rem 2rem; /* Curva na parte inferior */
+    border-radius: 0 0 2rem 2rem;
     overflow: hidden;
     margin-bottom: 3rem;
 }
 
-/* Overlay escuro para o texto aparecer */
 .hero-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(18,18,18,0.3), rgba(18,18,18,0.9));
+    background: linear-gradient(to bottom, rgba(16,0,43,0.4), rgba(16,0,43,0.95)); /* Overlay mais forte */
 }
 
 .hero-content {
@@ -112,26 +120,27 @@ body {
 .hero-title {
     font-size: 3.5rem;
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1.2;
     margin-bottom: 1rem;
     text-transform: uppercase;
-    /* Gradiente no texto */
     background: linear-gradient(90deg, #fff, var(--primary), var(--neon-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: glow 3s infinite alternate;
+    /* Fallback para browsers antigos */
+    color: var(--neon-accent); 
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
-    color: #ddd;
+    font-size: 1.25rem; /* Fonte um pouco maior */
+    color: #f0f0f0; /* Quase branco */
     margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .btn-cta {
     background: var(--primary);
     color: #fff;
-    padding: 12px 35px;
+    padding: 14px 40px; /* Botão maior para touch */
     border-radius: 30px;
     font-weight: 700;
     font-size: 1.1rem;
@@ -140,16 +149,16 @@ body {
     box-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.btn-cta:hover {
+.btn-cta:hover, .btn-cta:focus {
     transform: translateY(-3px) scale(1.05);
     background: var(--primary-hover);
     box-shadow: 0 0 30px rgba(111, 66, 193, 0.8);
+    color: #fff;
 }
 
 /* --- 3. Cards Modernos (Glassmorphism) --- */
 .card-role {
-    background: var(--bg-glass);
-    backdrop-filter: blur(10px);
+    background: var(--bg-card); /* Fundo mais escuro para contraste do texto */
     border: var(--glass-border);
     border-radius: 1rem;
     overflow: hidden;
@@ -158,16 +167,17 @@ body {
     position: relative;
 }
 
-.card-role:hover {
-    transform: translateY(-10px);
+.card-role:hover, .card-role:focus-within {
+    transform: translateY(-5px);
     border-color: var(--primary);
-    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
 }
 
 .card-img-wrapper {
     position: relative;
     height: 200px;
     overflow: hidden;
+    background-color: #000; /* Fundo preto enquanto carrega */
 }
 
 .card-role img {
@@ -177,8 +187,8 @@ body {
     transition: transform 0.5s ease;
 }
 
-.card-role:hover img {
-    transform: scale(1.1); /* Zoom suave na imagem */
+.card-role:hover img, .card-role:focus-within img {
+    transform: scale(1.1);
 }
 
 /* Badges Flutuantes */
@@ -193,16 +203,15 @@ body {
 }
 
 .badge-custom {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.85); /* Fundo mais escuro */
     color: #fff;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
 .badge-category {
@@ -218,13 +227,12 @@ body {
     gap: 1rem;
 }
 
-/* Ícone de Calendário Visual */
 .date-box {
-    background: rgba(255,255,255,0.08);
-    border: var(--glass-border);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
     border-radius: 10px;
-    min-width: 60px;
-    height: 60px;
+    min-width: 65px; /* Ligeiramente maior */
+    height: 65px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -234,14 +242,14 @@ body {
 
 .date-day {
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--neon-accent);
     text-transform: uppercase;
     line-height: 1;
 }
 
 .date-time {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #fff;
     margin-top: 2px;
 }
@@ -252,32 +260,59 @@ body {
 
 .card-title {
     font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
     color: #fff;
 }
 
 .card-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.4;
+    font-size: 0.95rem; /* Fonte aumentada */
+    color: var(--text-muted); /* Cinza claro WCAG AA */
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-/* --- 4. Categorias (Navegação) --- */
+/* Botão de Favoritar Acessível */
+.btn-fav-card {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7); /* Mais contraste */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    width: 44px; /* Área de toque mínima recomendada (44px) */
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-fav-card:hover, .btn-fav-card:focus {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-fav-card i {
+    font-size: 1.3rem;
+}
+
+/* --- 4. Categorias --- */
 .card-category {
-    background: linear-gradient(145deg, #1e1e1e, #252525);
-    border: none;
+    background: #1e1e1e;
+    border: 1px solid #333;
     border-radius: 15px;
     text-align: center;
     transition: all 0.3s ease;
-    border: 1px solid transparent;
+    min-height: 80px; /* Altura mínima para clique */
 }
 
-.card-category:hover {
+.card-category:hover, .card-category:focus-within {
     background: #2a2a2a;
     border-color: var(--primary);
     transform: translateY(-5px);
@@ -286,161 +321,59 @@ body {
 .card-category h5 {
     color: var(--primary);
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 0;
 }
 
-.card-category:hover h5 {
+.card-category:hover h5, .card-category:focus-within h5 {
     color: var(--neon-accent);
-    text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
 }
 
-/* --- 5. Footer & Textos Gerais --- */
-h3 {
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-footer {
-    background-color: #0a0a0a;
-    border-top: var(--glass-border);
-    color: var(--text-muted);
-}
-
-/* Página Detalhes e Cadastro */
-#detalhe-do-evento, #cadastro-evento, #edicao-evento, #sobre {
-    background: var(--bg-card);
-    border-radius: 15px;
-    padding: 2rem;
-    border: var(--glass-border);
-}
-
-label { color: var(--text-muted); font-weight: 500; }
-.list-group-item {
-    background-color: transparent;
-    border-color: rgba(255,255,255,0.1);
-    color: #ddd;
-}
-
-@keyframes glow {
-    from { text-shadow: 0 0 10px rgba(111, 66, 193, 0.2); }
-    to { text-shadow: 0 0 20px rgba(111, 66, 193, 0.8), 0 0 10px rgba(0, 255, 157, 0.5); }
-}
-
-/* Ajuste Responsivo Hero */
-@media (max-width: 768px) {
-    .hero-title { font-size: 2.5rem; }
-    .hero-section { height: 400px; }
-}
-
-/* Botão de Favoritar no Card (Home) */
-.btn-fav-card {
-    position: absolute;
-    top: 10px;
-    left: 10px; /* Posicionado à esquerda para não brigar com os badges */
-    z-index: 10; /* Garante que fique acima do link e da imagem */
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
-}
-
-.btn-fav-card:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-.btn-fav-card i {
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
-}
-
-/* Animação de "Pop" ao clicar */
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
-}
-
-.anim-pop {
-    animation: pop 0.3s ease;
-}
-
-/* --- UX: Loading Animations (NOVO) --- */
-
-/* Animação de pulso para o texto "Carregando..." */
-@keyframes pulseOpacity {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
-}
-
-.animate-pulse {
-    animation: pulseOpacity 1.5s infinite ease-in-out;
-}
-
-/* Ajuste dos Placeholders do Bootstrap para o Tema Escuro */
-.placeholder {
-    border-radius: 4px;
-}
-
-/* Garante que o brilho (glow) apareça sobre o fundo escuro */
-.placeholder-glow .placeholder {
-    animation: placeholder-glow 2s ease-in-out infinite;
-}
-
-@keyframes placeholder-glow {
-    50% {
-        opacity: 0.2;
-    }
-}
-
-/* =========================================
-   CORREÇÕES DE LEGIBILIDADE (High Contrast)
-   ========================================= */
-
-/* Força texto branco em todos os cards */
-.card-role, .card {
-    background: var(--bg-card) !important;
-    border: var(--glass-border) !important;
-}
-
-/* Títulos e descrições dentro dos cards */
-.card-title {
-    color: #fff !important;
-}
-.card-desc {
-    color: #ccc !important; /* Cinza claro para leitura fácil */
-}
-
-/* Inputs e Selects (Fundo escuro, texto claro) */
+/* --- 5. Elementos de Formulário (Alto Contraste) --- */
 .form-control, .form-select {
     background-color: #2c2c2c !important;
-    border: 1px solid #444 !important;
+    border: 1px solid #666 !important; /* Borda visível */
     color: #fff !important;
+    font-size: 1rem;
 }
 
-/* Placeholder dos inputs (ex: "Digite aqui...") */
-.form-control::placeholder {
-    color: #bbb !important;
-}
-
-/* Ao clicar no input */
 .form-control:focus, .form-select:focus {
     background-color: #333 !important;
     border-color: var(--primary) !important;
     color: #fff !important;
-    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25) !important;
+    box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.5) !important; /* Anel de foco forte */
 }
 
-/* Textos mudos do Bootstrap (ex: "small text") */
+label { 
+    color: #f0f0f0 !important; /* Rótulos claros */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
 .text-muted {
-    color: #a0a0a0 !important;
+    color: var(--text-muted) !important;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .hero-title { 
+        font-size: 2.2rem; 
+        word-break: break-word;
+    }
+    .hero-section { height: 450px; }
+    
+    /* Melhoria no layout dos cards em mobile */
+    .card-body-custom {
+        padding: 1rem;
+    }
+    
+    /* Textos maiores para leitura em tela pequena */
+    body { font-size: 16px; }
+}
+
+/* Animações Reduzidas (Preferências do Usuário) */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
 }

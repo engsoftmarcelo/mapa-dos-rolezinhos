@@ -42,7 +42,6 @@ window.loginGoogle = async () => {
             background: '#1e1e1e', color: '#fff' 
         });
     } catch (error) {
-        // [TRATAMENTO DE ERRO] Feedback claro de falha no login
         console.error("Erro Auth:", error);
         Swal.fire({ 
             title: 'Ops!', 
@@ -68,10 +67,15 @@ function atualizarInterfaceUsuario(user) {
     if (!container) return;
 
     if (user) {
+        // Adicionado aria-label nos botões e imagens para leitores de tela
         container.innerHTML = `
             <div class="dropdown">
-                <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="${user.photoURL}" class="rounded-circle" style="width: 24px; height: 24px;" alt="Foto de perfil">
+                <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                        aria-label="Menu do usuário ${user.displayName}">
+                    <img src="${user.photoURL}" class="rounded-circle" style="width: 24px; height: 24px;" alt="Sua foto de perfil">
                     <span class="d-none d-md-inline text-white">${user.displayName.split(' ')[0]}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
@@ -83,8 +87,8 @@ function atualizarInterfaceUsuario(user) {
         `;
     } else {
         container.innerHTML = `
-            <button onclick="loginGoogle()" class="btn btn-outline-light btn-sm rounded-pill">
-                <i class="bi bi-google me-2"></i>Entrar
+            <button onclick="loginGoogle()" class="btn btn-outline-light btn-sm rounded-pill" aria-label="Entrar com Google">
+                <i class="bi bi-google me-2" aria-hidden="true"></i>Entrar
             </button>
         `;
     }
@@ -92,7 +96,6 @@ function atualizarInterfaceUsuario(user) {
 
 // --- BANCO DE DADOS (DATA FETCHING) ---
 
-// [TRATAMENTO DE ERRO] Adicionado try/catch para lidar com falhas de rede
 async function fetchRoles(termoBusca = null) {
     try {
         const eventosRef = collection(db, "eventos");
@@ -111,7 +114,6 @@ async function fetchRoles(termoBusca = null) {
         return roles;
     } catch (error) {
         console.error("Erro ao buscar roles:", error);
-        // Retorna array vazio para não quebrar o .forEach de quem chamou
         return []; 
     }
 }
@@ -125,11 +127,11 @@ async function fetchRoleById(id) {
         if (docSnap.exists()) {
             return { id: docSnap.id, ...docSnap.data() };
         } else {
-            return null; // Retorna explicitamente null se não existir
+            return null;
         }
     } catch (error) {
         console.error("Erro ao buscar role por ID:", error);
-        throw error; // Lança o erro para ser tratado na UI (exibir mensagem)
+        throw error;
     }
 }
 
@@ -176,6 +178,8 @@ window.toggleFavCard = async function(event, idRole) {
             await updateDoc(userRef, { favoritos: arrayRemove(idRole.toString()) });
             icon.classList.replace('bi-heart-fill', 'bi-heart');
             icon.classList.replace('text-danger', 'text-white');
+            // Atualiza ARIA Label dinamicamente
+            btn.setAttribute('aria-label', 'Adicionar aos favoritos');
         } else {
             await updateDoc(userRef, { favoritos: arrayUnion(idRole.toString()) });
             icon.classList.replace('bi-heart', 'bi-heart-fill');
@@ -186,6 +190,8 @@ window.toggleFavCard = async function(event, idRole) {
                 title: 'Salvo!', showConfirmButton: false, timer: 1500,
                 background: '#1e1e1e', color: '#fff'
             });
+            // Atualiza ARIA Label dinamicamente
+            btn.setAttribute('aria-label', 'Remover dos favoritos');
         }
     } catch (e) {
         console.error("Erro favorito:", e);
@@ -202,19 +208,20 @@ async function atualizarIconesFavoritos() {
         if (docSnap.exists()) {
             const favs = docSnap.data().favoritos || [];
             document.querySelectorAll('.btn-fav-card').forEach(btn => {
-                // Extrai ID de forma segura
                 const onclickText = btn.getAttribute('onclick'); 
                 const idMatch = onclickText && onclickText.match(/toggleFavCard\(event,\s*['"]?(\d+)['"]?\)/);
+                
                 if (idMatch && favs.includes(idMatch[1])) {
                     const icon = btn.querySelector('i');
                     if(icon) {
                         icon.classList.replace('bi-heart', 'bi-heart-fill');
                         icon.classList.replace('text-white', 'text-danger');
+                        // Define o estado correto para leitores de tela
+                        btn.setAttribute('aria-label', 'Remover dos favoritos');
                     }
                 }
             });
             
-            // Página de Detalhes
             const btnDetail = document.getElementById('btn-fav-detail');
             if(btnDetail) {
                 const params = new URLSearchParams(window.location.search);
@@ -224,6 +231,7 @@ async function atualizarIconesFavoritos() {
                     icon.classList.replace('bi-heart', 'bi-heart-fill');
                     btnDetail.classList.remove('btn-outline-danger');
                     btnDetail.classList.add('btn-danger');
+                    btnDetail.setAttribute('aria-label', 'Remover dos favoritos');
                 }
             }
         }
@@ -235,7 +243,6 @@ async function atualizarIconesFavoritos() {
 // --- RENDERIZAÇÃO HTML ---
 
 async function renderCardHTML(role) {
-    // Tratamento para dados ausentes
     const horarioSafe = role.horario || "Horário a definir";
     let dia = "DATA";
     let hora = "";
@@ -249,7 +256,6 @@ async function renderCardHTML(role) {
     const cat = await fetchCategoriaById(role.categoria_principal_id);
     const nomeCategoria = cat ? cat.nome.split(' ')[0] : "Geral";
     
-    // Fallback de imagem
     const imgSafe = role.imagem_principal || 'imgs/logoMapaDosRolezinhos.png';
     
     let badgePreco = "";
@@ -257,32 +263,41 @@ async function renderCardHTML(role) {
         badgePreco = `<span class="badge-custom" style="background:var(--neon-accent); color:#000;">FREE</span>`;
     }
 
+    // ACESSIBILIDADE: 
+    // 1. aria-label no botão de favorito
+    // 2. aria-hidden="true" no ícone
+    // 3. alt descritivo na imagem
+    // 4. Estrutura semântica
+
     return `
     <div class="col">
         <div class="card-role position-relative">
-            <button class="btn-fav-card" onclick="toggleFavCard(event, ${role.id})" title="Favoritar" aria-label="Adicionar aos favoritos">
-                <i class="bi bi-heart text-white"></i>
+            <button class="btn-fav-card" 
+                    onclick="toggleFavCard(event, ${role.id})" 
+                    title="Favoritar" 
+                    aria-label="Adicionar ${role.nome} aos favoritos">
+                <i class="bi bi-heart text-white" aria-hidden="true"></i>
             </button>
-            <a href="detalhes.html?id=${role.id}" class="text-decoration-none">
+            <a href="detalhes.html?id=${role.id}" class="text-decoration-none" aria-label="Ver detalhes sobre ${role.nome}">
                 <div class="card-badges">
                     <span class="badge-custom badge-category">${nomeCategoria}</span>
                     ${badgePreco}
                 </div>
                 <div class="card-img-wrapper">
                     <img src="${imgSafe}" 
-                         alt="${role.nome}" 
+                         alt="Foto de divulgação do evento ${role.nome}" 
                          loading="lazy" 
                          class="w-100 h-100 object-fit-cover"
                          onerror="this.onerror=null; this.src='imgs/logoMapaDosRolezinhos.png';">
                 </div>
                 <div class="card-body-custom">
-                    <div class="date-box">
-                        <span class="date-day">${dia}</span>
-                        <span class="date-time">${hora}</span>
+                    <div class="date-box" aria-label="Data do evento: ${dia}, horário: ${hora}">
+                        <span class="date-day" aria-hidden="true">${dia}</span>
+                        <span class="date-time" aria-hidden="true">${hora}</span>
                     </div>
                     <div class="card-info">
                         <h5 class="card-title text-truncate">${role.nome}</h5>
-                        <p class="card-desc">${role.descricao || 'Sem descrição.'}</p>
+                        <p class="card-desc">${role.descricao || 'Sem descrição disponível.'}</p>
                     </div>
                 </div>
             </a>
@@ -293,9 +308,10 @@ async function renderCardHTML(role) {
 function renderSkeletonCards(qtd = 3) {
     let html = '';
     for (let i = 0; i < qtd; i++) {
+        // Adicionado role="status" e aria-label para indicar carregamento
         html += `
         <div class="col">
-            <div class="card-role position-relative" aria-hidden="true">
+            <div class="card-role position-relative" aria-hidden="true" role="status" aria-label="Carregando evento">
                 <div class="card-img-wrapper bg-secondary bg-opacity-25 placeholder-glow">
                     <span class="placeholder w-100 h-100"></span>
                 </div>
@@ -332,24 +348,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             const destaques = roles.filter(r => r.destaque).slice(0, 6);
             
             if(destaques.length === 0) {
-                // [TRATAMENTO DE ERRO] Estado vazio amigável
-                listaDestaques.innerHTML = '<div class="col-12 text-center text-muted py-4">Nenhum destaque encontrado no momento.</div>';
+                listaDestaques.innerHTML = '<div class="col-12 text-center text-muted py-4" role="alert">Nenhum destaque encontrado no momento.</div>';
             } else {
                 for (const r of destaques) {
                     listaDestaques.innerHTML += await renderCardHTML(r);
                 }
             }
             
-            // Categorias (Estático + Dinâmico)
             const listaCat = document.getElementById('lista-de-categorias');
             if(listaCat) {
                 const cats = await fetchCategorias();
                 listaCat.innerHTML = '';
                 cats.forEach(c => {
+                    // Adicionado aria-label
                     listaCat.innerHTML += `
                         <div class="col">
                             <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center">
-                                <a href="categoria.html?id=${c.id}" class="text-decoration-none w-100">
+                                <a href="categoria.html?id=${c.id}" class="text-decoration-none w-100" aria-label="Filtrar por categoria: ${c.nome}">
                                     <h5 class="m-0" style="font-size: 0.9rem;">${c.nome}</h5>
                                 </a>
                             </div>
@@ -360,36 +375,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (e) {
             console.error("Falha na Home:", e);
-            listaDestaques.innerHTML = '<div class="text-danger text-center">Erro ao carregar destaques. Atualize a página.</div>';
+            listaDestaques.innerHTML = '<div class="text-danger text-center" role="alert">Erro ao carregar destaques. Atualize a página.</div>';
         }
     }
 
-    // 2. PÁGINA DE DETALHES (Robustez Crítica)
+    // 2. PÁGINA DE DETALHES
     if (detalheArea && idEvento) {
         try {
-            // [TRATAMENTO DE ERRO] Busca dados
             const evt = await fetchRoleById(idEvento);
 
-            // [TRATAMENTO DE ERRO] Redirecionamento se não existir
             if (!evt) {
-                console.warn("Evento não encontrado, redirecionando para 404");
                 window.location.href = '404.html';
                 return;
             }
 
-            // Sucesso: Remove loading e mostra conteúdo
             document.getElementById('loading-msg').style.display = 'none';
             document.getElementById('content-area').style.display = 'block';
             
             const cat = await fetchCategoriaById(evt.categoria_principal_id);
             
-            // Preenchimento Seguro (usa "|| '-'" se faltar dado)
             document.getElementById('detalhe-categoria').textContent = cat ? cat.nome : 'Geral';
-            document.getElementById('detalhe-titulo').textContent = evt.nome || 'Sem título';
-            document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logoMapaDosRolezinhos.png';
             
-            // Tratamento de erro para a imagem
-            document.getElementById('detalhe-imagem').onerror = function() {
+            const titleEl = document.getElementById('detalhe-titulo');
+            titleEl.textContent = evt.nome || 'Sem título';
+            document.title = `${evt.nome} | Detalhes`; // Atualiza título da aba para acessibilidade
+            
+            const imgEl = document.getElementById('detalhe-imagem');
+            imgEl.src = evt.imagem_principal || 'imgs/logoMapaDosRolezinhos.png';
+            imgEl.alt = `Foto principal do evento ${evt.nome}`; // Alt dinâmico
+            
+            imgEl.onerror = function() {
                 this.src = 'imgs/logoMapaDosRolezinhos.png';
             };
 
@@ -402,12 +417,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('detalhe-atracoes').textContent = evt.atracoes_principais || 'Em breve';
 
             const btnFavDetail = document.getElementById('btn-fav-detail');
-            if(btnFavDetail) btnFavDetail.onclick = (e) => toggleFavCard(e, evt.id);
+            if(btnFavDetail) {
+                btnFavDetail.onclick = (e) => toggleFavCard(e, evt.id);
+                btnFavDetail.setAttribute('aria-label', `Adicionar ${evt.nome} aos favoritos`);
+            }
             
             const btnEditar = document.getElementById('btn-editar');
-            if(btnEditar) btnEditar.href = `editar.html?id=${evt.id}`;
+            if(btnEditar) {
+                btnEditar.href = `editar.html?id=${evt.id}`;
+                btnEditar.setAttribute('aria-label', `Editar informações do evento ${evt.nome}`);
+            }
 
-            // Mapa (Leaflet)
+            // Mapa
             if (evt.lat && evt.lng) {
                 const mapContainer = document.getElementById('map-detail');
                 if (mapContainer && typeof L !== 'undefined') {
@@ -415,10 +436,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
                         attribution: '&copy; OpenStreetMap contributors' 
                     }).addTo(map);
-                    L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(`<b>${evt.nome}</b>`).openPopup();
+                    // Marcador com título acessível
+                    L.marker([evt.lat, evt.lng], { title: evt.nome, alt: `Localização de ${evt.nome}` }).addTo(map).bindPopup(`<b>${evt.nome}</b>`).openPopup();
                 }
             } else {
-                // Se não tiver coordenadas, esconde o mapa ou mostra aviso
                 const mapContainer = document.getElementById('map-detail');
                 if(mapContainer) mapContainer.innerHTML = '<p class="text-muted small fst-italic p-3 text-center border border-secondary rounded">Mapa indisponível para este local.</p>';
             }
@@ -426,18 +447,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(atualizarIconesFavoritos, 1000);
 
         } catch (error) {
-            // [TRATAMENTO DE ERRO] UI de erro na própria página (se rede cair)
             console.error("Erro crítico detalhes:", error);
             document.getElementById('loading-msg').innerHTML = `
                 <div class="alert alert-danger bg-dark border-danger text-white w-75 mx-auto" role="alert">
-                    <h4 class="alert-heading"><i class="bi bi-wifi-off"></i> Erro de Conexão</h4>
+                    <h4 class="alert-heading"><i class="bi bi-wifi-off" aria-hidden="true"></i> Erro de Conexão</h4>
                     <p>Não conseguimos carregar os detalhes do rolê. Verifique sua internet.</p>
                     <button onclick="window.location.reload()" class="btn btn-outline-light btn-sm mt-2">Tentar Novamente</button>
                 </div>
             `;
         }
     } else if (detalheArea && !idEvento) {
-        // Se entrou em detalhes.html sem ID na URL
         window.location.href = 'index.html';
     }
 
@@ -456,15 +475,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 } else {
                     containerAlvo.innerHTML = `
-                        <div class="col-12 text-center py-5">
-                            <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+                        <div class="col-12 text-center py-5" role="alert">
+                            <i class="bi bi-search fs-1 text-muted mb-3 d-block" aria-hidden="true"></i>
                             <h4 class="text-white">Nenhum rolê encontrado.</h4>
                             <p class="text-muted">Tente buscar por outro termo.</p>
                         </div>`;
                 }
                 setTimeout(atualizarIconesFavoritos, 1000);
             } catch (e) {
-                containerAlvo.innerHTML = '<p class="text-danger text-center">Erro ao buscar eventos.</p>';
+                containerAlvo.innerHTML = '<p class="text-danger text-center" role="alert">Erro ao buscar eventos.</p>';
             }
         }
     }
@@ -472,7 +491,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 4. CADASTRO / EDIÇÃO
     const fCad = document.getElementById('form-cadastro') || document.getElementById('form-edicao');
     if(fCad) {
-        // Preencher categorias
         const s = document.getElementById('categoria_principal_id');
         if(s) {
             try {
@@ -494,16 +512,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const btnSubmit = fCad.querySelector('button[type="submit"]');
             const originalText = btnSubmit.innerHTML;
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Salvando...';
+            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
 
             try {
-                const idInput = document.getElementById('id'); // Existe na edição
+                const idInput = document.getElementById('id'); 
                 const isEdit = idInput && idInput.value;
                 const idRole = isEdit ? idInput.value : Date.now().toString();
 
                 const payload = {
                     nome: document.getElementById('nome').value,
-                    imagem_principal: 'imgs/logoMapaDosRolezinhos.png', // Mock upload
+                    imagem_principal: 'imgs/logoMapaDosRolezinhos.png', 
                     descricao: document.getElementById('descricao').value,
                     conteudo: document.getElementById('conteudo').value,
                     local: document.getElementById('local').value,
@@ -516,7 +534,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if(!isEdit) payload.criado_por = currentUser.email;
 
-                // Usa setDoc com merge para servir tanto pra criar quanto editar
                 await setDoc(doc(db, "eventos", idRole), payload, { merge: true });
 
                 Swal.fire({ 
