@@ -2,28 +2,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    /* Cores Base - Night Mode */
-    --bg-body: #121212;       /* Cinza muito escuro, quase preto */
-    --bg-card: #1e1e1e;       /* Cinza um pouco mais claro para cards */
-    --bg-glass: rgba(30, 30, 30, 0.65); /* Translúcido para glassmorphism */
+    /* === Nova Paleta - Manual da Marca v2.0 === */
+    --bg-body: #10002B;       /* Ultra Dark Purple */
+    --bg-card: rgba(36, 0, 70, 0.6); /* Roxo escuro translúcido */
+    --bg-glass: rgba(60, 9, 108, 0.4); /* Vidro mais claro para interações */
     
     /* Cores de Destaque */
-    --primary: #6f42c1;       /* Roxo Original */
-    --primary-hover: #855bc9;
-    --neon-accent: #00ff9d;   /* Verde Neon para detalhes vibrantes */
-    --text-main: #ffffff;
-    --text-muted: #b0b3b8;
+    --primary: #7B2CBF;       /* Roxo Brand */
+    --primary-hover: #9D4EDD;
+    --neon-accent: #00F5D4;   /* Verde Neon Brand */
+    --hot-pink: #F72585;      /* Novo: Rosa Quente para detalhes */
+    
+    --text-main: #FFFFFF;
+    --text-muted: #E0AAFF;    /* Lilás claro para texto secundário */
     
     /* Efeitos */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-    --glow-shadow: 0 0 15px rgba(111, 66, 193, 0.4);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+    --glow-shadow: 0 0 20px rgba(123, 44, 191, 0.4);
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-body);
     color: var(--text-main);
-    overflow-x: hidden; /* Evita rolagem lateral indesejada */
+    background-image: radial-gradient(circle at 50% 0%, #240046 0%, #10002B 60%); /* Gradiente sutil no topo */
+    min-height: 100vh;
 }
 
 /* --- 1. Glassmorphism Navbar --- */
@@ -69,12 +72,11 @@ body {
 .btn-outline-success {
     border-color: var(--neon-accent);
     color: var(--neon-accent);
-    border-radius: 20px;
-    font-weight: 600;
 }
+
 .btn-outline-success:hover {
     background-color: var(--neon-accent);
-    color: #000;
+    color: #10002B; /* Texto escuro para contraste */
     box-shadow: 0 0 15px var(--neon-accent);
 }
 
@@ -405,8 +407,9 @@ label { color: var(--text-muted); font-weight: 500; }
    ========================================= */
 
 /* Força texto branco em todos os cards */
-.card-role, .card, .card-body-custom {
-    color: var(--text-main) !important;
+.card-role, .card {
+    background: var(--bg-card) !important;
+    border: var(--glass-border) !important;
 }
 
 /* Títulos e descrições dentro dos cards */

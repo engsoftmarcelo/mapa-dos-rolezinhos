@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Não Encontrada | Mapa dos Rolezinhos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Estilo específico para centralizar a 404 */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #fff, var(--primary), var(--neon-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Simplificada -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container justify-content-center">
+            <a class="navbar-brand" href="index.html">
+                <img src="imgs/logoMapaDosRolezinhos.png" alt="Logo" height="50">
+            </a>
+        </div>
+    </nav>
+
+    <main class="error-container">
+        <div>
+            <h1 class="error-code">404</h1>
+            <h2 class="text-white fw-bold mb-3">Eita! Esse rolê miou.</h2>
+            <p class="text-muted fs-5 mb-4" style="max-width: 500px; margin: 0 auto;">
+                A página que você está procurando não existe, foi movida ou o evento já acabou.
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a href="index.html" class="btn btn-cta">
+                    <i class="bi bi-house-door me-2"></i>Voltar para a Pista
+                </a>
+                <a href="todos.html" class="btn btn-outline-light rounded-pill px-4 py-2">
+                    Ver Todos os Rolês
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4 mt-auto">
+        <p class="mb-0 small text-muted">&copy; 2025 Mapa dos Rolezinhos.</p>
+    </footer>
+</body>
+</html>

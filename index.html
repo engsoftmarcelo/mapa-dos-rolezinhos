@@ -17,9 +17,19 @@
   <header>
     <nav class="navbar navbar-expand-lg sticky-top">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img src="imgs/logoMapaDosRolezinhos.png" alt="Logo Mapa dos Rolezinhos">
-        </a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+    <svg width="50" height="50" viewBox="0 0 100 100" fill="none">
+        <path d="M50 95C50 95 85 65 85 40C85 20.67 69.33 5 50 5C30.67 5 15 20.67 15 40C15 65 50 95 50 95Z" fill="url(#logoGradient)"/>
+        <path d="M50 25L55 35H65L57 42L60 52L50 46L40 52L43 42L35 35H45L50 25Z" fill="#10002B"/>
+        <defs>
+            <linearGradient id="logoGradient" x1="15" y1="5" x2="85" y2="95" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00F5D4"/>
+                <stop offset="1" stop-color="#7B2CBF"/>
+            </linearGradient>
+        </defs>
+    </svg>
+    <span class="fw-bold d-none d-sm-block" style="font-size: 1.2rem;">Mapa dos Rolezinhos</span>
+</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
         </button>
