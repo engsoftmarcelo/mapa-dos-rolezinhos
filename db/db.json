@@ -1,235 +1,714 @@
 {
   "usuarios": [
-    { "id": "admin", "login": "admin", "senha": "123", "nome": "Admin" }
+    {
+      "id": "admin",
+      "login": "admin",
+      "senha": "123",
+      "nome": "Admin"
+    }
   ],
   "categorias_principais": [
-    { "id": 1, "nome": "Festas e Vida Noturna", "descricao": "Baladas, shows e bares." },
-    { "id": 2, "nome": "Cultura e Arte", "descricao": "Museus, teatro e exposições." },
-    { "id": 3, "nome": "Ao Ar Livre", "descricao": "Parques e atividades diurnas." },
-    { "id": 4, "nome": "Gastronomia", "descricao": "Comida e bebida." },
-    { "id": 5, "nome": "Jogos e Geek", "descricao": "Board games e e-sports." }
-  ],
-  "roles": [
     {
       "id": 1,
-      "nome": "Festa da Atlética",
-      "imagem_principal": "imgs/atletica_foto1.jpg",
-      "descricao": "A maior festa universitária do semestre!",
-      "local": "Espaço Modular, Centro",
-      "horario": "Sexta, 22h",
-      "data": "2023-11-24",
-      "zona": "centro",
-      "preco": 40,
-      "ingressos": "R$ 40",
-      "lat": -19.9191,
-      "lng": -43.9386,
-      "destaque": true,
-      "categoria_principal_id": 1,
-      "conteudo": "Prepare-se para a noite mais insana do ano! Open bar, 3 pistas de dança e as melhores atrações universitárias. Traga sua caneca e venha curtir com a gente até o amanhecer."
+      "nome": "Festas e Vida Noturna",
+      "descricao": "Baladas, shows e bares."
     },
     {
       "id": 2,
-      "nome": "Piquenique Cultural",
-      "imagem_principal": "imgs/piquenique_foto2.jpg",
-      "descricao": "Música e arte no parque.",
-      "local": "Parque Municipal, Centro",
-      "horario": "Sábado, 15h",
-      "data": "2023-11-25",
-      "zona": "centro",
-      "preco": 0,
-      "ingressos": "Gratuito",
-      "lat": -19.9246,
-      "lng": -43.9363,
-      "destaque": true,
-      "categoria_principal_id": 3,
-      "conteudo": "Um dia de sol, grama verde e muita cultura. Traga sua canga, seu lanche e aproveite shows acústicos de artistas locais, oficinas de pintura e yoga ao pôr do sol."
+      "nome": "Cultura e Arte",
+      "descricao": "Museus, teatro e exposições."
     },
     {
       "id": 3,
-      "nome": "Hype Neon",
-      "imagem_principal": "imgs/Hype1.jpg",
-      "descricao": "Festa eletrônica na Savassi.",
-      "local": "Clube Chalezinho, Savassi",
-      "horario": "Sábado, 23h",
-      "data": "2023-11-25",
-      "zona": "savassi",
-      "preco": 60,
-      "ingressos": "R$ 60",
-      "lat": -19.9724,
-      "lng": -43.9638,
-      "destaque": true,
-      "categoria_principal_id": 1,
-      "conteudo": "Muita luz negra, tintas neon e o melhor da cena eletrônica de BH. DJs convidados de SP e RJ para fazer a pista tremer."
+      "nome": "Ao Ar Livre",
+      "descricao": "Parques e atividades diurnas."
     },
     {
       "id": 4,
-      "nome": "Noite de Jogos",
-      "imagem_principal": "imgs/jogos_foto2.jpg",
-      "descricao": "Board games e hambúrguer.",
-      "local": "Funtasy, Savassi",
-      "horario": "Domingo, 18h",
-      "data": "2023-11-26",
-      "zona": "savassi",
-      "preco": 20,
-      "ingressos": "R$ 20",
-      "lat": -19.9393,
-      "lng": -43.9334,
-      "destaque": false,
-      "categoria_principal_id": 5,
-      "conteudo": "Venha desafiar seus amigos nos melhores board games modernos enquanto come aquele burger artesanal delicioso. Temos monitores para ensinar as regras!"
+      "nome": "Gastronomia",
+      "descricao": "Comida e bebida."
     },
     {
       "id": 5,
-      "nome": "Volta na Pampulha",
-      "imagem_principal": "imgs/Hype3.jpg",
-      "descricao": "Pedal matinal na lagoa.",
-      "local": "Igrejinha da Pampulha",
-      "horario": "Domingo, 08h",
-      "data": "2023-11-26",
-      "zona": "pampulha",
-      "preco": 0,
-      "ingressos": "Gratuito",
-      "lat": -19.8586,
-      "lng": -43.9783,
-      "destaque": false,
-      "categoria_principal_id": 3,
-      "conteudo": "Energia lá em cima para começar o domingo. Ponto de encontro na Igrejinha. Traga sua bike, patins ou venha correndo. Hidratação por conta da organização."
-    },
+      "nome": "Jogos e Geek",
+      "descricao": "Board games e e-sports."
+    }
+  ],
+  "roles": [
     {
-      "id": 6,
-      "nome": "Feira Gastronômica de Rua",
-      "imagem_principal": "imgs/Hype4.jpg",
-      "descricao": "Comidas típicas e música ao vivo.",
-      "local": "Av. Getúlio Vargas, Savassi",
-      "horario": "Domingo, 10h",
-      "data": "2023-11-26",
-      "zona": "savassi",
-      "preco": 0,
-      "ingressos": "Gratuito",
-      "lat": -19.9333,
-      "lng": -43.9371,
-      "destaque": true,
-      "categoria_principal_id": 4,
-      "conteudo": "O melhor da comida de rua de BH! Barracas com pratos mineiros, hambúrgueres, cervejas artesanais e muito mais. Show de chorinho a partir das 13h."
+      "id": "evt_night_001",
+      "category_id": 1,
+      "title": "Quintaneja Premium no Chalezinho",
+      "description": "A noite de sertanejo mais tradicional e sofisticada de Belo Horizonte. O Clube Chalezinho oferece uma experiência imersiva com decoração temática, carta de drinks exclusivos e shows com as melhores duplas do cenário mineiro e nacional. Ideal para quem busca gente bonita e animação em um ambiente climatizado e seguro.",
+      "date": "2025-11-27T22:00:00",
+      "location": {
+        "address": "Av. Professor Mário Werneck, 530 - Buritis, Belo Horizonte - MG",
+        "latitude": -19.968057,
+        "longitude": -43.957388
+      },
+      "venue": "Clube Chalezinho",
+      "price": "R$ 60,00",
+      "image_url": "https://example.com/images/chalezinho_sertanejo.jpg"
     },
-    {
-      "id": 7,
-      "nome": "Baile do Viaduto",
-      "imagem_principal": "imgs/viaduto_foto2.jpg",
-      "descricao": "Rap e cultura urbana embaixo do viaduto.",
-      "local": "Viaduto Santa Tereza, Centro",
-      "horario": "Sexta, 20h",
-      "data": "2023-12-01",
-      "zona": "centro",
-      "preco": 0,
-      "ingressos": "Gratuito",
-      "lat": -19.9195,
-      "lng": -43.9346,
-      "destaque": true,
-      "categoria_principal_id": 1,
-      "conteudo": "A tradicional batalha de MCs seguida de shows locais. Ocupação urbana com muita arte, grafite e música boa. Espaço democrático para todos."
+{
+      "id": "evt_night_002",
+      "category_id": 1,
+      "title": "Wannabe Jalapeño - Tributo Red Hot Chili Peppers",
+      "description": "Uma noite eletrizante dedicada aos clássicos do Red Hot Chili Peppers. O Jack Rock Bar oferece um ambiente climatizado, sinuca, sushibar e uma vasta seleção de cervejas especiais, proporcionando a atmosfera perfeita para os amantes do rock'n'roll e da cultura pop.",
+      "date": "2025-11-28T21:00:00",
+      "location": {
+        "address": "Av. do Contorno, 5623 - Funcionários, Belo Horizonte - MG",
+        "latitude": -19.9362,
+        "longitude": -43.9321
+      },
+      "venue": "Jack Rock Bar",
+      "price": "R$ 40,00",
+      "image_url": "https://example.com/images/jack_rock_rhcp.jpg"
     },
-    {
-      "id": 8,
-      "nome": "Exposição 'Olhares Modernos'",
-      "imagem_principal": "imgs/Role4.jpg",
-      "descricao": "Arte contemporânea no CCBB.",
-      "local": "CCBB, Praça da Liberdade",
-      "horario": "Ter a Dom, 10h às 20h",
-      "data": "2023-11-28",
-      "zona": "centro",
-      "preco": 0,
-      "ingressos": "Retirada no Site",
-      "lat": -19.9322,
-      "lng": -43.9381,
-      "destaque": false,
-      "categoria_principal_id": 2,
-      "conteudo": "Uma curadoria impecável de artistas novos da cena brasileira. Quadros, esculturas e instalações imersivas que vão mudar sua percepção de arte."
+{
+      "id": "evt_night_003",
+      "category_id": 1,
+      "title": "Festa 1999 - Pop & Indie 90s",
+      "description": "O porão mais famoso de BH recebe a festa que celebra o melhor da década de 90. De Spice Girls a Nirvana, a pista da Obra ferve com clássicos nostálgicos. Ambiente intimista e público alternativo marcam a identidade desta casa lendária, pilar da cultura underground da cidade.",
+      "date": "2025-11-29T22:00:00",
+      "location": {
+        "address": "R. Rio Grande do Norte, 1168 - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9268,
+        "longitude": -43.9354
+      },
+      "venue": "A Obra Bar Dançante",
+      "price": "R$ 30,00",
+      "image_url": "https://example.com/images/a_obra_90s.jpg"
     },
-    {
-      "id": 9,
-      "nome": "Café & Prosa",
-      "imagem_principal": "imgs/Role2.jpg",
-      "descricao": "Clube do livro e cafés especiais.",
-      "local": "Café com Letras, Savassi",
-      "horario": "Quinta, 19h",
-      "data": "2023-11-30",
-      "zona": "savassi",
-      "preco": 15,
-      "ingressos": "Consumação",
-      "lat": -19.9355,
-      "lng": -43.9328,
-      "destaque": false,
-      "categoria_principal_id": 4,
-      "conteudo": "Para quem ama o cheiro de café e de livro novo. Traga sua leitura atual para discutir ou apenas relaxe tomando um cappuccino premiado."
+{
+      "id": "evt_night_004",
+      "category_id": 1,
+      "title": "Savassi Jazz Night: Quarteto Instrumental",
+      "description": "Uma noite de jazz contemporâneo e bossa nova no ambiente mais charmoso da Savassi. O Clube de Jazz do Café com Letras oferece gastronomia refinada e apresentações intimistas de grandes nomes da música instrumental mineira, criando um refúgio cultural urbano.",
+      "date": "2025-11-30T20:00:00",
+      "location": {
+        "address": "R. Antônio de Albuquerque, 47 - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9386,
+        "longitude": -43.9327
+      },
+      "venue": "Clube de Jazz do Café com Letras",
+      "price": "R$ 50,00",
+      "image_url": "https://example.com/images/cafe_com_letras_jazz.jpg"
     },
-    {
-      "id": 10,
-      "nome": "Happy Hour da Crise",
-      "imagem_principal": "imgs/Role1.jpg",
-      "descricao": "Cerveja barata e conversa fiada.",
-      "local": "Maletta, Centro",
-      "horario": "Sexta, 18h",
-      "data": "2023-12-01",
-      "zona": "centro",
-      "preco": 10,
-      "ingressos": "Entrada Franca",
-      "lat": -19.9230,
-      "lng": -43.9405,
-      "destaque": false,
-      "categoria_principal_id": 4,
-      "conteudo": "Aquele rolê raiz no Edifício Maletta. Litrão barato, varanda com vista pro centro e aquela vibe caótica que a gente ama."
+{
+      "id": "evt_night_005",
+      "category_id": 1,
+      "title": "Major Night: Funk & Hits",
+      "description": "O pub mais tradicional de BH abre suas portas para uma noite de hits atuais e clássicos do funk. Com seu labirinto de ambientes e atmosfera caótica e divertida, o Major Lock é parada obrigatória para quem quer dançar até o amanhecer e viver a essência da boemia universitária.",
+      "date": "2025-12-05T23:00:00",
+      "location": {
+        "address": "R. Major Lopes, 729 - São Pedro, Belo Horizonte - MG",
+        "latitude": -19.9432,
+        "longitude": -43.9348
+      },
+      "venue": "Major Lock",
+      "price": "R$ 35,00",
+      "image_url": "https://example.com/images/major_lock_party.jpg"
+    },  
+{
+      "id": "evt_night_006",
+      "category_id": 1,
+      "title": "Baile da Autêntica: Tropicalismo Remix",
+      "description": "A Autêntica recebe uma festa vibrante misturando ritmos tropicais, brasilidades e música eletrônica. Um espaço amplo, com excelente acústica e curadoria musical que valoriza a diversidade sonora do Brasil, em um dos bairros mais boêmios da capital.",
+      "date": "2025-12-06T22:00:00",
+      "location": {
+        "address": "R. Álvares Maciel, 312 - Santa Efigênia, Belo Horizonte - MG",
+        "latitude": -19.9225,
+        "longitude": -43.9231
+      },
+      "venue": "Autêntica",
+      "price": "R$ 45,00",
+      "image_url": "https://example.com/images/autentica_show.jpg"
     },
-    {
-      "id": 11,
-      "nome": "Pub Crawl BH",
-      "imagem_principal": "imgs/Hype2.jpg",
-      "descricao": "Tour pelos melhores bares.",
-      "local": "Ponto de Encontro: Praça da Savassi",
-      "horario": "Sábado, 20h",
-      "data": "2023-12-02",
-      "zona": "savassi",
-      "preco": 80,
-      "ingressos": "R$ 80 (Inclui shots)",
-      "lat": -19.9400,
-      "lng": -43.9340,
-      "destaque": false,
-      "categoria_principal_id": 1,
-      "conteudo": "Conheça 4 bares em uma noite só! O ingresso inclui um shot em cada bar e guia turístico da boemia. Ótimo para fazer novos amigos."
+{
+      "id": "evt_night_007",
+      "category_id": 1,
+      "title": "Metal Fest BH: Noite de Clássicos",
+      "description": "Prepare-se para bater cabeça com as melhores bandas cover de Metallica e Iron Maiden de Minas Gerais. O Mister Rock oferece estrutura de som profissional e um ambiente dedicado aos verdadeiros fãs de Heavy Metal e suas vertentes.",
+      "date": "2025-12-12T21:00:00",
+      "location": {
+        "address": "Av. Teresa Cristina, 295 - Prado, Belo Horizonte - MG",
+        "latitude": -19.9201,
+        "longitude": -43.9532
+      },
+      "venue": "Mister Rock",
+      "price": "R$ 55,00",
+      "image_url": "https://example.com/images/mister_rock_metal.jpg"
     },
-    {
-      "id": 12,
-      "nome": "Festival de Cores",
-      "imagem_principal": "imgs/Spoiler1.jpg",
-      "descricao": "Música, pó colorido e alegria.",
-      "local": "Esplanada do Mineirão, Pampulha",
-      "horario": "Domingo, 14h",
-      "data": "2023-12-03",
-      "zona": "pampulha",
-      "preco": 120,
-      "ingressos": "R$ 120",
-      "lat": -19.8659,
-      "lng": -43.9711,
-      "destaque": true,
-      "categoria_principal_id": 3,
-      "conteudo": "O festival mais colorido do mundo chega a BH! DJs internacionais, contagem regressiva para explosão de cores a cada hora e muita energia positiva."
+{
+      "id": "evt_night_008",
+      "category_id": 1,
+      "title": "Noite no Velho Mercado Novo",
+      "description": "Experimente a efervescência cultural do Mercado Novo à noite. Um tour livre pelos corredores ocupados por cervejarias artesanais, destilarias de gin local e petiscos contemporâneos, tudo isso envolto na estética brutalista e nostálgica do edifício, ícone da requalificação do centro.",
+      "date": "2025-12-13T18:00:00",
+      "location": {
+        "address": "Av. Olegário Maciel, 742 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9208,
+        "longitude": -43.9378
+      },
+      "venue": "Mercado Novo",
+      "price": "Entrada Gratuita",
+      "image_url": "https://example.com/images/mercado_novo_noite.jpg"
     },
-    {
-      "id": 13,
-      "nome": "Parque Retrô",
-      "imagem_principal": "imgs/falencia.jpg",
-      "descricao": "Diversão nostálgica.",
-      "local": "Parque Guanabara, Pampulha",
-      "horario": "Domingo, 10h às 22h",
-      "data": "2023-12-03",
-      "zona": "pampulha",
-      "preco": 50,
-      "ingressos": "Passaporte R$ 50",
-      "lat": -19.8556,
-      "lng": -43.9797,
-      "destaque": false,
-      "categoria_principal_id": 5,
-      "conteudo": "Venha curtir os brinquedos clássicos, roda gigante com vista pra lagoa e aquele carrinho de bate-bate que marcou infância."
+{
+      "id": "evt_night_009",
+      "category_id": 1,
+      "title": "Forró Raiz de Domingo",
+      "description": "Encerre a semana dançando o autêntico forró pé-de-serra. Trios nordestinos e bandas locais comandam o arrasta-pé em um ambiente acolhedor, perfeito para praticar a dança e curtir a cultura popular brasileira em sua essência.",
+      "date": "2025-12-14T19:00:00",
+      "location": {
+        "address": "R. Álvares Maciel, 312 - Santa Efigênia, Belo Horizonte - MG",
+        "latitude": -19.9225,
+        "longitude": -43.9231
+      },
+      "venue": "Autêntica",
+      "price": "R$ 25,00",
+      "image_url": "https://example.com/images/forro_bh.jpg"
+    },
+{
+      "id": "evt_cult_001",
+      "category_id": 2,
+      "title": "Exposição: Movimento Improviso",
+      "description": "A mostra cultural celebra os 20 anos das batalhas de MCs no Brasil e reúne artistas, coletivos e representantes de todas as regiões do país, ocupando as galerias do CCBB com arte urbana, vídeo-instalações e fotografia documental. Uma imersão na cultura hip-hop dentro de um prédio neoclássico.",
+      "date": "2025-11-25T10:00:00",
+      "location": {
+        "address": "Praça da Liberdade, 450 - Funcionários, Belo Horizonte - MG",
+        "latitude": -19.9322,
+        "longitude": -43.9371
+      },
+      "venue": "CCBB Belo Horizonte",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/ccbb_improviso.jpg"
+    },
+{
+      "id": "evt_cult_002",
+      "category_id": 2,
+      "title": "Visita Teatralizada: Fantasmas das Minas",
+      "description": "Uma experiência imersiva onde personagens históricos de Minas Gerais guiam os visitantes pelas salas do Memorial. Do barroco ao modernismo, descubra os segredos da alma mineira em um percurso interativo e emocionante, onde a tecnologia encontra a tradição oral.",
+      "date": "2025-11-26T14:00:00",
+      "location": {
+        "address": "Praça da Liberdade, 640 - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9331,
+        "longitude": -43.9382
+      },
+      "venue": "Memorial Minas Gerais Vale",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/memorial_vale.jpg"
+    },
+{
+      "id": "evt_cult_003",
+      "category_id": 2,
+      "title": "La Cambiale di Matrimonio - Ópera de Gioachino Rossini",
+      "description": "A Fundação Clóvis Salgado apresenta a clássica ópera cômica de Rossini no Grande Teatro. Uma produção luxuosa com a Orquestra Sinfônica de Minas Gerais e o Coral Lírico, prometendo uma noite de virtuosismo vocal e cênico em um dos palcos mais importantes da América Latina.",
+      "date": "2025-11-27T20:30:00",
+      "location": {
+        "address": "Av. Afonso Pena, 1537 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9252,
+        "longitude": -43.9365
+      },
+      "venue": "Palácio das Artes",
+      "price": "R$ 80,00",
+      "image_url": "https://example.com/images/opera_palacio.jpg"
+    },
+{
+      "id": "evt_cult_004",
+      "category_id": 2,
+      "title": "Mostra Niemeyer: Traços do Modernismo",
+      "description": "Exposição dedicada à arquitetura de Oscar Niemeyer e o paisagismo de Burle Marx. Localizada na icônica Casa do Baile, a mostra explora a relação entre as curvas de concreto e a Lagoa da Pampulha através de maquetes e esboços originais, celebrando o Patrimônio Mundial da UNESCO.",
+      "date": "2025-11-28T09:00:00",
+      "location": {
+        "address": "Av. Otacílio Negrão de Lima, 751 - Pampulha, Belo Horizonte - MG",
+        "latitude": -19.8517,
+        "longitude": -43.9761
+      },
+      "venue": "Casa do Baile - Centro de Referência de Arquitetura",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/casa_do_baile.jpg"
+    },
+{
+      "id": "evt_cult_005",
+      "category_id": 2,
+      "title": "O Universo dos Minerais: Ciência e Beleza",
+      "description": "Uma jornada fascinante pelo subsolo mineiro. O MM Gerdau apresenta sua coleção mineralógica em um ambiente interativo, explicando a formação geológica de Minas Gerais e a importância dos metais na vida cotidiana e na história econômica do estado.",
+      "date": "2025-11-29T13:00:00",
+      "location": {
+        "address": "Praça da Liberdade, s/n - Funcionários, Belo Horizonte - MG",
+        "latitude": -19.9325,
+        "longitude": -43.9380
+      },
+      "venue": "MM Gerdau",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/mm_gerdau.jpg"
+    },
+{
+      "id": "evt_cult_006",
+      "category_id": 2,
+      "title": "Espetáculo Teatral: A Comédia Mineira",
+      "description": "Ria com os 'causos' e peculiaridades do povo mineiro nesta peça de comédia aclamada. O histórico Cine Theatro Brasil oferece o cenário perfeito, com sua arquitetura Art Déco restaurada, para uma noite de humor inteligente e valorização da cultura local.",
+      "date": "2025-11-30T19:00:00",
+      "location": {
+        "address": "Av. Amazonas, 315 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9198,
+        "longitude": -43.9385
+      },
+      "venue": "Cine Theatro Brasil Vallourec",
+      "price": "R$ 50,00",
+      "image_url": "https://example.com/images/cine_brasil_teatro.jpg"
+    },
+{
+      "id": "evt_cult_007",
+      "category_id": 2,
+      "title": "Oficinas do Fazer: Artesanato Tradicional",
+      "description": "Visita guiada seguida de workshop prático sobre as técnicas artesanais históricas de Minas Gerais. Explore as ferramentas antigas no Museu de Artes e Ofícios e aprenda sobre a evolução do trabalho manual no Brasil em um ambiente histórico preservado.",
+      "date": "2025-12-02T14:30:00",
+      "location": {
+        "address": "Praça da Estação, s/n - Centro, Belo Horizonte - MG",
+        "latitude": -19.9164,
+        "longitude": -43.9347
+      },
+      "venue": "Museu de Artes e Ofícios",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/mao_oficinas.jpg"
+    },
+{
+      "id": "evt_cult_008",
+      "category_id": 2,
+      "title": "Mostra de Cinema Contemporâneo de BH",
+      "description": "Exibição de curtas e longas metragens produzidos por cineastas mineiros independentes. Debates com diretores após as sessões no cinema do Sesc Palladium, fomentando a cena audiovisual local e oferecendo uma janela para novas narrativas.",
+      "date": "2025-12-03T18:30:00",
+      "location": {
+        "address": "R. Rio de Janeiro, 1046 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9234,
+        "longitude": -43.9412
+      },
+      "venue": "Sesc Palladium",
+      "price": "R$ 20,00",
+      "image_url": "https://example.com/images/sesc_cinema.jpg"
+    },
+{
+      "id": "evt_cult_009",
+      "category_id": 2,
+      "title": "Domingo na Feira Hippie: Arte e Tradição",
+      "description": "Visite a maior feira de artesanato a céu aberto da América Latina. Milhares de expositores apresentam pinturas, esculturas, joias e vestuário na Avenida Afonso Pena. Um mergulho profundo na criatividade e no comércio cultural de BH, ideal para garimpar peças únicas.",
+      "date": "2025-12-07T08:00:00",
+      "location": {
+        "address": "Av. Afonso Pena - Centro, Belo Horizonte - MG",
+        "latitude": -19.9227,
+        "longitude": -43.9355
+      },
+      "venue": "Feira Hippie de Belo Horizonte",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/feira_hippie_arte.jpg"
+    },
+{
+      "id": "evt_gastro_001",
+      "category_id": 3,
+      "title": "Circuito dos Campeões: Comida di Buteco",
+      "description": "Um roteiro gastronômico pelos bares vencedores do Comida di Buteco 2025. Deguste os petiscos premiados que transformam ingredientes simples em alta gastronomia popular, celebrando a cultura de boteco belo-horizontina e a criatividade dos cozinheiros locais.",
+      "date": "2025-11-22T18:00:00",
+      "location": {
+        "address": "Vários locais (Ponto de encontro: Praça da Savassi), Belo Horizonte - MG",
+        "latitude": -19.9401,
+        "longitude": -43.9339
+      },
+      "venue": "Circuito de Bares BH",
+      "price": "Consumo sob demanda",
+      "image_url": "https://example.com/images/comida_di_buteco.jpg"
+    },
+{
+      "id": "evt_gastro_002",
+      "category_id": 3,
+      "title": "Cozinha Interativa Itambé: Sabores de Minas",
+      "description": "Workshop culinário no coração do Mercado Central. Aprenda a preparar pratos clássicos como o feijão tropeiro e o pão de queijo com chefs locais, utilizando ingredientes frescos adquiridos nas bancas do próprio mercado. Uma imersão na cultura alimentar mineira.",
+      "date": "2025-11-23T10:00:00",
+      "location": {
+        "address": "Av. Augusto de Lima, 744 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9239,
+        "longitude": -43.9422
+      },
+      "venue": "Mercado Central de Belo Horizonte",
+      "price": "Gratuito (mediante inscrição)",
+      "image_url": "https://example.com/images/mercado_central_aula.jpg"
+    },
+{
+      "id": "evt_gastro_003",
+      "category_id": 3,
+      "title": "Festival Mineiro da Cerveja 2025",
+      "description": "O maior encontro de microcervejarias de Minas Gerais. Deguste rótulos premiados de IPAs, Stouts e Lagers produzidas localmente, acompanhado de shows de rock e uma praça de alimentação com o melhor da street food em pleno Parque Municipal.",
+      "date": "2025-12-06T12:00:00",
+      "location": {
+        "address": "Av. Assis Chateaubriand, 809 - Floresta, Belo Horizonte - MG",
+        "latitude": -19.9220,
+        "longitude": -43.9315
+      },
+      "venue": "Parque Municipal (Área de Eventos)",
+      "price": "R$ 20,00",
+      "image_url": "https://example.com/images/festival_cerveja_bh.jpg"
+    },
+{
+      "id": "evt_gastro_004",
+      "category_id": 3,
+      "title": "Jantar Magno: Bienal da Gastronomia",
+      "description": "Um jantar exclusivo parte da programação da Bienal da Gastronomia de BH. Chefs renomados reinterpretam a culinária mineira com técnicas contemporâneas em um menu degustação harmonizado com vinhos mineiros, celebrando a designação de Cidade Criativa da UNESCO.",
+      "date": "2025-10-28T20:00:00",
+      "location": {
+        "address": "R. Marília de Dirceu, 180 - Lourdes, Belo Horizonte - MG",
+        "latitude": -19.9358,
+        "longitude": -43.9456
+      },
+      "venue": "Restaurante Glouton (sede rotativa)",
+      "price": "R$ 350,00",
+      "image_url": "https://example.com/images/bienal_gastro.jpg"
+    },
+{
+      "id": "evt_gastro_005",
+      "category_id": 3,
+      "title": "Feira Aproxima: Edição Savassi",
+      "description": "A feira que conecta pequenos produtores rurais e chefs da capital. Barracas com queijos da Canastra, doces caseiros, cafés especiais e pratos preparados na hora, ocupando as ruas em um ambiente familiar e festivo, valorizando a agricultura familiar.",
+      "date": "2025-12-13T09:00:00",
+      "location": {
+        "address": "Av. Getúlio Vargas (trecho fechado) - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9361,
+        "longitude": -43.9342
+      },
+      "venue": "Savassi",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/feira_aproxima.jpg"
+    },
+{
+      "id": "evt_gastro_006",
+      "category_id": 3,
+      "title": "Noite do Rodízio: Sabores da Itália",
+      "description": "Experiência gastronômica completa com mais de 40 sabores de pizza, incluindo opções doces e gourmet. Ambiente descontraído ideal para grupos de amigos e famílias, com massas artesanais e vinhos da casa, oferecendo excelente custo-benefício.",
+      "date": "2025-12-04T19:00:00",
+      "location": {
+        "address": "R. Rio de Janeiro, 1270 - Lourdes, Belo Horizonte - MG",
+        "latitude": -19.9345,
+        "longitude": -43.9418
+      },
+      "venue": "Pizzaria Donna Margherita",
+      "price": "R$ 69,90",
+      "image_url": "https://example.com/images/rodizio_pizza.jpg"
+    },
+{
+      "id": "evt_gastro_007",
+      "category_id": 3,
+      "title": "Wine Expo BH 2025: Degustação de Vinhos",
+      "description": "Feira internacional de vinhos reunindo importadoras e vinícolas nacionais, com destaque para os premiados vinhos de inverno da Serra da Mantiqueira. Workshops de harmonização e degustação livre para os participantes em um ambiente de negócios e lazer.",
+      "date": "2025-11-29T16:00:00",
+      "location": {
+        "address": "Av. Augusto de Lima, 785 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9250,
+        "longitude": -43.9430
+      },
+      "venue": "BeFly Minascentro",
+      "price": "R$ 120,00",
+      "image_url": "https://example.com/images/wine_expo.jpg"
+    },
+{
+      "id": "evt_gastro_008",
+      "category_id": 3,
+      "title": "Brunch de Domingo no Grande Hotel",
+      "description": "Desfrute de um brunch sofisticado no espaço cultural do estilista Ronaldo Fraga. Pães de fermentação natural, bolos artísticos e cafés especiais servidos em um casarão histórico tombado, cercado de arte e design, proporcionando uma manhã de domingo única.",
+      "date": "2025-12-14T10:00:00",
+      "location": {
+        "address": "R. Ceará, 1205 - Funcionários, Belo Horizonte - MG",
+        "latitude": -19.9382,
+        "longitude": -43.9305
+      },
+      "venue": "Grande Hotel Ronaldo Fraga",
+      "price": "R$ 85,00",
+      "image_url": "https://example.com/images/brunch_fraga.jpg"
+    },
+{
+      "id": "evt_gastro_009",
+      "category_id": 3,
+      "title": "Workshop de Barista e Degustação de Cafés",
+      "description": "Mergulhe no universo dos cafés especiais. Aprenda sobre métodos de extração (Hario V60, Aeropress) e deguste grãos premiados das matas de Minas, guiado por baristas especialistas em uma das cafeterias mais conceituadas da cidade.",
+      "date": "2025-12-06T15:00:00",
+      "location": {
+        "address": "R. Antônio de Albuquerque, 47 - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9386,
+        "longitude": -43.9327
+      },
+      "venue": "Café com Letras",
+      "price": "R$ 90,00",
+      "image_url": "https://example.com/images/workshop_cafe.jpg"
+    },
+{
+      "id": "evt_out_001",
+      "category_id": 4,
+      "title": "Trilha do Sol e Observação de Aves",
+      "description": "Caminhada ecológica guiada pelas trilhas da Mata do Jambreiro dentro do Parque das Mangabeiras. Contato direto com a fauna nativa (quatis, micos) e flora de transição entre Mata Atlântica e Cerrado. Nível de dificuldade: Leve/Moderado. Ideal para fotógrafos de natureza.",
+      "date": "2025-11-29T08:00:00",
+      "location": {
+        "address": "Av. José do Patrocínio Pontes, 580 - Mangabeiras, Belo Horizonte - MG",
+        "latitude": -19.9554,
+        "longitude": -43.9172
+      },
+      "venue": "Parque das Mangabeiras",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/trilha_mangabeiras.jpg"
+    },
+{
+      "id": "evt_out_002",
+      "category_id": 4,
+      "title": "Tai Chi Chuan na Praça do Trenzinho",
+      "description": "Prática corporal chinesa voltada à respiração, equilíbrio e relaxamento no coração do Parque Municipal. A atividade é aberta ao público e ideal para iniciar o fim de semana com energia e serenidade em meio à natureza urbana, fugindo do caos do centro.",
+      "date": "2025-11-30T08:00:00",
+      "location": {
+        "address": "Av. Afonso Pena, 1377 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9246,
+        "longitude": -43.9351
+      },
+      "venue": "Parque Municipal Américo Renné Giannetti",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/tai_chi_parque.jpg"
+    },
+{
+      "id": "evt_out_003",
+      "category_id": 4,
+      "title": "Sunset no Mirante: Música e Vista",
+      "description": "Contemple o pôr do sol mais bonito de Belo Horizonte com trilha sonora ao vivo. O deck do Mirante das Mangabeiras oferece uma vista panorâmica da cidade, criando o cenário perfeito para fotografia e relaxamento no fim de tarde.",
+      "date": "2025-12-06T17:00:00",
+      "location": {
+        "address": "R. Pedro José Pardo, 1000 - Mangabeiras, Belo Horizonte - MG",
+        "latitude": -19.9576,
+        "longitude": -43.9128
+      },
+      "venue": "Mirante do Mangabeiras",
+      "price": "Gratuito (Reserva necessária)",
+      "image_url": "https://example.com/images/mirante_sunset.jpg"
+    },
+{
+      "id": "evt_out_004",
+      "category_id": 4,
+      "title": "Caminhada Histórica da Praça da Liberdade",
+      "description": "Um passeio guiado pelos jardins inspirados em Versalhes e pelo conjunto arquitetônico que conta a história da construção de Belo Horizonte. Ideal para famílias e entusiastas de arquitetura e paisagismo que desejam redescobrir os símbolos da capital.",
+      "date": "2025-12-07T09:00:00",
+      "location": {
+        "address": "Praça da Liberdade, s/n - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9322,
+        "longitude": -43.9371
+      },
+      "venue": "Praça da Liberdade",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/praca_liberdade_tour.jpg"
+    },
+{
+      "id": "evt_out_005",
+      "category_id": 4,
+      "title": "Volta da Pampulha de Bike",
+      "description": "Encontro de ciclistas para um percurso de 18km no entorno da Lagoa da Pampulha. Aprecie o Conjunto Moderno (Igrejinha, Museu, Casa do Baile) enquanto se exercita em uma das ciclovias mais famosas do Brasil.",
+      "date": "2025-12-14T08:30:00",
+      "location": {
+        "address": "Av. Otacílio Negrão de Lima (Marco Zero) - Pampulha, Belo Horizonte - MG",
+        "latitude": -19.8589,
+        "longitude": -43.9785
+      },
+      "venue": "Orla da Lagoa da Pampulha",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/bike_pampulha.jpg"
+    },
+{
+      "id": "evt_out_006",
+      "category_id": 4,
+      "title": "Piquenique e Festival de Pipas na Praça do Papa",
+      "description": "Um dia de lazer para toda a família no gramado da Praça do Papa. O local oferece espaço amplo para piqueniques, brincadeiras e soltar pipas, com uma vista privilegiada da Serra do Curral e da cidade, sendo um dos pontos mais icônicos de BH.",
+      "date": "2025-12-13T10:00:00",
+      "location": {
+        "address": "Av. Agulhas Negras, s/n - Mangabeiras, Belo Horizonte - MG",
+        "latitude": -19.9573,
+        "longitude": -43.9242
+      },
+      "venue": "Praça do Papa",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/praca_papa_pipa.jpg"
+    },
+{
+      "id": "evt_out_007",
+      "category_id": 4,
+      "title": "Encontro de Slackline e Yoga",
+      "description": "Atividades de equilíbrio e concentração nos gramados do Parque Ecológico. Workshop iniciante de Slackline e sessão de Yoga ao ar livre, aproveitando a tranquilidade e a área verde preservada da região da Pampulha.",
+      "date": "2025-11-29T09:30:00",
+      "location": {
+        "address": "Av. Otacílio Negrão de Lima, 6061 - Pampulha, Belo Horizonte - MG",
+        "latitude": -19.8461,
+        "longitude": -43.9979
+      },
+      "venue": "Parque Ecológico da Pampulha",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/parque_ecologico_yoga.jpg"
+    },
+{
+      "id": "evt_out_008",
+      "category_id": 4,
+      "title": "Oficina de Educação Ambiental no Jacques Cousteau",
+      "description": "Atividade educativa para crianças e jovens focada na preservação de nascentes e compostagem. O Parque Jacques Cousteau oferece trilhas em mata regenerada, sendo um importante refúgio de biodiversidade na região oeste.",
+      "date": "2025-11-22T14:00:00",
+      "location": {
+        "address": "R. Augusto José dos Santos, 366 - Betânia, Belo Horizonte - MG",
+        "latitude": -19.9734,
+        "longitude": -43.9852
+      },
+      "venue": "Parque Jacques Cousteau",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/jacques_cousteau_bio.jpg"
+    },
+{
+      "id": "evt_out_009",
+      "category_id": 4,
+      "title": "Travessia da Serra do Curral",
+      "description": "Expedição guiada pela crista da Serra do Curral, símbolo máximo de Belo Horizonte. Uma caminhada de nível moderado/difícil que revela paisagens únicas da vegetação de canga e vistas 360º da região metropolitana.",
+      "date": "2025-12-07T07:00:00",
+      "location": {
+        "address": "Av. José do Patrocínio Pontes (Entrada Parque da Serra) - Mangabeiras, Belo Horizonte - MG",
+        "latitude": -19.9589,
+        "longitude": -43.9150
+      },
+      "venue": "Parque da Serra do Curral",
+      "price": "Gratuito (Agendamento obrigatório)",
+      "image_url": "https://example.com/images/serra_curral_trekking.jpg"
+    },
+{
+      "id": "evt_geek_001",
+      "category_id": 5,
+      "title": "Noite de Jogos Modernos: Lançamentos",
+      "description": "Experimente os últimos lançamentos do mercado de jogos de tabuleiro com monitoria especializada. O Ludo Café oferece um acervo vasto e um cardápio delicioso, ideal para grupos que querem sair da rotina digital e interagir presencialmente através de mecânicas lúdicas inovadoras.",
+      "date": "2025-11-26T18:00:00",
+      "location": {
+        "address": "R. Antônio Dias, 201 - Santo Antônio, Belo Horizonte - MG",
+        "latitude": -19.9425,
+        "longitude": -43.9388
+      },
+      "venue": "Ludo Café",
+      "price": "R$ 20,00 (Couvert lúdico)",
+      "image_url": "https://example.com/images/ludo_cafe_night.jpg"
+    },
+{
+      "id": "evt_geek_002",
+      "category_id": 5,
+      "title": "Anime Festival BH 2025: Winter Edition",
+      "description": "O encontro definitivo para fãs de anime, mangá e cultura pop japonesa em Minas Gerais. Concursos de cosplay, stands de produtos geek, artist alley e shows de J-Pop em um fim de semana repleto de atrações no maior centro de convenções da cidade.",
+      "date": "2025-12-13T11:00:00",
+      "location": {
+        "address": "Av. Amazonas, 6200 - Gameleira, Belo Horizonte - MG",
+        "latitude": -19.9318,
+        "longitude": -43.9945
+      },
+      "venue": "Expominas",
+      "price": "R$ 50,00",
+      "image_url": "https://example.com/images/anime_festival_bh.jpg"
+    },
+{
+      "id": "evt_geek_003",
+      "category_id": 5,
+      "title": "Torneio Regional de Magic: The Gathering",
+      "description": "Competição oficial formato Commander e Standard. Reúna seus decks e enfrente os melhores estrategistas da cidade em um ambiente focado no competitivo e na troca de cartas colecionáveis, sancionado pela Wizards of the Coast.",
+      "date": "2025-11-29T14:00:00",
+      "location": {
+        "address": "R. Pernambuco, 1000 - Savassi, Belo Horizonte - MG",
+        "latitude": -19.9375,
+        "longitude": -43.9350
+      },
+      "venue": "UG Card Shop",
+      "price": "R$ 35,00",
+      "image_url": "https://example.com/images/mtg_tournament.jpg"
+    },
+{
+      "id": "evt_geek_004",
+      "category_id": 5,
+      "title": "Happy Hour Geek no Shelf Bar",
+      "description": "A combinação perfeita de coquetelaria autoral e jogos de tabuleiro. O Shelf Bar oferece monitores para ensinar as regras enquanto você desfruta de drinks temáticos inspirados em personagens da cultura pop. O ponto de encontro ideal para o público geek adulto.",
+      "date": "2025-11-28T19:00:00",
+      "location": {
+        "address": "Av. do Contorno, 7287 - Lourdes, Belo Horizonte - MG",
+        "latitude": -19.9340,
+        "longitude": -43.9420
+      },
+      "venue": "Shelf Bar e Jogos",
+      "price": "Entrada Gratuita (Consumo à parte)",
+      "image_url": "https://example.com/images/shelf_bar_drinks.jpg"
+    },
+{
+      "id": "evt_geek_005",
+      "category_id": 5,
+      "title": "Noite de RPG: Dungeons & Dragons",
+      "description": "Mesas abertas para iniciantes e veteranos de RPG. Junte-se a uma campanha de D&D 5ª Edição mestrada por narradores experientes. Dados, fichas e aventuras épicas garantidas em um ambiente temático preparado para a imersão.",
+      "date": "2025-11-27T19:30:00",
+      "location": {
+        "address": "Av. Amazonas, 2310 - Santo Agostinho, Belo Horizonte - MG",
+        "latitude": -19.9255,
+        "longitude": -43.9480
+      },
+      "venue": "Comdado Bar e Jogos",
+      "price": "R$ 15,00",
+      "image_url": "https://example.com/images/comdado_rpg.jpg"
+    },
+{
+      "id": "evt_geek_006",
+      "category_id": 5,
+      "title": "Encontro de Quadrinistas Independentes",
+      "description": "Feira de zines e HQs autorais mineiras. Conheça os artistas locais, participe de sessões de autógrafos e workshops de ilustração. Um evento para valorizar a potente cena de quadrinhos de Belo Horizonte, reconhecida internacionalmente.",
+      "date": "2025-12-06T10:00:00",
+      "location": {
+        "address": "R. da Bahia, 1149 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9245,
+        "longitude": -43.9375
+      },
+      "venue": "Centro de Referência da Juventude",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/feira_hqs_bh.jpg"
+    },
+{
+      "id": "evt_geek_007",
+      "category_id": 5,
+      "title": "Mega Quiz Geek: Cinema e Séries",
+      "description": "Reúna sua equipe e teste seus conhecimentos sobre Star Wars, Marvel, Lord of the Rings e muito mais. Prêmios para os vencedores e rodadas de shots temáticos para animar a competição em um ambiente decorado com memorabilia.",
+      "date": "2025-12-04T20:00:00",
+      "location": {
+        "address": "R. Cristina, 1445 - Santo Antônio, Belo Horizonte - MG",
+        "latitude": -19.9450,
+        "longitude": -43.9390
+      },
+      "venue": "The House Food & Fun",
+      "price": "R$ 10,00 por pessoa",
+      "image_url": "https://example.com/images/quiz_geek.jpg"
+    },
+{
+      "id": "evt_geek_008",
+      "category_id": 5,
+      "title": "K-Pop Contest BH: Dance Cover",
+      "description": "Competição de grupos cover de K-Pop. Venha torcer pelos melhores dançarinos da cidade em apresentações cheias de energia e coreografias precisas dos maiores hits da música pop coreana. Um espetáculo visual de figurinos e dança.",
+      "date": "2025-12-14T14:00:00",
+      "location": {
+        "address": "R. Rio de Janeiro, 1046 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9234,
+        "longitude": -43.9412
+      },
+      "venue": "Sesc Palladium (Grande Teatro)",
+      "price": "R$ 25,00",
+      "image_url": "https://example.com/images/kpop_contest.jpg"
+    },
+{
+      "id": "evt_geek_009",
+      "category_id": 5,
+      "title": "Gaymado: Campeonato de Queimada Urbana",
+      "description": "O evento esportivo mais divertido e inclusivo da cidade. Campeonato de queimada amador, com times fantasiados, música pop e muita animação ocupando as quadras públicas do Parque Municipal. Celebração da diversidade e do direito à cidade.",
+      "date": "2025-12-07T13:00:00",
+      "location": {
+        "address": "Av. Afonso Pena, 1377 - Centro, Belo Horizonte - MG",
+        "latitude": -19.9246,
+        "longitude": -43.9351
+      },
+      "venue": "Parque Municipal (Quadras)",
+      "price": "Gratuito",
+      "image_url": "https://example.com/images/gaymado_bh.jpg"
     }
   ]
 }

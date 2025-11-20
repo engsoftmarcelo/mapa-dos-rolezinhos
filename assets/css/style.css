@@ -1,112 +1,118 @@
-/* Importa a fonte Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+/* =========================================
+   MAPA DOS ROLEZINHOS - ESTILO PROFISSIONAL (V2.1)
+   Atualizado com correções de legibilidade e carrossel
+   ========================================= */
+
+/* Importa a fonte Poppins (Padrão Moderno) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    /* === Nova Paleta - Manual da Marca v2.0 === */
-    --bg-body: #10002B;       /* Ultra Dark Purple */
-    --bg-card: rgba(36, 0, 70, 0.85); /* Roxo escuro mais opaco para leitura */
-    --bg-glass: rgba(60, 9, 108, 0.6); /* Vidro mais visível */
+    /* === Paleta de Cores (High Contrast & Neon) === */
+    --bg-body: #10002B;       /* Roxo Ultra Escuro (Fundo Principal) */
+    --bg-card: rgba(20, 0, 40, 0.95); /* Quase sólido para leitura perfeita mobile */
+    --bg-glass: rgba(60, 9, 108, 0.6); 
     
-    /* Cores de Destaque */
+    /* Cores de Marca */
     --primary: #7B2CBF;       /* Roxo Brand */
-    --primary-hover: #9D4EDD;
-    --neon-accent: #00F5D4;   /* Verde Neon Brand */
-    --hot-pink: #F72585;      /* Rosa Quente para detalhes */
+    --primary-hover: #9D4EDD; /* Roxo Claro para Hover */
+    --neon-accent: #00F5D4;   /* Ciano Neon (Destaques/Ação) */
+    --hot-pink: #F72585;      /* Rosa para detalhes secundários */
     
-    --text-main: #FFFFFF;
-    /* WCAG: Alterado de #E0AAFF para #d1d1d1 para alto contraste */
-    --text-muted: #d1d1d1;    
+    /* Tipografia */
+    --text-main: #FFFFFF;     /* Branco Puro */
+    --text-muted: #e6e6e6;    /* Cinza Quase Branco (Melhorado para leitura) */
     
-    /* Efeitos */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.2); /* Borda levemente mais forte */
-    --glow-shadow: 0 0 20px rgba(123, 44, 191, 0.4);
+    /* UI Elements */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+    --input-bg: #1E1E2E;      /* Fundo de Inputs (Sólido para contraste) */
+    --radius-card: 16px;      /* Bordas arredondadas consistentes */
+    --radius-btn: 50px;       /* Botões redondos */
 }
 
-/* === Acessibilidade: Foco Visível para Navegação via Teclado === */
-:focus-visible {
-    outline: 3px solid var(--neon-accent);
-    outline-offset: 3px;
-    border-radius: 4px;
+/* === Reset & Base === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-body);
     color: var(--text-main);
-    background-image: radial-gradient(circle at 50% 0%, #240046 0%, #10002B 60%);
+    /* Gradiente sutil de fundo fixo para profundidade */
+    background-image: radial-gradient(circle at 50% 0%, #3c096c 0%, #10002B 70%);
+    background-attachment: fixed;
     min-height: 100vh;
-    line-height: 1.6; /* Melhora legibilidade */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* --- 1. Glassmorphism Navbar --- */
+/* Força a cor do texto muted para ser legível */
+.text-muted, .form-text, .small {
+    color: var(--text-muted) !important;
+    opacity: 0.95;
+}
+
+/* === Acessibilidade (Teclado) === */
+:focus-visible {
+    outline: 3px solid var(--neon-accent);
+    outline-offset: 2px;
+}
+
+/* === Navbar (Glassmorphism Legível) === */
 .navbar {
-    background: rgba(18, 18, 18, 0.95) !important; /* Mais opaco para leitura */
-    backdrop-filter: blur(12px);
-    border-bottom: var(--glass-border);
-    padding: 1rem 0;
-    transition: all 0.3s ease;
+    background: rgba(16, 0, 43, 0.95) !important; /* Alta opacidade */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0.8rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-.navbar-brand img {
-    height: 60px;
-    filter: drop-shadow(0 0 5px rgba(111, 66, 193, 0.5));
+/* === CONFIGURAÇÃO DA LOGO (CORRIGIDA) === */
+.logo-brand {
+    height: 75px;
+    width: auto;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .logo-brand {
+    transform: scale(1.05) rotate(-3deg);
+    /* CORREÇÃO: Removido o drop-shadow neon excessivo que borrava a leitura */
+    filter: brightness(1.2); 
 }
 
 .nav-link {
-    color: var(--text-main) !important;
+    color: var(--text-muted) !important;
     font-weight: 500;
-    position: relative;
-    padding: 0.5rem 1rem; /* Área de clique maior */
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
-.nav-link:hover, .nav-link:focus {
-    color: var(--primary-hover) !important;
-    text-shadow: 0 0 8px rgba(111, 66, 193, 0.6);
+.nav-link:hover, .nav-link.active {
+    color: var(--neon-accent) !important;
+    text-shadow: 0 0 10px rgba(0, 245, 212, 0.4);
 }
 
-/* Campo de busca estilo Neon */
-.form-control {
-    background-color: rgba(255, 255, 255, 0.1); /* Mais contraste no input */
-    border: var(--glass-border);
-    color: #fff;
-    border-radius: 20px;
-}
-.form-control:focus {
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 10px rgba(111, 66, 193, 0.3);
-    border-color: var(--primary);
-    color: #fff;
-}
-.form-control::placeholder { color: #cccccc; } /* Placeholder mais claro */
-
-.btn-outline-success {
-    border-color: var(--neon-accent);
-    color: var(--neon-accent);
-}
-
-.btn-outline-success:hover, .btn-outline-success:focus {
-    background-color: var(--neon-accent);
-    color: #10002B;
-    box-shadow: 0 0 15px var(--neon-accent);
-}
-
-/* --- 2. Hero Section --- */
+/* === Hero Section (Impacto Visual) === */
 .hero-section {
     position: relative;
-    height: 500px;
+    height: 550px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('../../imgs/Hype1.jpg') no-repeat center center/cover;
-    border-radius: 0 0 2rem 2rem;
+    background: url('../../imgs/Hype1.webp') no-repeat center center/cover;
+    border-radius: 0 0 2.5rem 2.5rem;
     overflow: hidden;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .hero-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(16,0,43,0.4), rgba(16,0,43,0.95)); /* Overlay mais forte */
+    background: linear-gradient(to bottom, rgba(16,0,43,0.3), rgba(16,0,43,1));
 }
 
 .hero-content {
@@ -114,160 +120,163 @@ body {
     z-index: 2;
     text-align: center;
     padding: 2rem;
-    max-width: 800px;
+    max-width: 900px;
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
-    background: linear-gradient(90deg, #fff, var(--primary), var(--neon-accent));
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, var(--neon-accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* Fallback para browsers antigos */
-    color: var(--neon-accent); 
+    text-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .hero-subtitle {
-    font-size: 1.25rem; /* Fonte um pouco maior */
-    color: #f0f0f0; /* Quase branco */
-    margin-bottom: 2rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 1.25rem;
+    color: #e0e0e0;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
 }
 
+/* === Botões (CTAs) === */
 .btn-cta {
-    background: var(--primary);
-    color: #fff;
-    padding: 14px 40px; /* Botão maior para touch */
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 1.1rem;
+    background: var(--neon-accent);
+    color: #10002B;
+    padding: 16px 40px;
+    border-radius: var(--radius-btn);
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
     border: none;
-    box-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.btn-cta:hover, .btn-cta:focus {
-    transform: translateY(-3px) scale(1.05);
-    background: var(--primary-hover);
-    box-shadow: 0 0 30px rgba(111, 66, 193, 0.8);
-    color: #fff;
+    box-shadow: 0 0 25px rgba(0, 245, 212, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    display: inline-block;
 }
 
-/* --- 3. Cards Modernos (Glassmorphism) --- */
-.card-role {
-    background: var(--bg-card); /* Fundo mais escuro para contraste do texto */
-    border: var(--glass-border);
-    border-radius: 1rem;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    height: 100%;
-    position: relative;
-}
-
-.card-role:hover, .card-role:focus-within {
+.btn-cta:hover {
     transform: translateY(-5px);
-    border-color: var(--primary);
-    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+    box-shadow: 0 0 40px rgba(0, 245, 212, 0.6);
+    color: #10002B;
+    background: #fff;
 }
 
+/* === NOVO: Estilos do Carrossel de Destaques === */
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+.carousel-caption-custom {
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, transparent 100%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 3rem 2rem 2rem 2rem;
+    text-align: left;
+}
+
+/* === Cards Profissionais (Consistência) === */
+.card-role {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-role:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+}
+
+/* WRAPPER DE IMAGEM */
 .card-img-wrapper {
     position: relative;
-    height: 200px;
+    width: 100%;
+    /* Ajuste se necessário, ou use height fixo no inline style como no JS */
+    min-height: 200px; 
     overflow: hidden;
-    background-color: #000; /* Fundo preto enquanto carrega */
+    background-color: #000;
 }
 
-.card-role img {
+.card-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s ease;
 }
 
-.card-role:hover img, .card-role:focus-within img {
+.card-role:hover .card-img-wrapper img {
     transform: scale(1.1);
 }
 
-/* Badges Flutuantes */
+/* Labels Flutuantes (Badges) */
 .card-badges {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    z-index: 2;
+    align-items: flex-end;
+    gap: 6px;
 }
 
 .badge-custom {
-    background: rgba(0, 0, 0, 0.85); /* Fundo mais escuro */
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
     color: #fff;
     padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .badge-category {
     background: var(--primary);
-    border-color: var(--primary);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 /* Conteúdo do Card */
 .card-body-custom {
-    padding: 1.2rem;
-    position: relative;
+    padding: 1.5rem;
     display: flex;
     gap: 1rem;
-}
-
-.date-box {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 10px;
-    min-width: 65px; /* Ligeiramente maior */
-    height: 65px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.date-day {
-    font-weight: 800;
-    font-size: 1rem;
-    color: var(--neon-accent);
-    text-transform: uppercase;
-    line-height: 1;
-}
-
-.date-time {
-    font-size: 0.85rem;
-    color: #fff;
-    margin-top: 2px;
+    flex-grow: 1;
+    flex-direction: column; /* Ajuste para alinhar melhor */
 }
 
 .card-info {
     flex: 1;
+    overflow: hidden;
 }
 
 .card-title {
     font-weight: 700;
-    font-size: 1.15rem;
-    margin-bottom: 0.4rem;
+    font-size: 1.1rem;
     color: #fff;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card-desc {
-    font-size: 0.95rem; /* Fonte aumentada */
-    color: var(--text-muted); /* Cinza claro WCAG AA */
+    font-size: 0.9rem;
+    color: var(--text-muted);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -275,105 +284,175 @@ body {
     overflow: hidden;
 }
 
-/* Botão de Favoritar Acessível */
+/* Botão Favorito */
 .btn-fav-card {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 12px;
+    left: 12px;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.7); /* Mais contraste */
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 44px; /* Área de toque mínima recomendada (44px) */
-    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.btn-fav-card:hover, .btn-fav-card:focus {
-    background: rgba(255, 255, 255, 0.3);
+.btn-fav-card:hover {
+    background: #fff;
     transform: scale(1.1);
 }
 
-.btn-fav-card i {
-    font-size: 1.3rem;
+.btn-fav-card:hover i {
+    color: #e63946 !important;
 }
 
-/* --- 4. Categorias --- */
+/* === Categorias (Pílulas) === */
 .card-category {
-    background: #1e1e1e;
-    border: 1px solid #333;
-    border-radius: 15px;
-    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     transition: all 0.3s ease;
-    min-height: 80px; /* Altura mínima para clique */
+    min-height: 80px;
 }
 
-.card-category:hover, .card-category:focus-within {
-    background: #2a2a2a;
-    border-color: var(--primary);
-    transform: translateY(-5px);
+.card-category:hover {
+    background: var(--input-bg);
+    border-color: var(--neon-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 245, 212, 0.1);
 }
 
 .card-category h5 {
-    color: var(--primary);
-    font-weight: 700;
-    margin-bottom: 0;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
-.card-category:hover h5, .card-category:focus-within h5 {
+.card-category:hover h5 {
     color: var(--neon-accent);
 }
 
-/* --- 5. Elementos de Formulário (Alto Contraste) --- */
+/* === Formulários e Inputs === */
+.form-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
 .form-control, .form-select {
-    background-color: #2c2c2c !important;
-    border: 1px solid #666 !important; /* Borda visível */
+    background-color: var(--input-bg) !important;
+    border: 1px solid #444 !important;
     color: #fff !important;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
     font-size: 1rem;
 }
 
 .form-control:focus, .form-select:focus {
-    background-color: #333 !important;
+    background-color: #252535 !important;
     border-color: var(--primary) !important;
-    color: #fff !important;
-    box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.5) !important; /* Anel de foco forte */
+    box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.3) !important;
+    outline: none;
 }
 
-label { 
-    color: #f0f0f0 !important; /* Rótulos claros */
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+.form-control::placeholder {
+    color: #888;
 }
 
-.text-muted {
-    color: var(--text-muted) !important;
+input[type="file"] {
+    padding: 0.5rem;
+}
+input[type="file"]::file-selector-button {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 0.3rem 1rem;
+    border-radius: 5px;
+    margin-right: 1rem;
+    cursor: pointer;
 }
 
-/* --- Responsividade --- */
+/* === Página de Erro 404 === */
+.error-container {
+    padding: 4rem 1rem;
+    text-align: center;
+}
+.error-code {
+    font-size: 8rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.05);
+    line-height: 1;
+    margin-bottom: -2rem;
+    pointer-events: none;
+}
+
+/* === Footer (CORRIGIDO) === */
+footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    background: #0a001c !important;
+}
+
+footer p, footer span, footer div {
+    color: #ffffff !important;
+    opacity: 0.9;
+}
+
+footer a {
+    color: #ffffff !important;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+footer a:hover {
+    color: var(--neon-accent) !important;
+    opacity: 1;
+    text-decoration: underline !important;
+}
+
+/* === Responsividade Mobile === */
 @media (max-width: 768px) {
-    .hero-title { 
-        font-size: 2.2rem; 
-        word-break: break-word;
+    .hero-section {
+        height: 400px;
+        border-radius: 0 0 1.5rem 1.5rem;
     }
-    .hero-section { height: 450px; }
     
-    /* Melhoria no layout dos cards em mobile */
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+    }
+
     .card-body-custom {
         padding: 1rem;
     }
     
-    /* Textos maiores para leitura em tela pequena */
-    body { font-size: 16px; }
-}
+    .card-title {
+        font-size: 1rem;
+    }
+    
+    .btn-cta {
+        width: 100%;
+        text-align: center;
+        padding: 14px 0;
+    }
 
-/* Animações Reduzidas (Preferências do Usuário) */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation: none !important;
-        transition: none !important;
+    .logo-brand {
+        height: 60px;
+    }
+    
+    .carousel-caption-custom {
+        padding: 1.5rem;
+    }
+    
+    .carousel-caption-custom h2 {
+        font-size: 1.5rem;
     }
 }
