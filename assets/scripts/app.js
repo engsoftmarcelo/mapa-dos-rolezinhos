@@ -4,13 +4,17 @@ import {
     getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
-    getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove 
+    getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // 2. SweetAlert2
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/+esm";
 
-// --- CONFIGURAÇÃO ---
+// --- CONFIGURAÇÃO DO FIREBASE ---
+// NOTA DE SEGURANÇA: Em aplicações Frontend-Only, essas chaves ficam visíveis no navegador.
+// A segurança é garantida pelas:
+// 1. Firestore Security Rules (que impedem escrita não autorizada).
+// 2. Restrições de Domínio no Google Cloud Console (impedem uso da chave em outros sites).
 const firebaseConfig = {
   apiKey: "AIzaSyDKBnPHgrTk3QArYQyCuD0Z1baOenf4GdE",
   authDomain: "mapadosrolezinhos.firebaseapp.com",
@@ -45,7 +49,7 @@ window.loginGoogle = async () => {
         console.error("Erro Auth:", error);
         Swal.fire({ 
             title: 'Ops!', 
-            text: 'Não foi possível conectar com o Google. Tente novamente.', 
+            text: 'Não foi possível conectar com o Google. Verifique se o domínio está autorizado no Firebase Console.', 
             icon: 'error', 
             background: '#1e1e1e', color: '#fff' 
         });
@@ -60,6 +64,9 @@ onAuthStateChanged(auth, (user) => {
     currentUser = user;
     atualizarInterfaceUsuario(user);
     if (user) atualizarIconesFavoritos();
+    
+    // Verifica permissão de edição na página de detalhes
+    verificarPermissaoDono();
 });
 
 function atualizarInterfaceUsuario(user) {
@@ -67,7 +74,6 @@ function atualizarInterfaceUsuario(user) {
     if (!container) return;
 
     if (user) {
-        // Adicionado aria-label nos botões e imagens para leitores de tela
         container.innerHTML = `
             <div class="dropdown">
                 <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" 
@@ -172,13 +178,13 @@ window.toggleFavCard = async function(event, idRole) {
     const userRef = doc(db, "usuarios", currentUser.uid);
 
     try {
+        // Garante que o documento do usuário existe antes de atualizar
         await setDoc(userRef, { email: currentUser.email }, { merge: true });
 
         if (isFav) {
             await updateDoc(userRef, { favoritos: arrayRemove(idRole.toString()) });
             icon.classList.replace('bi-heart-fill', 'bi-heart');
             icon.classList.replace('text-danger', 'text-white');
-            // Atualiza ARIA Label dinamicamente
             btn.setAttribute('aria-label', 'Adicionar aos favoritos');
         } else {
             await updateDoc(userRef, { favoritos: arrayUnion(idRole.toString()) });
@@ -190,12 +196,12 @@ window.toggleFavCard = async function(event, idRole) {
                 title: 'Salvo!', showConfirmButton: false, timer: 1500,
                 background: '#1e1e1e', color: '#fff'
             });
-            // Atualiza ARIA Label dinamicamente
             btn.setAttribute('aria-label', 'Remover dos favoritos');
         }
     } catch (e) {
         console.error("Erro favorito:", e);
-        Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível salvar.', background: '#1e1e1e', color: '#fff' });
+        // Se der erro de permissão, é provável que as regras do Firestore estejam bloqueando
+        Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível salvar. Tente recarregar.', background: '#1e1e1e', color: '#fff' });
     }
 };
 
@@ -216,7 +222,6 @@ async function atualizarIconesFavoritos() {
                     if(icon) {
                         icon.classList.replace('bi-heart', 'bi-heart-fill');
                         icon.classList.replace('text-white', 'text-danger');
-                        // Define o estado correto para leitores de tela
                         btn.setAttribute('aria-label', 'Remover dos favoritos');
                     }
                 }
@@ -237,6 +242,72 @@ async function atualizarIconesFavoritos() {
         }
     } catch (error) {
         console.warn("Falha silenciosa ao carregar favoritos", error);
+    }
+}
+
+// Função auxiliar para verificar se o usuário é dono do evento (Visual apenas)
+async function verificarPermissaoDono() {
+    const params = new URLSearchParams(window.location.search);
+    const idEvento = params.get('id');
+    // Só roda na página de detalhes
+    if (!idEvento || !document.getElementById('detalhe-do-evento')) return;
+
+    const btnEditar = document.getElementById('btn-editar');
+    const btnExcluir = document.getElementById('btn-excluir');
+    
+    // Esconde botões por padrão
+    if(btnEditar) btnEditar.style.display = 'none';
+    if(btnExcluir) btnExcluir.style.display = 'none';
+
+    if (!currentUser) return;
+
+    try {
+        const role = await fetchRoleById(idEvento);
+        // Se o email do usuário logado for igual ao email de quem criou
+        if (role && role.criado_por === currentUser.email) {
+            if(btnEditar) btnEditar.style.display = 'block';
+            if(btnExcluir) {
+                btnExcluir.style.display = 'block';
+                btnExcluir.onclick = () => excluirEvento(idEvento);
+            }
+        }
+    } catch (e) {
+        console.error("Erro ao verificar permissão", e);
+    }
+}
+
+async function excluirEvento(id) {
+    const result = await Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você não poderá reverter isso!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar',
+        background: '#1e1e1e', color: '#fff'
+    });
+
+    if (result.isConfirmed) {
+        try {
+            await deleteDoc(doc(db, "eventos", id.toString()));
+            Swal.fire({
+                title: 'Excluído!',
+                text: 'O rolê foi removido.',
+                icon: 'success',
+                background: '#1e1e1e', color: '#fff'
+            }).then(() => {
+                window.location.href = 'index.html';
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Você não tem permissão para excluir este evento.',
+                icon: 'error',
+                background: '#1e1e1e', color: '#fff'
+            });
+        }
     }
 }
 
@@ -262,12 +333,6 @@ async function renderCardHTML(role) {
     if(role.ingressos && role.ingressos.toLowerCase().includes('gratuit')) {
         badgePreco = `<span class="badge-custom" style="background:var(--neon-accent); color:#000;">FREE</span>`;
     }
-
-    // ACESSIBILIDADE: 
-    // 1. aria-label no botão de favorito
-    // 2. aria-hidden="true" no ícone
-    // 3. alt descritivo na imagem
-    // 4. Estrutura semântica
 
     return `
     <div class="col">
@@ -308,7 +373,6 @@ async function renderCardHTML(role) {
 function renderSkeletonCards(qtd = 3) {
     let html = '';
     for (let i = 0; i < qtd; i++) {
-        // Adicionado role="status" e aria-label para indicar carregamento
         html += `
         <div class="col">
             <div class="card-role position-relative" aria-hidden="true" role="status" aria-label="Carregando evento">
@@ -360,7 +424,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const cats = await fetchCategorias();
                 listaCat.innerHTML = '';
                 cats.forEach(c => {
-                    // Adicionado aria-label
                     listaCat.innerHTML += `
                         <div class="col">
                             <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center">
@@ -398,11 +461,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const titleEl = document.getElementById('detalhe-titulo');
             titleEl.textContent = evt.nome || 'Sem título';
-            document.title = `${evt.nome} | Detalhes`; // Atualiza título da aba para acessibilidade
+            document.title = `${evt.nome} | Detalhes`;
             
             const imgEl = document.getElementById('detalhe-imagem');
             imgEl.src = evt.imagem_principal || 'imgs/logoMapaDosRolezinhos.png';
-            imgEl.alt = `Foto principal do evento ${evt.nome}`; // Alt dinâmico
+            imgEl.alt = `Foto principal do evento ${evt.nome}`;
             
             imgEl.onerror = function() {
                 this.src = 'imgs/logoMapaDosRolezinhos.png';
@@ -422,6 +485,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnFavDetail.setAttribute('aria-label', `Adicionar ${evt.nome} aos favoritos`);
             }
             
+            // Botão Editar (Lógica de preenchimento se for editar)
             const btnEditar = document.getElementById('btn-editar');
             if(btnEditar) {
                 btnEditar.href = `editar.html?id=${evt.id}`;
@@ -436,7 +500,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
                         attribution: '&copy; OpenStreetMap contributors' 
                     }).addTo(map);
-                    // Marcador com título acessível
                     L.marker([evt.lat, evt.lng], { title: evt.nome, alt: `Localização de ${evt.nome}` }).addTo(map).bindPopup(`<b>${evt.nome}</b>`).openPopup();
                 }
             } else {
@@ -444,7 +507,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if(mapContainer) mapContainer.innerHTML = '<p class="text-muted small fst-italic p-3 text-center border border-secondary rounded">Mapa indisponível para este local.</p>';
             }
 
-            setTimeout(atualizarIconesFavoritos, 1000);
+            // Delay para verificar auth e atualizar botões de dono
+            setTimeout(() => {
+                atualizarIconesFavoritos();
+                verificarPermissaoDono();
+            }, 1000);
 
         } catch (error) {
             console.error("Erro crítico detalhes:", error);
@@ -502,6 +569,36 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
+        // Se for Edição, preencher dados
+        const idInput = document.getElementById('id');
+        if (idInput && window.location.href.includes('editar.html')) {
+             const params = new URLSearchParams(window.location.search);
+             const idEditar = params.get('id');
+             if (idEditar) {
+                 idInput.value = idEditar;
+                 const evt = await fetchRoleById(idEditar);
+                 if (evt) {
+                     // Preenche os campos
+                     document.getElementById('nome').value = evt.nome || '';
+                     document.getElementById('descricao').value = evt.descricao || '';
+                     document.getElementById('conteudo').value = evt.conteudo || '';
+                     document.getElementById('local').value = evt.local || '';
+                     document.getElementById('horario').value = evt.horario || '';
+                     document.getElementById('atracoes_principais').value = evt.atracoes_principais || '';
+                     document.getElementById('ingressos').value = evt.ingressos || '';
+                     document.getElementById('data').value = evt.data || '';
+                     if(document.getElementById('lat')) document.getElementById('lat').value = evt.lat || '';
+                     if(document.getElementById('lng')) document.getElementById('lng').value = evt.lng || '';
+                     if(document.getElementById('zona')) document.getElementById('zona').value = evt.zona || 'centro';
+                     document.getElementById('imagem_principal').value = evt.imagem_principal || '';
+                     if(document.getElementById('preview-imagem')) document.getElementById('preview-imagem').src = evt.imagem_principal || '';
+                     
+                     if(s) s.value = evt.categoria_principal_id;
+                     if(document.getElementById('destaque')) document.getElementById('destaque').checked = evt.destaque;
+                 }
+             }
+        }
+
         fCad.addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentUser) {
@@ -515,13 +612,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
 
             try {
-                const idInput = document.getElementById('id'); 
                 const isEdit = idInput && idInput.value;
                 const idRole = isEdit ? idInput.value : Date.now().toString();
 
                 const payload = {
                     nome: document.getElementById('nome').value,
-                    imagem_principal: 'imgs/logoMapaDosRolezinhos.png', 
+                    // Em produção real, aqui você faria upload para o Firebase Storage
+                    // Mantendo estático ou o valor anterior para simplificar o exemplo
+                    imagem_principal: document.getElementById('imagem_principal')?.value || 'imgs/logoMapaDosRolezinhos.png', 
                     descricao: document.getElementById('descricao').value,
                     conteudo: document.getElementById('conteudo').value,
                     local: document.getElementById('local').value,
@@ -530,9 +628,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ingressos: document.getElementById('ingressos').value,
                     categoria_principal_id: parseInt(s.value),
                     destaque: document.getElementById('destaque').checked,
+                    // Campos adicionais para edição
+                    data: document.getElementById('data') ? document.getElementById('data').value : new Date().toISOString().split('T')[0],
                 };
+                
+                if(document.getElementById('lat')) payload.lat = parseFloat(document.getElementById('lat').value);
+                if(document.getElementById('lng')) payload.lng = parseFloat(document.getElementById('lng').value);
+                if(document.getElementById('zona')) payload.zona = document.getElementById('zona').value;
 
-                if(!isEdit) payload.criado_por = currentUser.email;
+                // IMPORTANTE: Vincula o dono do evento ao email do usuário atual
+                if(!isEdit) {
+                    payload.criado_por = currentUser.email;
+                }
 
                 await setDoc(doc(db, "eventos", idRole), payload, { merge: true });
 
@@ -545,7 +652,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                Swal.fire({ title: 'Erro', text: 'Falha ao salvar dados.', icon: 'error', background: '#1e1e1e', color: '#fff' });
+                let msg = 'Falha ao salvar dados.';
+                // Tratamento de erro específico para permissão negada (Security Rules)
+                if(error.code === 'permission-denied') {
+                    msg = 'Você não tem permissão para editar este evento.';
+                }
+                Swal.fire({ title: 'Erro', text: msg, icon: 'error', background: '#1e1e1e', color: '#fff' });
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = originalText;
             }
