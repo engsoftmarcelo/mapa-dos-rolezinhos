@@ -1,36 +1,42 @@
 /* =========================================
-   MAPA DOS ROLEZINHOS - VERCEL FIXED
+   MAPA DOS ROLEZINHOS - APP PRINCIPAL
    ========================================= */
 
-const DATA_URL = `/db/db.json?v=${new Date().getTime()}`;
+// 1. IMPORTAÇÃO DO FIREBASE (Conexão Real)
+import { auth, provider, signInWithPopup, signOut } from './firebase.js';
 
-// --- 1. GESTÃO DE DADOS ---
+const DATA_URL = `db/db.json?v=${new Date().getTime()}`;
+
+// --- 2. GESTÃO DE DADOS (Banco de Dados + LocalStorage) ---
 
 async function carregarBanco() {
     try {
+        // Tenta carregar o JSON local
         const response = await fetch(DATA_URL);
         if (!response.ok) throw new Error('Erro HTTP: ' + response.status);
         const dadosEstaticos = await response.json();
 
         let dadosLocais = { eventos: [] };
         try {
+            // Tenta carregar eventos criados pelo usuário (LocalStorage)
             const localRaw = localStorage.getItem('mapa_dados_locais');
             if (localRaw) {
                 dadosLocais = JSON.parse(localRaw);
             }
         } catch (e) {
             console.warn("Dados locais corrompidos, resetando...", e);
-            localStorage.removeItem('mapa_dados_locais'); // Limpa se estiver ruim
+            localStorage.removeItem('mapa_dados_locais');
         }
 
+        // Mescla os dados do JSON com os dados locais
         let listaFinal = [...dadosEstaticos.eventos];
 
         dadosLocais.eventos.forEach(eventoLocal => {
             const index = listaFinal.findIndex(e => e.id === eventoLocal.id);
             if (index !== -1) {
-                listaFinal[index] = eventoLocal;
+                listaFinal[index] = eventoLocal; // Atualiza se já existe (edição)
             } else {
-                listaFinal.push(eventoLocal);
+                listaFinal.push(eventoLocal); // Adiciona se é novo
             }
         });
 
@@ -40,7 +46,6 @@ async function carregarBanco() {
         };
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
-        // Retorna estrutura vazia para não quebrar a UI
         return { eventos: [], categorias_principais: [] };
     }
 }
@@ -58,15 +63,14 @@ function salvarEventoLocalmente(evento) {
     localStorage.setItem('mapa_dados_locais', JSON.stringify(dadosLocais));
 }
 
-// --- 2. FAVORITOS ---
+// --- 3. FAVORITOS ---
 
 function getFavoritos() {
     return JSON.parse(localStorage.getItem('meus_favoritos')) || [];
 }
 
-// Tornar global de forma segura
+// Função Global para o botão de favorito
 window.toggleFavorito = function (id) {
-    // Captura o evento de forma segura ou ignora se não existir
     const e = window.event;
     if (e) { e.preventDefault(); e.stopPropagation(); }
 
@@ -85,10 +89,11 @@ window.toggleFavorito = function (id) {
     atualizarBotoesFavUI(id);
 
     if (typeof Swal !== 'undefined') {
-        const msg = acao === 'adicionado' ? 'Salvo!' : 'Removido!';
+        const msg = acao === 'adicionado' ? 'Salvo nos favoritos!' : 'Removido dos favoritos!';
         Swal.fire({ toast: true, icon: 'success', title: msg, position: 'top-end', showConfirmButton: false, timer: 1500 });
     }
 
+    // Se estiver na página de favoritos, recarrega a lista para remover o item
     if (window.location.pathname.includes('favoritos.html')) carregarListaEventos();
 };
 
@@ -96,6 +101,7 @@ function atualizarBotoesFavUI(id) {
     const favs = getFavoritos();
     const isFav = favs.includes(id);
 
+    // Atualiza botão no Card
     const btnCard = document.getElementById(`fav-btn-${id}`);
     if (btnCard) {
         const icon = btnCard.querySelector('i');
@@ -110,6 +116,7 @@ function atualizarBotoesFavUI(id) {
         }
     }
 
+    // Atualiza botão na Página de Detalhes
     const btnDetail = document.getElementById('btn-fav-detail');
     if (btnDetail) {
         const icon = btnDetail.querySelector('i');
@@ -127,32 +134,57 @@ function atualizarBotoesFavUI(id) {
     }
 }
 
-// --- 3. AUTH (MOCK) ---
+// --- 4. AUTENTICAÇÃO (LOGIN REAL COM GOOGLE) ---
 
 window.login = async () => {
-    const { value: tipo } = await Swal.fire({
-        title: 'Login',
-        text: 'Escolha o perfil (Simulação):',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Admin',
-        denyButtonText: 'Visitante',
-        confirmButtonColor: '#7B2CBF',
-        denyButtonColor: '#00F5D4'
-    });
+    try {
+        // 1. Abre o pop-up do Google
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // 2. Define quem é Admin (Verificação por E-mail)
+        const adminEmail = "engsoftmarcelo@gmail.com"; 
+        
+        let userData = {
+            id: user.uid,
+            nome: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            role: user.email === adminEmail ? 'admin' : 'user'
+        };
 
-    if (tipo === true) {
-        localStorage.setItem('usuario_logado', JSON.stringify({ id: 'admin', nome: 'Admin', role: 'admin', photoURL: 'imgs/foto-perfil.webp' }));
+        // 3. Salva no localStorage para persistência na sessão
+        localStorage.setItem('usuario_logado', JSON.stringify(userData));
+        
+        // 4. Feedback e Reload
+        await Swal.fire({
+            icon: 'success',
+            title: `Bem-vindo, ${user.displayName}!`,
+            text: userData.role === 'admin' ? 'Painel de Admin Ativado' : 'Login realizado com sucesso',
+            timer: 2000,
+            showConfirmButton: false
+        });
+        
         window.location.reload();
-    } else if (tipo === false) {
-        localStorage.setItem('usuario_logado', JSON.stringify({ id: 'guest', nome: 'Visitante', role: 'user', photoURL: 'imgs/logo.png' }));
-        window.location.reload();
+
+    } catch (error) {
+        console.error("Erro no login:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Ops!',
+            text: 'Falha ao conectar com o Google. Tente novamente.'
+        });
     }
 };
 
-window.logout = () => {
-    localStorage.removeItem('usuario_logado');
-    window.location.href = 'index.html';
+window.logout = async () => {
+    try {
+        await signOut(auth);
+        localStorage.removeItem('usuario_logado');
+        window.location.href = 'index.html';
+    } catch (error) {
+        console.error("Erro ao sair:", error);
+    }
 };
 
 function isAdmin() {
@@ -184,47 +216,49 @@ function atualizarAuthUI() {
                 </ul>
             </div>`;
     } else {
-        container.innerHTML = `<button onclick="login()" class="btn btn-outline-light btn-sm rounded-pill px-3">Entrar</button>`;
+        container.innerHTML = `<button onclick="login()" class="btn btn-outline-light btn-sm rounded-pill px-3">Entrar com Google</button>`;
     }
 }
 
-// --- 4. INICIALIZAÇÃO ---
+// --- 5. INICIALIZAÇÃO E LOGICA DE PÁGINAS ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("App iniciado");
+    console.log("App iniciado com Firebase");
 
     // Carrega UI de Auth imediatamente
     atualizarAuthUI();
 
     const path = window.location.pathname;
 
-    // Proteção simples de rotas
+    // Proteção de rotas administrativas
     if ((path.includes('cadastro.html') || path.includes('editar.html')) && !isAdmin()) {
-        window.location.href = 'index.html';
+        Swal.fire('Acesso Negado', 'Você precisa ser administrador para acessar esta página.', 'error')
+            .then(() => window.location.href = 'index.html');
         return;
     }
 
+    // Exibe botão de cadastro apenas para Admins
     const btnCad = document.getElementById('btn-cadastrar-home');
     if (btnCad) btnCad.style.display = isAdmin() ? 'inline-flex' : 'none';
 
-    // Carregamento de Conteúdo
+    // Carregamento de Conteúdo Dinâmico
     if (document.getElementById('lista-destaques')) carregarDestaques();
     if (document.getElementById('lista-de-categorias')) carregarCategorias();
     if (document.getElementById('lista-roles-por-categoria')) carregarListaEventos();
     if (document.getElementById('detalhe-do-evento')) carregarDetalhesEvento();
 
-    // Select de Categorias
+    // Preenchimento de Selects (Cadastro/Edição)
     const selectCat = document.getElementById('categoria_principal_id');
     if (selectCat) preencherCategorias(selectCat, path.includes('editar.html'));
 
-    // Formulários
+    // Listeners de Formulários
     const formCadastro = document.getElementById('form-cadastro');
     if (formCadastro) formCadastro.addEventListener('submit', (e) => salvarFormulario(e, 'criar'));
 
     const formEdicao = document.getElementById('form-edicao');
     if (formEdicao) formEdicao.addEventListener('submit', (e) => salvarFormulario(e, 'editar'));
 
-    // Busca
+    // Listener de Busca Global
     const formBusca = document.getElementById('form-busca');
     if (formBusca) {
         formBusca.addEventListener('submit', (e) => {
@@ -262,7 +296,7 @@ async function carregarDestaques() {
                 </div>
             </div>`).join('');
     } else {
-        container.innerHTML = '<div class="carousel-item active" style="height:500px;"><div class="d-flex h-100 align-items-center justify-content-center text-white"><h3>Sem destaques.</h3></div></div>';
+        container.innerHTML = '<div class="carousel-item active" style="height:500px;"><div class="d-flex h-100 align-items-center justify-content-center text-white"><h3>Sem destaques no momento.</h3></div></div>';
     }
 }
 
@@ -271,7 +305,7 @@ async function carregarCategorias() {
     const db = await carregarBanco();
     if (db.categorias_principais.length > 0) {
         lista.innerHTML = db.categorias_principais.map(c => `
-            <div class="col"><a href="categoria.html?id=${c.id}" class="text-decoration-none">
+            <div class="col"><a href="todos.html?id=${c.id}" class="text-decoration-none">
                 <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
                     <h5 class="m-0 text-white">${c.nome}</h5>
                 </div>
@@ -292,11 +326,15 @@ async function carregarListaEventos() {
     let eventos = db.eventos;
     let titulo = "Todos os Rolezinhos";
 
+    // Lógica de Filtros
     if (path.includes('favoritos.html')) {
         const favs = getFavoritos();
         eventos = eventos.filter(e => favs.includes(e.id));
         titulo = "Meus Favoritos";
-        if (!eventos.length) { container.innerHTML = '<div class="col-12 text-center text-white mt-5"><h3>Sem favoritos ainda.</h3></div>'; return; }
+        if (!eventos.length) { 
+            container.innerHTML = '<div class="col-12 text-center text-white mt-5"><h3>Você ainda não favoritou nenhum rolê.</h3><a href="todos.html" class="btn btn-outline-light mt-3">Explorar Rolês</a></div>'; 
+            return; 
+        }
     }
     else if (params.get('id')) {
         eventos = eventos.filter(e => e.categoria_principal_id == params.get('id'));
@@ -308,6 +346,7 @@ async function carregarListaEventos() {
         titulo = `Busca: "${params.get('busca')}"`;
     }
 
+    // Atualiza título da página se existir o elemento
     const elTitulo = document.getElementById('categoria-titulo');
     if (elTitulo) elTitulo.innerText = titulo;
 
@@ -336,7 +375,7 @@ async function carregarListaEventos() {
             </div>`;
         }).join('');
     } else {
-        container.innerHTML = '<div class="col-12 text-center py-5 text-muted">Nenhum evento encontrado.</div>';
+        container.innerHTML = '<div class="col-12 text-center py-5 text-muted">Nenhum evento encontrado com esses critérios.</div>';
     }
 }
 
@@ -355,35 +394,56 @@ async function carregarDetalhesEvento() {
         const fields = ['titulo', 'descricao', 'conteudo', 'data', 'horario', 'local', 'ingressos', 'atracoes'];
         fields.forEach(field => {
             const el = document.getElementById(`detalhe-${field}`);
-            const val = evt[field === 'atracoes' ? 'atracoes_principais' : field];
-            if (el) el.innerText = val || '';
+            // Mapeia nomes diferentes (titulo -> nome, atracoes -> atracoes_principais)
+            let val = '';
+            if(field === 'titulo') val = evt.nome;
+            else if(field === 'atracoes') val = evt.atracoes_principais;
+            else val = evt[field];
+            
+            if (el) el.innerText = val || 'Não informado';
         });
 
-        document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logo.png';
+        const imgEl = document.getElementById('detalhe-imagem');
+        if (imgEl) imgEl.src = evt.imagem_principal || 'imgs/logo.png';
 
         const cat = db.categorias_principais.find(c => c.id == evt.categoria_principal_id);
         if (cat) document.getElementById('detalhe-categoria').innerText = cat.nome;
 
+        // Lógica do botão Favoritar (remover listeners antigos clonando)
         const btnFav = document.getElementById('btn-fav-detail');
-        // Remove listeners antigos
-        const clone = btnFav.cloneNode(true);
-        btnFav.parentNode.replaceChild(clone, btnFav);
-        clone.onclick = () => toggleFavorito(evt.id);
-        atualizarBotoesFavUI(evt.id);
+        if (btnFav) {
+            const clone = btnFav.cloneNode(true);
+            btnFav.parentNode.replaceChild(clone, btnFav);
+            clone.onclick = () => toggleFavorito(evt.id);
+            atualizarBotoesFavUI(evt.id);
+        }
 
+        // Botões Admin (Editar/Excluir)
         const adminDiv = document.getElementById('admin-buttons-container');
         if (adminDiv) {
             adminDiv.style.display = isAdmin() ? 'flex' : 'none';
-            document.getElementById('btn-editar').href = `editar.html?id=${evt.id}`;
-            document.getElementById('btn-excluir').onclick = () => Swal.fire('Aviso', 'A exclusão está desabilitada no modo demonstração.', 'info');
+            const btnEdit = document.getElementById('btn-editar');
+            if(btnEdit) btnEdit.href = `editar.html?id=${evt.id}`;
+            
+            const btnDel = document.getElementById('btn-excluir');
+            if(btnDel) btnDel.onclick = () => Swal.fire('Aviso', 'A exclusão está desabilitada nesta versão.', 'info');
         }
 
+        // Mapa Leaflet
         if (evt.lat && evt.lng && typeof L !== 'undefined') {
-            document.getElementById('map-detail').innerHTML = "";
-            const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(evt.nome).openPopup();
+            const mapContainer = document.getElementById('map-detail');
+            if(mapContainer) {
+                mapContainer.innerHTML = ""; // Limpa mapa anterior
+                const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+                L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(evt.nome).openPopup();
+            }
         }
+    } else {
+        // Evento não encontrado
+        document.getElementById('loading-msg').innerHTML = "<h3>Evento não encontrado :(</h3>";
     }
 }
 
@@ -408,7 +468,7 @@ async function salvarFormulario(e, modo) {
     };
 
     salvarEventoLocalmente(novoEvento);
-    await Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'Salvo no navegador (Simulação).' });
+    await Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'Evento salvo localmente!' });
     window.location.href = 'todos.html';
 }
 
@@ -416,6 +476,7 @@ async function carregarDadosEdicao() {
     const id = new URLSearchParams(window.location.search).get('id');
     const db = await carregarBanco();
     const evt = db.eventos.find(e => e.id == id);
+    
     if (evt) {
         document.getElementById('id').value = evt.id;
         document.getElementById('nome').value = evt.nome;
@@ -436,14 +497,14 @@ async function carregarDadosEdicao() {
 
 window.buscarEndereco = async () => {
     const end = document.getElementById('local').value;
-    if (!end) return Swal.fire('Ops', 'Digite o endereço', 'warning');
+    if (!end) return Swal.fire('Ops', 'Digite o endereço primeiro', 'warning');
     try {
         const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}&limit=1`);
         const d = await r.json();
         if (d.length) {
             document.getElementById('lat').value = d[0].lat;
             document.getElementById('lng').value = d[0].lon;
-            Swal.fire({ toast: true, icon: 'success', title: 'Localizado!', position: 'top-end', timer: 1500, showConfirmButton: false });
-        } else Swal.fire('Erro', 'Endereço não encontrado', 'error');
-    } catch (e) { Swal.fire('Erro', 'Falha de conexão', 'error'); }
+            Swal.fire({ toast: true, icon: 'success', title: 'Localização encontrada!', position: 'top-end', timer: 1500, showConfirmButton: false });
+        } else Swal.fire('Erro', 'Endereço não encontrado no mapa', 'error');
+    } catch (e) { Swal.fire('Erro', 'Falha de conexão com o mapa', 'error'); }
 };
