@@ -1,134 +1,132 @@
 /* =========================================
-   LÓGICA COMPLETA - VERSÃO CORRIGIDA (V3.0)
-   Correções: Loops infinitos, Upload de Imagem,
-   Categorias independentes e Tratamento de Erros.
+   VERSÃO DE PRODUÇÃO (ESTÁTICA)
+   - Lê os dados diretamente do arquivo db/db.json
+   - Funciona no Vercel/Firebase Hosting
    ========================================= */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/+esm";
+// Caminho para o seu arquivo de dados
+const DATA_URL = "db/db.json";
 
-// --- 1. CONFIGURAÇÃO ---
-const firebaseConfig = {
-  apiKey: "AIzaSyDKBnPHgrTk3QArYQyCuD0Z1baOenf4GdE",
-  authDomain: "mapadosrolezinhos.firebaseapp.com",
-  projectId: "mapadosrolezinhos",
-  storageBucket: "mapadosrolezinhos.firebasestorage.app",
-  messagingSenderId: "283864853368",
-  appId: "1:283864853368:web:6b6027885c158774ca768d",
-  measurementId: "G-F6GCE32P6V"
-};
+// --- 1. FUNÇÕES DE BUSCA (DATA) ---
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-let currentUser = null;
-
-// --- 2. FUNÇÕES AUXILIARES (DATA) ---
-async function fetchRoles(termoBusca = null) {
+// Função genérica para carregar todo o banco de dados
+async function carregarBanco() {
     try {
-        // Tenta buscar do Firebase
-        const snapshot = await getDocs(collection(db, "eventos"));
-        let roles = [];
-        snapshot.forEach(doc => roles.push({ id: doc.id, ...doc.data() }));
-        
-        if (termoBusca) {
-            const t = termoBusca.toLowerCase();
-            roles = roles.filter(r => r.nome.toLowerCase().includes(t) || (r.descricao && r.descricao.toLowerCase().includes(t)));
-        }
-        return roles;
+        const response = await fetch(DATA_URL);
+        if (!response.ok) throw new Error('Erro ao carregar db.json');
+        return await response.json();
     } catch (error) {
-        console.error("Erro ao buscar roles:", error);
-        // Retorna lista vazia para não quebrar o site
-        return [];
+        console.error("Erro ao carregar dados:", error);
+        return { eventos: [], categorias_principais: [] };
     }
 }
 
-async function fetchRoleById(id) {
-    try {
-        if (!id) return null;
-        const docSnap = await getDoc(doc(db, "eventos", id));
-        return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
-    } catch (e) { return null; }
+// Busca lista de eventos
+async function fetchRoles(termoBusca = null) {
+    const db = await carregarBanco();
+    let roles = db.eventos || [];
+
+    // Filtragem manual
+    if (termoBusca) {
+        const t = termoBusca.toLowerCase();
+        roles = roles.filter(r => 
+            r.nome.toLowerCase().includes(t) || 
+            (r.descricao && r.descricao.toLowerCase().includes(t))
+        );
+    }
+    return roles;
 }
 
-// Dados estáticos para garantir que sempre carreguem
-const CATEGORIAS_FIXAS = [
-    { id: 1, nome: "Festas e Vida Noturna" },
-    { id: 2, nome: "Cultura e Arte" },
-    { id: 3, nome: "Ao Ar Livre" },
-    { id: 4, nome: "Gastronomia" },
-    { id: 5, nome: "Jogos e Geek" }
-];
+// Busca evento por ID
+async function fetchRoleById(id) {
+    const db = await carregarBanco();
+    const eventos = db.eventos || [];
+    return eventos.find(r => r.id == id) || null;
+}
 
+// Busca categorias
 async function fetchCategorias() {
-    return CATEGORIAS_FIXAS;
+    const db = await carregarBanco();
+    return db.categorias_principais || [];
 }
 
 async function fetchCategoriaById(id) {
-    return CATEGORIAS_FIXAS.find(c => c.id == id) || { nome: "Geral" };
+    const cats = await fetchCategorias();
+    // Compara como string e número para garantir
+    return cats.find(c => c.id == id) || { nome: "Geral", descricao: "" };
 }
 
-// --- 3. AUTENTICAÇÃO ---
-window.loginGoogle = async () => {
-    try {
-        await signInWithPopup(auth, provider);
-        Swal.fire({ icon: 'success', title: 'Logado com sucesso!', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, background: '#1e1e1e', color: '#fff' });
-    } catch (e) { Swal.fire('Erro', 'Falha no login.', 'error'); }
+// --- 2. AUTENTICAÇÃO SIMULADA ---
+// (Mantida para você conseguir ver a tela de cadastro, mesmo que não salve no servidor)
+window.loginGoogle = () => {
+    const fakeUser = {
+        displayName: "Admin Visitante",
+        email: "visitante@maparole.com",
+        photoURL: "imgs/foto-perfil.webp"
+    };
+    localStorage.setItem('usuario_logado', JSON.stringify(fakeUser));
+    window.location.reload();
 };
 
-window.logout = () => signOut(auth).then(() => window.location.reload());
+window.logout = () => {
+    localStorage.removeItem('usuario_logado');
+    window.location.reload();
+};
 
-function atualizarAuthUI(user) {
+function checarUsuario() {
+    const userJson = localStorage.getItem('usuario_logado');
+    return userJson ? JSON.parse(userJson) : null;
+}
+
+function atualizarAuthUI() {
     const container = document.getElementById('auth-container');
     if (!container) return;
+    
+    const user = checarUsuario();
     
     if (user) {
         container.innerHTML = `
             <div class="dropdown">
                 <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="dropdown">
-                    <img src="${user.photoURL}" class="rounded-circle" style="width: 24px; height: 24px;">
+                    <img src="${user.photoURL}" class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;" onerror="this.src='imgs/logo.png'">
                     <span class="d-none d-md-inline text-white">${user.displayName.split(' ')[0]}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                     <li><button class="dropdown-item text-danger" onclick="logout()">Sair</button></li>
                 </ul>
             </div>`;
-        atualizarIconesFavoritos();
-        verificarPermissaoDono();
     } else {
-        container.innerHTML = `<button onclick="loginGoogle()" class="btn btn-outline-light btn-sm rounded-pill"><i class="bi bi-google me-2"></i>Entrar</button>`;
+        container.innerHTML = `<button onclick="loginGoogle()" class="btn btn-outline-light btn-sm rounded-pill"><i class="bi bi-person-circle me-2"></i>Entrar</button>`;
     }
 }
 
-onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    atualizarAuthUI(user);
-});
-
-// --- 4. RENDERIZAÇÃO E LÓGICA DE PÁGINA ---
+// --- 3. LÓGICA DE PÁGINA ---
 document.addEventListener('DOMContentLoaded', async () => {
+    atualizarAuthUI();
     const path = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
 
-    // A. LÓGICA DA HOME (CARROSSEL) - Isolada
+    // A. CARROSSEL (HOME)
     const containerDestaques = document.getElementById('lista-destaques');
     if (containerDestaques && !path.includes('todos.html')) {
         try {
             const roles = await fetchRoles();
-            const destaques = roles.filter(r => r.destaque);
+            let destaques = roles.filter(r => r.destaque === true);
             
+            if (destaques.length === 0) destaques = roles.slice(0, 3);
+
             containerDestaques.innerHTML = '';
+            
             if(destaques.length > 0) {
                 destaques.forEach((r, index) => {
                     const active = index === 0 ? 'active' : '';
-                    const img = r.imagem_principal || 'imgs/logoMapaDosRolezinhos.webp';
+                    const img = r.imagem_principal || 'imgs/logo.png';
+                    
                     containerDestaques.innerHTML += `
                         <div class="carousel-item ${active}" style="height: 500px;">
                             <div class="w-100 h-100 bg-black">
-                                <img src="${img}" class="d-block w-100 h-100 object-fit-cover opacity-75" onerror="this.src='imgs/logoMapaDosRolezinhos.webp'">
+                                <img src="${img}" class="d-block w-100 h-100 object-fit-cover opacity-75" 
+                                     onerror="this.onerror=null; this.src='imgs/logo.png'">
                             </div>
                             <div class="carousel-caption-custom">
                                 <span class="badge bg-warning text-dark mb-2">EM ALTA</span>
@@ -138,173 +136,139 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>`;
                 });
             } else {
-                containerDestaques.innerHTML = '<div class="carousel-item active" style="height:400px;"><div class="d-flex align-items-center justify-content-center h-100 text-white"><h3>Nenhum destaque encontrado.</h3></div></div>';
+                containerDestaques.innerHTML = '<div class="carousel-item active" style="height:400px;"><div class="d-flex align-items-center justify-content-center h-100 text-white"><h3>Nenhum evento encontrado.</h3></div></div>';
             }
         } catch (e) {
             console.error(e);
-            containerDestaques.innerHTML = '<div class="text-white text-center p-5">Erro ao carregar destaques.</div>';
+            containerDestaques.innerHTML = '<div class="text-white text-center p-5">Erro ao carregar.</div>';
         }
     }
 
-    // B. LÓGICA DE CATEGORIAS (HOME) - Isolada
+    // B. LISTA DE CATEGORIAS
     const listaCat = document.getElementById('lista-de-categorias');
     if(listaCat) {
-        try {
-            const cats = await fetchCategorias();
-            listaCat.innerHTML = '';
-            cats.forEach(c => {
-                listaCat.innerHTML += `
-                <div class="col">
-                    <a href="categoria.html?id=${c.id}" class="text-decoration-none">
-                        <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
-                            <h5 class="m-0">${c.nome}</h5>
-                        </div>
-                    </a>
-                </div>`;
-            });
-        } catch (e) { console.error("Erro Cat:", e); }
+        const cats = await fetchCategorias();
+        listaCat.innerHTML = '';
+        cats.forEach(c => {
+            listaCat.innerHTML += `
+            <div class="col">
+                <a href="categoria.html?id=${c.id}" class="text-decoration-none">
+                    <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
+                        <h5 class="m-0">${c.nome}</h5>
+                    </div>
+                </a>
+            </div>`;
+        });
     }
 
-    // C. PÁGINA TODOS/CATEGORIA
+    // C. LISTAGEM (TODOS/CATEGORIA)
     const containerLista = document.getElementById('lista-roles-por-categoria');
     if (containerLista) {
-        try {
-            const termo = params.get('busca');
-            const catId = params.get('id');
-            const isCatPage = path.includes('categoria.html');
-            
-            let roles = await fetchRoles(termo);
-            
-            if(isCatPage && catId) {
-                roles = roles.filter(r => r.categoria_principal_id == catId);
-                const catInfo = await fetchCategoriaById(catId);
-                if(document.getElementById('categoria-titulo')) document.getElementById('categoria-titulo').textContent = catInfo.nome;
-            } else if (document.getElementById('categoria-titulo')) {
-                document.getElementById('categoria-titulo').textContent = termo ? `Busca: "${termo}"` : "Todos os Rolês";
+        const termo = params.get('busca');
+        const catId = params.get('id');
+        
+        let roles = await fetchRoles(termo);
+        
+        if(catId) {
+            roles = roles.filter(r => String(r.categoria_principal_id) === String(catId));
+            const catInfo = await fetchCategoriaById(catId);
+            if(document.getElementById('categoria-titulo')) {
+                document.getElementById('categoria-titulo').textContent = catInfo.nome;
+                document.getElementById('categoria-descricao').textContent = catInfo.descricao || "";
             }
+        } else if (termo && document.getElementById('categoria-titulo')) {
+            document.getElementById('categoria-titulo').textContent = `Busca: "${termo}"`;
+            document.getElementById('categoria-descricao').textContent = "Resultados encontrados.";
+        }
 
-            containerLista.innerHTML = '';
-            if (roles.length > 0) {
-                for(const r of roles) {
-                    const img = r.imagem_principal || 'imgs/logoMapaDosRolezinhos.webp';
-                    const cat = await fetchCategoriaById(r.categoria_principal_id);
-                    containerLista.innerHTML += `
-                    <div class="col">
-                        <div class="card-role h-100">
-                            <a href="detalhes.html?id=${r.id}" class="text-decoration-none">
-                                <div class="card-img-wrapper" style="height: 200px;">
-                                    <img src="${img}" class="w-100 h-100 object-fit-cover" onerror="this.src='imgs/logoMapaDosRolezinhos.webp'">
-                                </div>
-                                <div class="card-body-custom">
-                                    <span class="badge bg-primary mb-2 w-auto align-self-start">${cat.nome}</span>
-                                    <h5 class="card-title text-white">${r.nome}</h5>
-                                    <p class="card-desc text-muted small">${r.descricao || ''}</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>`;
-                }
-            } else {
-                containerLista.innerHTML = '<p class="text-white text-center col-12">Nenhum evento encontrado.</p>';
+        containerLista.innerHTML = '';
+        if (roles.length > 0) {
+            for(const r of roles) {
+                const img = r.imagem_principal || 'imgs/logo.png';
+                const c = await fetchCategoriaById(r.categoria_principal_id);
+                
+                containerLista.innerHTML += `
+                <div class="col">
+                    <div class="card-role h-100">
+                        <a href="detalhes.html?id=${r.id}" class="text-decoration-none">
+                            <div class="card-img-wrapper" style="height: 200px;">
+                                <img src="${img}" class="w-100 h-100 object-fit-cover" 
+                                     onerror="this.onerror=null; this.src='imgs/logo.png'">
+                            </div>
+                            <div class="card-body-custom">
+                                <span class="badge bg-primary mb-2 w-auto align-self-start">${c.nome}</span>
+                                <h5 class="card-title text-white">${r.nome}</h5>
+                                <p class="card-desc text-muted small">${r.descricao || ''}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>`;
             }
-        } catch (e) {
-            containerLista.innerHTML = '<p class="text-white text-center col-12">Erro ao carregar lista.</p>';
+        } else {
+            containerLista.innerHTML = '<p class="text-white text-center col-12">Nenhum evento encontrado.</p>';
         }
     }
 
     // D. PÁGINA DETALHES
     const idDetalhe = params.get('id');
     if(idDetalhe && document.getElementById('detalhe-do-evento')) {
-        try {
-            const evt = await fetchRoleById(idDetalhe);
-            if(evt) {
-                document.getElementById('loading-msg').style.display = 'none';
-                document.getElementById('content-area').style.display = 'block';
-                
-                document.getElementById('detalhe-titulo').textContent = evt.nome;
-                document.getElementById('detalhe-descricao').textContent = evt.descricao;
-                document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logoMapaDosRolezinhos.webp';
-                document.getElementById('detalhe-local').textContent = evt.local;
-                
-                // Mapa
-                if (evt.lat && evt.lng && typeof L !== 'undefined') {
-                     const mapDiv = document.getElementById('map-detail');
-                     mapDiv.innerHTML = ""; 
-                     const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);
-                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                     L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(evt.nome).openPopup();
-                }
+        const evt = await fetchRoleById(idDetalhe);
+        if(evt) {
+            document.getElementById('loading-msg').style.display = 'none';
+            document.getElementById('content-area').style.display = 'block';
+            
+            document.getElementById('detalhe-titulo').textContent = evt.nome;
+            document.getElementById('detalhe-descricao').textContent = evt.descricao;
+            document.getElementById('detalhe-conteudo').textContent = evt.conteudo || evt.descricao;
+            
+            const imgDet = document.getElementById('detalhe-imagem');
+            imgDet.src = evt.imagem_principal || 'imgs/logo.png';
+            imgDet.onerror = function() { this.src = 'imgs/logo.png'; };
+
+            document.getElementById('detalhe-data').textContent = evt.data ? new Date(evt.data + 'T12:00:00').toLocaleDateString('pt-BR') : 'A definir';
+            document.getElementById('detalhe-horario').textContent = evt.horario || 'A definir';
+            document.getElementById('detalhe-local').textContent = evt.local || 'Local a confirmar';
+            document.getElementById('detalhe-ingressos').textContent = evt.ingressos || 'Consulte';
+            document.getElementById('detalhe-atracoes').textContent = evt.atracoes_principais || 'A divulgar';
+
+            // Ajuste visual
+            const ul = document.querySelector('#detalhe-data')?.closest('ul');
+            if(ul) ul.classList.add('text-white');
+            
+            if(evt.categoria_principal_id) {
+                const c = await fetchCategoriaById(evt.categoria_principal_id);
+                document.getElementById('detalhe-categoria').textContent = c.nome;
             }
-        } catch(e) { console.error(e); }
+
+            // Mapa
+            if ((evt.lat && evt.lng) && typeof L !== 'undefined') {
+                 const mapDiv = document.getElementById('map-detail');
+                 mapDiv.innerHTML = ""; 
+                 const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);
+                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                 L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(evt.nome).openPopup();
+            }
+        }
     }
 
-    // E. CADASTRO & UPLOAD DE IMAGEM
-    const formCadastro = document.getElementById('form-cadastro') || document.getElementById('form-edicao');
+    // E. CADASTRO (SIMULADO - AVISO)
+    const formCadastro = document.getElementById('form-cadastro');
     if (formCadastro) {
-        // 1. Carregar Categorias no Select
         const select = document.getElementById('categoria_principal_id');
         const cats = await fetchCategorias();
         select.innerHTML = cats.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
         
-        // 2. Configurar Upload de Imagem
-        const fileInput = document.getElementById('file-upload');
-        const hiddenInput = document.getElementById('imagem_principal');
-        const preview = document.getElementById('preview-img'); // Se existir
-
-        if(fileInput) {
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = function() {
-                        // Converte para Base64 e salva no input hidden
-                        hiddenInput.value = reader.result; 
-                        if(preview) {
-                            preview.src = reader.result;
-                            preview.style.display = 'block';
-                        }
-                        Swal.fire({ toast: true, icon: 'success', title: 'Imagem carregada!', position: 'top-end', showConfirmButton: false, timer: 1500, background: '#1e1e1e', color:'#fff' });
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        // 3. Submit do Form
-        formCadastro.addEventListener('submit', async (e) => {
+        formCadastro.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (!currentUser) { Swal.fire('Erro', 'Faça login para cadastrar.', 'warning'); return; }
-            
-            try {
-                const dados = {
-                    nome: document.getElementById('nome').value,
-                    local: document.getElementById('local').value,
-                    lat: document.getElementById('lat').value || null,
-                    lng: document.getElementById('lng').value || null,
-                    descricao: document.getElementById('descricao').value,
-                    conteudo: document.getElementById('conteudo').value,
-                    horario: document.getElementById('horario').value,
-                    atracoes_principais: document.getElementById('atracoes_principais').value,
-                    ingressos: document.getElementById('ingressos').value,
-                    categoria_principal_id: select.value,
-                    imagem_principal: hiddenInput.value, // Pega do hidden
-                    criado_por: currentUser.email,
-                    destaque: document.getElementById('destaque') ? document.getElementById('destaque').checked : false
-                };
-                
-                // Salva no Firebase (Gera ID automático com Date.now para simplificar)
-                await setDoc(doc(db, "eventos", Date.now().toString()), dados);
-                
-                Swal.fire({ title: 'Sucesso!', text: 'Rolê cadastrado!', icon: 'success', background: '#1e1e1e', color: '#fff' })
-                    .then(() => window.location.href = 'index.html');
-            } catch (err) {
-                console.error(err);
-                Swal.fire('Erro', 'Não foi possível salvar.', 'error');
-            }
+            Swal.fire({
+                icon: 'info',
+                title: 'Modo Demonstração',
+                text: 'No modo Vercel/Estático, novos cadastros não são salvos permanentemente. Configure o Firebase Firestore para habilitar essa função real.'
+            });
         });
     }
 
-    // F. BUSCA NAVBAR
+    // F. BUSCA
     const formBusca = document.getElementById('form-busca');
     if(formBusca) {
         formBusca.addEventListener('submit', (e) => {
@@ -315,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- 5. FUNÇÕES GLOBAIS (GEO, FAV) ---
+// 4. GLOBAIS
 window.buscarEndereco = async () => {
     const end = document.getElementById('local').value;
     if(!end) return Swal.fire('Ops', 'Digite um endereço!', 'warning');
@@ -330,13 +294,8 @@ window.buscarEndereco = async () => {
         if(d.length) {
             document.getElementById('lat').value = d[0].lat;
             document.getElementById('lng').value = d[0].lon;
-            Swal.fire({ toast:true, icon:'success', title:'Local encontrado!', position:'top-end', timer:2000, background:'#1e1e1e', color:'#fff', showConfirmButton: false });
+            Swal.fire({ toast:true, icon:'success', title:'Achado!', position:'top-end', timer:2000, showConfirmButton:false });
         } else { Swal.fire('Erro', 'Endereço não achado.', 'error'); }
     } catch(e) { Swal.fire('Erro', 'Falha na busca.', 'error'); }
     finally { btn.innerHTML = oldTxt; }
 };
-
-// (Funções de Favoritos e Admin mantidas mas simplificadas para caber na resposta)
-async function verificarPermissaoDono() {} 
-function atualizarIconesFavoritos() {}
-
