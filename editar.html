@@ -3,23 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Rolê | Mapa dos Rolezinhos</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+    <title>Editar Rolê</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <!-- NAVBAR PADRÃO -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-              <img src="imgs/logo.png" alt="Logo" class="logo-brand">
-            </a>
-            <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">Cancelar Edição</a>
+          <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+              <img src="imgs/logo.png" alt="Logo" class="logo-brand" style="height: 50px;">
+          </a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex ms-auto my-2 my-lg-0 position-relative" id="form-busca">
+              <input class="form-control rounded-pill border-secondary bg-dark text-white pe-5" type="search" placeholder="Buscar Rolê..." aria-label="Busca">
+              <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-light pe-3 text-decoration-none" type="submit">
+                  <i class="bi bi-search"></i>
+              </button>
+            </form>
+            <ul class="navbar-nav ms-3 align-items-center gap-2">
+              <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="todos.html">Rolezinhos</a></li>
+              <li class="nav-item"><a class="nav-link" href="favoritos.html">Favoritos</a></li>
+              <li class="nav-item ms-2" id="auth-container"></li>
+            </ul>
+          </div>
         </div>
     </nav>
 
@@ -31,7 +43,6 @@
 
         <div class="card border-secondary bg-dark text-white shadow-lg">
             <div class="card-body p-4">
-                
                 <form id="form-edicao">
                     <input type="hidden" id="id">
                     
@@ -43,20 +54,15 @@
                     <div class="mb-3">
                         <label class="form-label">Imagem Principal (URL)</label>
                         <input type="text" id="imagem_principal" class="form-control mb-2">
-                        
-                        <div class="p-3 border border-secondary rounded bg-black bg-opacity-25 text-center">
-                            <p class="small text-muted mb-2">Pré-visualização Atual:</p>
-                            <img id="preview-imagem" src="" style="max-height: 200px; max-width: 100%; object-fit: contain;" class="rounded" onerror="this.style.display='none'">
-                        </div>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Data do Evento</label>
+                            <label class="form-label">Data</label>
                             <input type="date" id="data" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Horário (Exibição)</label>
+                            <label class="form-label">Horário</label>
                             <input type="text" id="horario" class="form-control" required>
                         </div>
                     </div>
@@ -65,17 +71,13 @@
                         <div class="card bg-secondary bg-opacity-10 border-secondary">
                             <div class="card-body">
                                 <h5 class="card-title text-warning mb-3"><i class="bi bi-map me-2"></i>Localização</h5>
-                                
                                 <div class="mb-3">
-                                    <label class="form-label">Endereço / Local</label>
+                                    <label class="form-label">Endereço</label>
                                     <div class="input-group">
-                                        <input type="text" id="local" class="form-control" placeholder="Digite para buscar..." required>
-                                        <button class="btn btn-info fw-bold" type="button" id="btn-buscar-geo" onclick="buscarEndereco()">
-                                            <i class="bi bi-search"></i> Atualizar Mapa
-                                        </button>
+                                        <input type="text" id="local" class="form-control" required>
+                                        <button class="btn btn-info fw-bold" type="button" id="btn-buscar-geo" onclick="buscarEndereco()">Atualizar Mapa</button>
                                     </div>
                                 </div>
-
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="form-label small opacity-75">Latitude</label>
@@ -85,7 +87,6 @@
                                         <label class="form-label small opacity-75">Longitude</label>
                                         <input type="number" step="any" id="lng" class="form-control bg-dark border-secondary text-muted" readonly>
                                     </div>
-                                    <input type="hidden" id="zona" value="centro">
                                 </div>
                             </div>
                         </div>
@@ -119,12 +120,12 @@
 
                     <div class="form-check form-switch mb-4">
                         <input class="form-check-input" type="checkbox" id="destaque">
-                        <label class="form-check-label text-white" for="destaque">Evento em Destaque</label>
+                        <label class="form-check-label text-white" for="destaque">Destaque</label>
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="index.html" class="btn btn-outline-light px-4">Cancelar</a>
-                        <button type="submit" class="btn btn-warning px-5 fw-bold">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-warning px-5 fw-bold">Salvar</button>
                     </div>
                 </form>
             </div>
