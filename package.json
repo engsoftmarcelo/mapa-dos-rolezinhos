@@ -1,18 +1,10 @@
 {
-
-  "name": "template-diw-20251-semana-12",
+  "name": "mapa-dos-rolezinhos",
   "version": "1.0.0",
   "description": "Plataforma web para gestão e descoberta de eventos locais.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "json-server --watch ./db/db.json"
+    "dev": "json-server --watch ./db/db.json"
   },
-  "dependencies": {
-    "json-server": "^0.17.0"
-  },
-  "keywords": [],
-  "author": "",
+  "dependencies": {},
   "license": "ISC"
 }
-
