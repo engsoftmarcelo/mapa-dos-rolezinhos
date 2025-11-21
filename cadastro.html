@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Novo Rolê | Mapa dos Rolezinhos</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+    <title>Cadastrar Novo Rolê</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">
-                  <img src="imgs/logo.png" alt="Logo" class="logo-brand">
-                </a>
-                <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">Voltar</a>
-            </div>
-        </nav>
-    </header>
+    <!-- NAVBAR PADRÃO -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+              <img src="imgs/logo.png" alt="Logo" class="logo-brand" style="height: 50px;">
+          </a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex ms-auto my-2 my-lg-0 position-relative" id="form-busca">
+              <input class="form-control rounded-pill border-secondary bg-dark text-white pe-5" type="search" placeholder="Buscar Rolê..." aria-label="Busca">
+              <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-light pe-3 text-decoration-none" type="submit">
+                  <i class="bi bi-search"></i>
+              </button>
+            </form>
+            <ul class="navbar-nav ms-3 align-items-center gap-2">
+              <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="todos.html">Rolezinhos</a></li>
+              <li class="nav-item"><a class="nav-link" href="favoritos.html">Favoritos</a></li>
+              <li class="nav-item ms-2" id="auth-container"></li>
+            </ul>
+          </div>
+        </div>
+    </nav>
 
     <main class="container my-5">
         <section id="cadastro-evento">
@@ -37,69 +45,54 @@
             <div class="card bg-dark border-secondary shadow-lg">
                 <div class="card-body p-4">
                     <form id="form-cadastro" class="row g-3">
-                        
                         <div class="col-md-6">
                             <label for="nome" class="form-label">Nome do Evento</label>
                             <input type="text" class="form-control" id="nome" required placeholder="Ex: Festival de Jazz">
                         </div>
+                        <div class="col-md-6">
+                            <label for="imagem_upload" class="form-label">Imagem (URL)</label>
+                            <input type="text" class="form-control" id="imagem_principal" placeholder="Ex: imgs/foto.jpg">
+                        </div>
+                        <div class="col-12">
+                            <label for="descricao" class="form-label">Descrição Curta</label>
+                            <input type="text" class="form-control" id="descricao" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="conteudo" class="form-label">Detalhes Completos</label>
+                            <textarea class="form-control" id="conteudo" rows="4" required></textarea>
+                        </div>
                         
-                        <div class="col-md-6">
-                            <label for="imagem_upload" class="form-label">Imagem do Evento (URL ou Upload Simulado)</label>
-                            <input type="text" class="form-control" id="imagem_principal" placeholder="Cole a URL da imagem aqui (Ex: imgs/foto.jpg)">
-                            <div class="form-text opacity-50">Para teste, use URLs externas ou caminhos locais (imgs/...).</div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="descricao" class="form-label">Descrição Curta (Card)</label>
-                            <input type="text" class="form-control" id="descricao" placeholder="Resumo rápido para aparecer na listagem..." required>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="conteudo" class="form-label">Conteúdo Completo (Detalhes)</label>
-                            <textarea class="form-control" id="conteudo" rows="4" placeholder="Conte tudo sobre o evento..." required></textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <hr class="border-secondary my-3">
-                            <h5 class="text-white mb-3"><i class="bi bi-geo-alt text-warning me-2"></i>Localização e Mapa</h5>
-                        </div>
-
                         <div class="col-md-12">
-                            <label for="local" class="form-label">Endereço Completo (Para busca)</label>
+                            <label for="local" class="form-label">Endereço</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="local" placeholder="Ex: Praça da Liberdade, Savassi, Belo Horizonte" required>
-                                <button class="btn btn-outline-info fw-bold" type="button" id="btn-buscar-geo" onclick="buscarEndereco()">
-                                    <i class="bi bi-search me-2"></i>Buscar no Mapa
-                                </button>
+                                <input type="text" class="form-control" id="local" required>
+                                <button class="btn btn-outline-info fw-bold" type="button" id="btn-buscar-geo" onclick="buscarEndereco()">Buscar</button>
                             </div>
-                            <div class="form-text text-light opacity-50">Clique em buscar para gerar o mapa automaticamente.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lat" class="form-label text-muted small">Latitude</label>
+                            <input type="text" class="form-control bg-secondary bg-opacity-25" id="lat" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lng" class="form-label text-muted small">Longitude</label>
+                            <input type="text" class="form-control bg-secondary bg-opacity-25" id="lng" readonly>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="lat" class="form-label text-muted small">Latitude (Automático)</label>
-                            <input type="text" class="form-control bg-secondary bg-opacity-25 border-secondary text-white" id="lat" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lng" class="form-label text-muted small">Longitude (Automático)</label>
-                            <input type="text" class="form-control bg-secondary bg-opacity-25 border-secondary text-white" id="lng" readonly>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="data" class="form-label">Data do Evento</label>
+                            <label for="data" class="form-label">Data</label>
                             <input type="date" class="form-control" id="data" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="horario" class="form-label">Horário (Texto)</label>
-                            <input type="text" class="form-control" id="horario" placeholder="Ex: Sexta, 22h" required>
+                            <label for="horario" class="form-label">Horário</label>
+                            <input type="text" class="form-control" id="horario" required>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="atracoes_principais" class="form-label">Atrações Principais</label>
-                            <input type="text" class="form-control" id="atracoes_principais" placeholder="Ex: DJ K, Banda M">
+                            <label for="atracoes_principais" class="form-label">Atrações</label>
+                            <input type="text" class="form-control" id="atracoes_principais">
                         </div>
                         <div class="col-md-4">
                             <label for="ingressos" class="form-label">Ingressos</label>
-                            <input type="text" class="form-control" id="ingressos" placeholder="Ex: R$ 25 / Gratuito">
+                            <input type="text" class="form-control" id="ingressos">
                         </div>
                         <div class="col-md-4">
                             <label for="categoria_principal_id" class="form-label">Categoria</label>
@@ -107,18 +100,15 @@
                                 <option value="">Carregando...</option>
                             </select>
                         </div>
-                        
                         <div class="col-12 mt-4">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="destaque">
-                                <label class="form-check-label text-white" for="destaque">
-                                    Marcar como <strong>Destaque</strong> (aparece no carrossel da Home)
-                                </label>
+                                <label class="form-check-label text-white" for="destaque">Destaque na Home</label>
                             </div>
                         </div>
 
                         <div class="col-12 mt-4 text-end">
-                            <button type="submit" class="btn btn-cta px-5">Cadastrar Rolê</button>
+                            <button type="submit" class="btn btn-cta px-5">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -128,7 +118,7 @@
 
     <footer class="text-center mt-5 py-4 bg-black bg-opacity-25 border-top border-secondary">
         <div class="container">
-            <p class="mb-2 small text-white opacity-75">&copy; 2025 Mapa dos Rolezinhos. Feito com <i class="bi bi-lightning-fill text-warning"></i> em BH.</p>
+            <p class="mb-2 small text-white opacity-75">&copy; 2025 Mapa dos Rolezinhos.</p>
         </div>
     </footer>
 
