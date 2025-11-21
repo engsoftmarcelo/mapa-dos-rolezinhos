@@ -1,6 +1,6 @@
 /* =========================================
-   MAPA DOS ROLEZINHOS - ESTILO PROFISSIONAL (V2.1)
-   Atualizado com correções de legibilidade e carrossel
+   MAPA DOS ROLEZINHOS - ESTILO PROFISSIONAL (V2.2)
+   Atualizado: Fix Carrossel, Favoritos e Admin
    ========================================= */
 
 /* Importa a fonte Poppins (Padrão Moderno) */
@@ -69,7 +69,13 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-/* === CONFIGURAÇÃO DA LOGO (CORRIGIDA) === */
+/* Navbar Ativa */
+.nav-link.active {
+    color: var(--neon-accent) !important;
+    font-weight: 700;
+    border-bottom: 2px solid var(--neon-accent);
+}
+
 .logo-brand {
     height: 75px;
     width: auto;
@@ -79,7 +85,6 @@ body {
 
 .navbar-brand:hover .logo-brand {
     transform: scale(1.05) rotate(-3deg);
-    /* CORREÇÃO: Removido o drop-shadow neon excessivo que borrava a leitura */
     filter: brightness(1.2); 
 }
 
@@ -90,7 +95,7 @@ body {
     font-size: 0.95rem;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover {
     color: var(--neon-accent) !important;
     text-shadow: 0 0 10px rgba(0, 245, 212, 0.4);
 }
@@ -166,19 +171,33 @@ body {
     background: #fff;
 }
 
-/* === NOVO: Estilos do Carrossel de Destaques === */
+/* === FIX: Carrossel de Destaques === */
 .carousel-item {
     transition: transform 0.6s ease-in-out;
 }
 
 .carousel-caption-custom {
-    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, transparent 100%);
+    /* FIX: Permite clicar através da legenda onde não tem conteúdo */
+    pointer-events: none; 
+    background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 3rem 2rem 2rem 2rem;
+    padding: 4rem 2rem 2rem 2rem; /* Mais padding para afastar das setas */
     text-align: left;
+    z-index: 10;
+}
+
+/* Reativa cliques nos textos e botões dentro da legenda */
+.carousel-caption-custom > * {
+    pointer-events: auto;
+}
+
+/* FIX: Diminui a área de clique das setas para não cobrir o botão central */
+.carousel-control-prev, .carousel-control-next {
+    width: 8%; 
+    z-index: 20;
 }
 
 /* === Cards Profissionais (Consistência) === */
@@ -191,6 +210,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative; /* Necessário para posicionar o coração */
 }
 
 .card-role:hover {
@@ -199,11 +219,9 @@ body {
     box-shadow: 0 15px 30px rgba(0,0,0,0.6);
 }
 
-/* WRAPPER DE IMAGEM */
 .card-img-wrapper {
     position: relative;
     width: 100%;
-    /* Ajuste se necessário, ou use height fixo no inline style como no JS */
     min-height: 200px; 
     overflow: hidden;
     background-color: #000;
@@ -220,48 +238,12 @@ body {
     transform: scale(1.1);
 }
 
-/* Labels Flutuantes (Badges) */
-.card-badges {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
-}
-
-.badge-custom {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.badge-category {
-    background: var(--primary);
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Conteúdo do Card */
 .card-body-custom {
     padding: 1.5rem;
     display: flex;
     gap: 1rem;
     flex-grow: 1;
-    flex-direction: column; /* Ajuste para alinhar melhor */
-}
-
-.card-info {
-    flex: 1;
-    overflow: hidden;
+    flex-direction: column;
 }
 
 .card-title {
@@ -284,14 +266,15 @@ body {
     overflow: hidden;
 }
 
-/* Botão Favorito */
+/* === Botão Favorito (Coração no Card) === */
 .btn-fav-card {
     position: absolute;
     top: 12px;
-    left: 12px;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255,255,255,0.2);
+    right: 12px; /* Canto superior direito */
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -300,15 +283,20 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #fff;
+    padding: 0;
 }
 
 .btn-fav-card:hover {
     background: #fff;
+    color: #dc3545;
     transform: scale(1.1);
 }
 
-.btn-fav-card:hover i {
-    color: #e63946 !important;
+.btn-fav-card.active {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
 }
 
 /* === Categorias (Pílulas) === */
@@ -365,19 +353,6 @@ body {
     color: #888;
 }
 
-input[type="file"] {
-    padding: 0.5rem;
-}
-input[type="file"]::file-selector-button {
-    background: #333;
-    color: #fff;
-    border: 1px solid #555;
-    padding: 0.3rem 1rem;
-    border-radius: 5px;
-    margin-right: 1rem;
-    cursor: pointer;
-}
-
 /* === Página de Erro 404 === */
 .error-container {
     padding: 4rem 1rem;
@@ -392,7 +367,7 @@ input[type="file"]::file-selector-button {
     pointer-events: none;
 }
 
-/* === Footer (CORRIGIDO) === */
+/* === Footer === */
 footer {
     border-top: 1px solid rgba(255,255,255,0.05);
     background: #0a001c !important;
@@ -434,16 +409,6 @@ footer a:hover {
         padding: 1rem;
     }
     
-    .card-title {
-        font-size: 1rem;
-    }
-    
-    .btn-cta {
-        width: 100%;
-        text-align: center;
-        padding: 14px 0;
-    }
-
     .logo-brand {
         height: 60px;
     }
