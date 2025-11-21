@@ -2,7 +2,7 @@
    MAPA DOS ROLEZINHOS - VERCEL FIXED
    ========================================= */
 
-const DATA_URL = "/db/db.json"; // Caminho absoluto para evitar erros em subpastas
+const DATA_URL = `/db/db.json?v=${new Date().getTime()}`;
 
 // --- 1. GESTÃO DE DADOS ---
 
@@ -12,22 +12,31 @@ async function carregarBanco() {
         if (!response.ok) throw new Error('Erro HTTP: ' + response.status);
         const dadosEstaticos = await response.json();
 
-        const dadosLocais = JSON.parse(localStorage.getItem('mapa_dados_locais')) || { eventos: [] };
+        let dadosLocais = { eventos: [] };
+        try {
+            const localRaw = localStorage.getItem('mapa_dados_locais');
+            if (localRaw) {
+                dadosLocais = JSON.parse(localRaw);
+            }
+        } catch (e) {
+            console.warn("Dados locais corrompidos, resetando...", e);
+            localStorage.removeItem('mapa_dados_locais'); // Limpa se estiver ruim
+        }
 
         let listaFinal = [...dadosEstaticos.eventos];
 
         dadosLocais.eventos.forEach(eventoLocal => {
             const index = listaFinal.findIndex(e => e.id === eventoLocal.id);
             if (index !== -1) {
-                listaFinal[index] = eventoLocal; 
+                listaFinal[index] = eventoLocal;
             } else {
-                listaFinal.push(eventoLocal); 
+                listaFinal.push(eventoLocal);
             }
         });
 
-        return { 
-            eventos: listaFinal, 
-            categorias_principais: dadosEstaticos.categorias_principais 
+        return {
+            eventos: listaFinal,
+            categorias_principais: dadosEstaticos.categorias_principais
         };
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
@@ -39,7 +48,7 @@ async function carregarBanco() {
 function salvarEventoLocalmente(evento) {
     const dadosLocais = JSON.parse(localStorage.getItem('mapa_dados_locais')) || { eventos: [] };
     const index = dadosLocais.eventos.findIndex(e => e.id === evento.id);
-    
+
     if (index !== -1) {
         dadosLocais.eventos[index] = evento;
     } else {
@@ -56,10 +65,10 @@ function getFavoritos() {
 }
 
 // Tornar global de forma segura
-window.toggleFavorito = function(id) {
+window.toggleFavorito = function (id) {
     // Captura o evento de forma segura ou ignora se não existir
     const e = window.event;
-    if(e) { e.preventDefault(); e.stopPropagation(); }
+    if (e) { e.preventDefault(); e.stopPropagation(); }
 
     let favs = getFavoritos();
     let acao = '';
@@ -71,16 +80,16 @@ window.toggleFavorito = function(id) {
         favs.push(id);
         acao = 'adicionado';
     }
-    
+
     localStorage.setItem('meus_favoritos', JSON.stringify(favs));
     atualizarBotoesFavUI(id);
-    
-    if(typeof Swal !== 'undefined') {
+
+    if (typeof Swal !== 'undefined') {
         const msg = acao === 'adicionado' ? 'Salvo!' : 'Removido!';
         Swal.fire({ toast: true, icon: 'success', title: msg, position: 'top-end', showConfirmButton: false, timer: 1500 });
     }
 
-    if(window.location.pathname.includes('favoritos.html')) carregarListaEventos(); 
+    if (window.location.pathname.includes('favoritos.html')) carregarListaEventos();
 };
 
 function atualizarBotoesFavUI(id) {
@@ -100,7 +109,7 @@ function atualizarBotoesFavUI(id) {
             icon.classList.add('bi-heart');
         }
     }
-    
+
     const btnDetail = document.getElementById('btn-fav-detail');
     if (btnDetail) {
         const icon = btnDetail.querySelector('i');
@@ -128,7 +137,7 @@ window.login = async () => {
         showCancelButton: true,
         confirmButtonText: 'Admin',
         denyButtonText: 'Visitante',
-        confirmButtonColor: '#7B2CBF', 
+        confirmButtonColor: '#7B2CBF',
         denyButtonColor: '#00F5D4'
     });
 
@@ -150,16 +159,16 @@ function isAdmin() {
     try {
         const user = JSON.parse(localStorage.getItem('usuario_logado'));
         return user && user.role === 'admin';
-    } catch(e) { return false; }
+    } catch (e) { return false; }
 }
 
 function atualizarAuthUI() {
     const container = document.getElementById('auth-container');
     if (!container) return;
-    
+
     let user = null;
-    try { user = JSON.parse(localStorage.getItem('usuario_logado')); } catch(e) {}
-    
+    try { user = JSON.parse(localStorage.getItem('usuario_logado')); } catch (e) { }
+
     if (user) {
         const badge = user.role === 'admin' ? '<span class="badge bg-warning text-dark ms-1">ADM</span>' : '';
         container.innerHTML = `
@@ -183,10 +192,10 @@ function atualizarAuthUI() {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("App iniciado");
-    
+
     // Carrega UI de Auth imediatamente
     atualizarAuthUI();
-    
+
     const path = window.location.pathname;
 
     // Proteção simples de rotas
@@ -196,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnCad = document.getElementById('btn-cadastrar-home');
-    if(btnCad) btnCad.style.display = isAdmin() ? 'inline-flex' : 'none';
+    if (btnCad) btnCad.style.display = isAdmin() ? 'inline-flex' : 'none';
 
     // Carregamento de Conteúdo
     if (document.getElementById('lista-destaques')) carregarDestaques();
@@ -206,22 +215,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Select de Categorias
     const selectCat = document.getElementById('categoria_principal_id');
-    if(selectCat) preencherCategorias(selectCat, path.includes('editar.html'));
+    if (selectCat) preencherCategorias(selectCat, path.includes('editar.html'));
 
     // Formulários
     const formCadastro = document.getElementById('form-cadastro');
-    if(formCadastro) formCadastro.addEventListener('submit', (e) => salvarFormulario(e, 'criar'));
+    if (formCadastro) formCadastro.addEventListener('submit', (e) => salvarFormulario(e, 'criar'));
 
     const formEdicao = document.getElementById('form-edicao');
-    if(formEdicao) formEdicao.addEventListener('submit', (e) => salvarFormulario(e, 'editar'));
-    
+    if (formEdicao) formEdicao.addEventListener('submit', (e) => salvarFormulario(e, 'editar'));
+
     // Busca
     const formBusca = document.getElementById('form-busca');
-    if(formBusca) {
+    if (formBusca) {
         formBusca.addEventListener('submit', (e) => {
             e.preventDefault();
             const termo = formBusca.querySelector('input').value;
-            if(termo) window.location.href = `todos.html?busca=${encodeURIComponent(termo)}`;
+            if (termo) window.location.href = `todos.html?busca=${encodeURIComponent(termo)}`;
         });
     }
 });
@@ -230,19 +239,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function preencherCategorias(selectEl, isEdit) {
     const db = await carregarBanco();
-    if(db.categorias_principais.length > 0) {
-        selectEl.innerHTML = '<option value="">Selecione...</option>' + 
+    if (db.categorias_principais.length > 0) {
+        selectEl.innerHTML = '<option value="">Selecione...</option>' +
             db.categorias_principais.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
     }
-    if(isEdit) carregarDadosEdicao();
+    if (isEdit) carregarDadosEdicao();
 }
 
 async function carregarDestaques() {
     const container = document.getElementById('lista-destaques');
     const db = await carregarBanco();
     const destaques = db.eventos.filter(r => r.destaque).slice(0, 3);
-    
-    if(destaques.length > 0) {
+
+    if (destaques.length > 0) {
         container.innerHTML = destaques.map((r, i) => `
             <div class="carousel-item ${i === 0 ? 'active' : ''}" style="height: 500px;">
                 <div class="w-100 h-100 bg-black"><img src="${r.imagem_principal}" class="d-block w-100 h-100 object-fit-cover opacity-75" onerror="this.src='imgs/logo.png'"></div>
@@ -260,7 +269,7 @@ async function carregarDestaques() {
 async function carregarCategorias() {
     const lista = document.getElementById('lista-de-categorias');
     const db = await carregarBanco();
-    if(db.categorias_principais.length > 0) {
+    if (db.categorias_principais.length > 0) {
         lista.innerHTML = db.categorias_principais.map(c => `
             <div class="col"><a href="categoria.html?id=${c.id}" class="text-decoration-none">
                 <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
@@ -276,7 +285,7 @@ async function carregarListaEventos() {
     const container = document.getElementById('lista-roles-por-categoria');
     // Limpa spinner se já foi renderizado antes
     container.innerHTML = '<div class="col-12 text-center text-white py-5"><div class="spinner-border"></div></div>';
-    
+
     const db = await carregarBanco();
     const params = new URLSearchParams(window.location.search);
     const path = window.location.pathname;
@@ -287,12 +296,12 @@ async function carregarListaEventos() {
         const favs = getFavoritos();
         eventos = eventos.filter(e => favs.includes(e.id));
         titulo = "Meus Favoritos";
-        if(!eventos.length) { container.innerHTML = '<div class="col-12 text-center text-white mt-5"><h3>Sem favoritos ainda.</h3></div>'; return; }
-    } 
+        if (!eventos.length) { container.innerHTML = '<div class="col-12 text-center text-white mt-5"><h3>Sem favoritos ainda.</h3></div>'; return; }
+    }
     else if (params.get('id')) {
         eventos = eventos.filter(e => e.categoria_principal_id == params.get('id'));
         const cat = db.categorias_principais.find(c => c.id == params.get('id'));
-        if(cat) titulo = cat.nome;
+        if (cat) titulo = cat.nome;
     }
     else if (params.get('busca')) {
         eventos = eventos.filter(e => e.nome.toLowerCase().includes(params.get('busca').toLowerCase()));
@@ -300,10 +309,10 @@ async function carregarListaEventos() {
     }
 
     const elTitulo = document.getElementById('categoria-titulo');
-    if(elTitulo) elTitulo.innerText = titulo;
+    if (elTitulo) elTitulo.innerText = titulo;
 
     const favs = getFavoritos();
-    if(eventos.length > 0) {
+    if (eventos.length > 0) {
         container.innerHTML = eventos.map(r => {
             const isFav = favs.includes(r.id);
             const catNome = db.categorias_principais.find(c => c.id == r.categoria_principal_id)?.nome || 'Geral';
@@ -334,26 +343,26 @@ async function carregarListaEventos() {
 async function carregarDetalhesEvento() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-    if(!id) return;
+    if (!id) return;
 
     const db = await carregarBanco();
     const evt = db.eventos.find(e => e.id == id);
 
-    if(evt) {
+    if (evt) {
         document.getElementById('loading-msg').style.display = 'none';
         document.getElementById('content-area').style.display = 'block';
-        
-        const fields = ['titulo','descricao','conteudo','data','horario','local','ingressos','atracoes'];
+
+        const fields = ['titulo', 'descricao', 'conteudo', 'data', 'horario', 'local', 'ingressos', 'atracoes'];
         fields.forEach(field => {
             const el = document.getElementById(`detalhe-${field}`);
             const val = evt[field === 'atracoes' ? 'atracoes_principais' : field];
-            if(el) el.innerText = val || '';
+            if (el) el.innerText = val || '';
         });
-        
+
         document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logo.png';
-        
+
         const cat = db.categorias_principais.find(c => c.id == evt.categoria_principal_id);
-        if(cat) document.getElementById('detalhe-categoria').innerText = cat.nome;
+        if (cat) document.getElementById('detalhe-categoria').innerText = cat.nome;
 
         const btnFav = document.getElementById('btn-fav-detail');
         // Remove listeners antigos
@@ -363,13 +372,13 @@ async function carregarDetalhesEvento() {
         atualizarBotoesFavUI(evt.id);
 
         const adminDiv = document.getElementById('admin-buttons-container');
-        if(adminDiv) {
+        if (adminDiv) {
             adminDiv.style.display = isAdmin() ? 'flex' : 'none';
             document.getElementById('btn-editar').href = `editar.html?id=${evt.id}`;
             document.getElementById('btn-excluir').onclick = () => Swal.fire('Aviso', 'A exclusão está desabilitada no modo demonstração.', 'info');
         }
 
-        if(evt.lat && evt.lng && typeof L !== 'undefined') {
+        if (evt.lat && evt.lng && typeof L !== 'undefined') {
             document.getElementById('map-detail').innerHTML = "";
             const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -380,7 +389,7 @@ async function carregarDetalhesEvento() {
 
 async function salvarFormulario(e, modo) {
     e.preventDefault();
-    
+
     const novoEvento = {
         id: modo === 'criar' ? 'evt_local_' + Date.now() : document.getElementById('id').value,
         nome: document.getElementById('nome').value,
@@ -399,7 +408,7 @@ async function salvarFormulario(e, modo) {
     };
 
     salvarEventoLocalmente(novoEvento);
-    await Swal.fire({icon:'success', title:'Sucesso!', text:'Salvo no navegador (Simulação).'});
+    await Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'Salvo no navegador (Simulação).' });
     window.location.href = 'todos.html';
 }
 
@@ -407,7 +416,7 @@ async function carregarDadosEdicao() {
     const id = new URLSearchParams(window.location.search).get('id');
     const db = await carregarBanco();
     const evt = db.eventos.find(e => e.id == id);
-    if(evt) {
+    if (evt) {
         document.getElementById('id').value = evt.id;
         document.getElementById('nome').value = evt.nome;
         document.getElementById('imagem_principal').value = evt.imagem_principal;
@@ -427,14 +436,14 @@ async function carregarDadosEdicao() {
 
 window.buscarEndereco = async () => {
     const end = document.getElementById('local').value;
-    if(!end) return Swal.fire('Ops', 'Digite o endereço', 'warning');
+    if (!end) return Swal.fire('Ops', 'Digite o endereço', 'warning');
     try {
         const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}&limit=1`);
         const d = await r.json();
-        if(d.length) {
+        if (d.length) {
             document.getElementById('lat').value = d[0].lat;
             document.getElementById('lng').value = d[0].lon;
-            Swal.fire({toast:true, icon:'success', title:'Localizado!', position:'top-end', timer:1500, showConfirmButton:false});
+            Swal.fire({ toast: true, icon: 'success', title: 'Localizado!', position: 'top-end', timer: 1500, showConfirmButton: false });
         } else Swal.fire('Erro', 'Endereço não encontrado', 'error');
-    } catch(e) { Swal.fire('Erro', 'Falha de conexão', 'error'); }
+    } catch (e) { Swal.fire('Erro', 'Falha de conexão', 'error'); }
 };
