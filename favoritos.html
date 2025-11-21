@@ -1,138 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa dos Rolezinhos | O Melhor de BH</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Favoritos | Mapa dos Rolezinhos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
-  <!-- NAVBAR PADRÃO ATUALIZADA -->
-  <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-          <img src="imgs/logo.png" alt="Logo" class="logo-brand" style="height: 50px;">
-      </a>
-      
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <form class="d-flex ms-auto my-2 my-lg-0 position-relative" id="form-busca">
-          <input class="form-control rounded-pill border-secondary bg-dark text-white pe-5" type="search" placeholder="Buscar Rolê..." aria-label="Busca">
-          <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-light pe-3 text-decoration-none" type="submit">
-              <i class="bi bi-search"></i>
-          </button>
-        </form>
-        
-        <ul class="navbar-nav ms-3 align-items-center gap-2">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="todos.html">Rolezinhos</a></li>
-          <li class="nav-item"><a class="nav-link" href="favoritos.html">Favoritos</a></li>
-          <li class="nav-item ms-2" id="auth-container">
-              <div class="spinner-border spinner-border-sm text-light" role="status"></div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <section class="hero-section">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-          <h1 class="hero-title">Descubra seu<br>Próximo Rolê</h1>
-          <p class="hero-subtitle text-light opacity-75">O guia definitivo da vida noturna, cultural e alternativa de Belo Horizonte.</p>
-          <a href="#itens-em-destaque" class="btn btn-cta">Explorar Agora</a>
-      </div>
-  </section>
-
-  <main class="container my-5">
-
-    <section id="itens-em-destaque" class="mb-5">
-      <div class="d-flex align-items-center justify-content-between mb-4">
-        <h3 class="fw-bold m-0 text-white"><i class="bi bi-fire text-warning me-2"></i>Em Alta na Cidade</h3>
-        <a href="todos.html" class="text-decoration-none text-muted small hover-link">Ver todos <i class="bi bi-arrow-right"></i></a>
-      </div>
-      
-      <div id="carouselDestaques" class="carousel slide rounded-4 overflow-hidden shadow-lg border border-secondary" data-bs-ride="carousel">
-          
-          <div class="carousel-inner" id="lista-destaques">
-               <div class="carousel-item active" style="height: 500px;">
-                   <div class="d-flex align-items-center justify-content-center h-100 bg-dark">
-                       <div class="spinner-border text-light" role="status"></div>
-                   </div>
-               </div>
-          </div>
-          
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselDestaques" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon bg-dark rounded-circle p-3 bg-opacity-50" aria-hidden="true"></span>
-              <span class="visually-hidden">Anterior</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselDestaques" data-bs-slide="next">
-              <span class="carousel-control-next-icon bg-dark rounded-circle p-3 bg-opacity-50" aria-hidden="true"></span>
-              <span class="visually-hidden">Próximo</span>
-          </button>
-      </div>
-    </section>
-    
-    <section id="navegue-por-categorias" class="mb-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3 class="fw-bold m-0 text-white">Vibes & Categorias</h3>
-          <!-- ID adicionado para controle de Admin -->
-          <a href="cadastro.html" id="btn-cadastrar-home" class="btn btn-outline-light btn-sm rounded-pill px-3 border-secondary" style="display: none;">
-              <i class="bi bi-plus-circle me-1 text-success"></i> Cadastrar Rolê
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+              <img src="imgs/logo.png" alt="Logo" class="logo-brand" style="height: 50px;">
           </a>
-      </div>
-      
-      <div id="lista-de-categorias" class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
-           <div class="col"><div class="card bg-dark border-secondary p-4"></div></div>
-      </div>
-    </section>
-    
-    <section id="sobre" class="container mt-5 p-4 rounded-4 bg-dark border border-secondary shadow-lg">
-      <h3 class="text-center fw-bold mb-4 text-white">Quem Faz Acontecer</h3>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-3 text-center mb-3 mb-md-0">
-          <img src="imgs/foto-perfil.webp" 
-               alt="Foto do Aluno" 
-               class="img-fluid rounded-circle border border-3 border-primary p-1 shadow" 
-               style="width: 130px; height: 130px; object-fit: cover;"
-               loading="lazy">
-        </div>
-        <div class="col-md-6 text-white text-center text-md-start">
-          <p class="fs-4 mb-1 fw-bold text-white">Marcelo Gomes</p>
-          <p class="text-light opacity-75 mb-3">Engenharia de Software - 1º Período</p>
-          <div class="d-flex gap-3 justify-content-center justify-content-md-start">
-            <a href="#" class="text-white fs-4 hover-effect"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="text-white fs-4 hover-effect"><i class="bi bi-github"></i></a>
-            <a href="#" class="text-white fs-4 hover-effect"><i class="bi bi-instagram"></i></a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex ms-auto my-2 my-lg-0 position-relative" id="form-busca">
+              <input class="form-control rounded-pill border-secondary bg-dark text-white pe-5" type="search" placeholder="Buscar Rolê..." aria-label="Busca">
+              <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-light pe-3 text-decoration-none" type="submit">
+                  <i class="bi bi-search"></i>
+              </button>
+            </form>
+            <ul class="navbar-nav ms-3 align-items-center gap-2">
+              <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="todos.html">Rolezinhos</a></li>
+              <li class="nav-item"><a class="nav-link active" href="favoritos.html">Favoritos</a></li>
+              <li class="nav-item ms-2" id="auth-container"></li>
+            </ul>
           </div>
         </div>
-      </div>
-    </section>
+    </nav>
 
-  </main>
+    <main class="container my-5">
+        <div class="text-center mb-5">
+            <h1 id="categoria-titulo" class="fw-bold display-4 text-white">Meus Favoritos</h1>
+            <p id="categoria-descricao" class="lead text-muted">Os rolês que você curtiu ficam guardados aqui.</p>
+        </div>
 
-  <footer class="text-center mt-5 py-5">
-    <div class="container">
-        <img src="imgs/logo.png" alt="Logo Rodapé" style="height: 40px; filter: grayscale(1) brightness(2);" class="mb-3 opacity-50">
-        <p class="mb-2 small text-white opacity-75">
-            &copy; 2025 Mapa dos Rolezinhos. Feito com <i class="bi bi-lightning-fill text-warning"></i> em BH.
-        </p>
-    </div>
-  </footer>
+        <div id="lista-roles-por-categoria" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col-12 text-center text-white py-5">
+                <div class="spinner-border"></div>
+            </div>
+        </div>
+    </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="assets/scripts/app.js"></script>
+    <footer class="text-center mt-5 py-4 bg-black bg-opacity-25">
+        <div class="container">
+            <p class="mb-2 small text-white opacity-75">&copy; 2025 Mapa dos Rolezinhos.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="assets/scripts/app.js"></script>
 </body>
 </html>
