@@ -1,35 +1,71 @@
 /* =========================================
-   MAPA DOS ROLEZINHOS - LÓGICA COMPLETA
-   - Admin vs Visitante
-   - Favoritos (LocalStorage)
-   - Renderização de Cards com Coração
+   MAPA DOS ROLEZINHOS - LÓGICA HÍBRIDA (Vercel Ready)
+   - Leitura: db.json (Estático) + LocalStorage
+   - Escrita: LocalStorage (Simulação de Persistência)
    ========================================= */
 
 const DATA_URL = "db/db.json";
 
-// --- 1. GESTÃO DE DADOS E FAVORITOS ---
+// --- 1. GESTÃO DE DADOS (HÍBRIDA) ---
 
+// Carrega dados do JSON estático e funde com o LocalStorage
 async function carregarBanco() {
     try {
+        // 1. Busca dados estáticos (originais)
         const response = await fetch(DATA_URL);
         if (!response.ok) throw new Error('Erro ao carregar db.json');
-        return await response.json();
+        const dadosEstaticos = await response.json();
+
+        // 2. Busca dados locais (novos cadastros/edições)
+        const dadosLocais = JSON.parse(localStorage.getItem('mapa_dados_locais')) || { eventos: [] };
+
+        // 3. Fusão (Merge):
+        // Se um evento foi editado (existe no local com mesmo ID), usamos a versão local.
+        // Se é novo (só no local), adicionamos.
+        
+        let listaFinal = [...dadosEstaticos.eventos];
+
+        dadosLocais.eventos.forEach(eventoLocal => {
+            const index = listaFinal.findIndex(e => e.id === eventoLocal.id);
+            if (index !== -1) {
+                listaFinal[index] = eventoLocal; // Sobrescreve com a edição
+            } else {
+                listaFinal.push(eventoLocal); // Adiciona novo
+            }
+        });
+
+        return { 
+            eventos: listaFinal, 
+            categorias_principais: dadosEstaticos.categorias_principais 
+        };
     } catch (error) {
         console.error("Erro:", error);
         return { eventos: [], categorias_principais: [] };
     }
 }
 
-// Recupera IDs favoritos do LocalStorage
+// Salva evento no LocalStorage (Simula POST/PUT)
+function salvarEventoLocalmente(evento) {
+    const dadosLocais = JSON.parse(localStorage.getItem('mapa_dados_locais')) || { eventos: [] };
+    
+    const index = dadosLocais.eventos.findIndex(e => e.id === evento.id);
+    if (index !== -1) {
+        dadosLocais.eventos[index] = evento; // Atualiza
+    } else {
+        dadosLocais.eventos.push(evento); // Cria novo
+    }
+
+    localStorage.setItem('mapa_dados_locais', JSON.stringify(dadosLocais));
+}
+
+// Recupera IDs favoritos
 function getFavoritos() {
     return JSON.parse(localStorage.getItem('meus_favoritos')) || [];
 }
 
-// Adiciona/Remove favorito e atualiza UI
+// Toggle Favorito
 window.toggleFavorito = (id) => {
-    // Previne bubbling se clicado dentro de um link
     if(event) event.preventDefault();
-
     let favs = getFavoritos();
     let acao = '';
 
@@ -43,28 +79,19 @@ window.toggleFavorito = (id) => {
     
     localStorage.setItem('meus_favoritos', JSON.stringify(favs));
     
-    // Feedback visual rápido
     if(acao === 'adicionado') {
         Swal.fire({ toast: true, icon: 'success', title: 'Salvo nos favoritos!', position: 'top-end', showConfirmButton: false, timer: 1500 });
     } else {
         Swal.fire({ toast: true, icon: 'info', title: 'Removido dos favoritos', position: 'top-end', showConfirmButton: false, timer: 1500 });
     }
-
-    // Atualiza botões na tela
     atualizarBotoesFavUI(id);
-    
-    // Se estiver na página de favoritos, recarrega a lista
-    if(window.location.pathname.includes('favoritos.html')) {
-        carregarListaEventos(); 
-    }
+    if(window.location.pathname.includes('favoritos.html')) carregarListaEventos(); 
 };
 
-// Atualiza visual dos botões (Coração Cheio/Vazio) em toda a tela
 function atualizarBotoesFavUI(id) {
     const favs = getFavoritos();
     const isFav = favs.includes(id);
 
-    // 1. Atualiza botão na página de detalhes (se existir)
     const btnDetail = document.getElementById('btn-fav-detail');
     if (btnDetail) {
         const icon = btnDetail.querySelector('i');
@@ -81,7 +108,6 @@ function atualizarBotoesFavUI(id) {
         }
     }
 
-    // 2. Atualiza botão nos cards (se existirem)
     const btnCard = document.getElementById(`fav-btn-${id}`);
     if (btnCard) {
         const icon = btnCard.querySelector('i');
@@ -97,12 +123,12 @@ function atualizarBotoesFavUI(id) {
     }
 }
 
-// --- 2. AUTENTICAÇÃO (ADMIN vs VISITANTE) ---
+// --- 2. AUTENTICAÇÃO (MOCK) ---
 
 window.login = async () => {
     const { value: tipo } = await Swal.fire({
         title: 'Acesso ao Sistema',
-        text: 'Selecione seu nível de acesso (Simulado):',
+        text: 'Selecione seu nível (Simulação):',
         icon: 'question',
         showDenyButton: true,
         showCancelButton: true,
@@ -110,17 +136,16 @@ window.login = async () => {
         denyButtonText: 'Sou Visitante',
         confirmButtonColor: '#7B2CBF',
         denyButtonColor: '#00F5D4',
-        cancelButtonText: 'Cancelar'
     });
 
-    if (tipo === true) { // Admin
+    if (tipo === true) {
         const adminUser = { id: 'admin', nome: 'Marcelo Admin', email: 'admin@mapa.com', photoURL: 'imgs/foto-perfil.webp', role: 'admin' };
         localStorage.setItem('usuario_logado', JSON.stringify(adminUser));
         Swal.fire('Bem-vindo, Admin!', 'Você tem acesso total.', 'success').then(() => window.location.reload());
-    } else if (tipo === false) { // Visitante
+    } else if (tipo === false) {
         const visitUser = { id: 'guest', nome: 'Visitante', email: 'visitante@gmail.com', photoURL: 'imgs/logo.png', role: 'user' };
         localStorage.setItem('usuario_logado', JSON.stringify(visitUser));
-        Swal.fire('Bem-vindo!', 'Você pode explorar e favoritar eventos.', 'success').then(() => window.location.reload());
+        Swal.fire('Bem-vindo!', 'Você pode explorar e favoritar.', 'success').then(() => window.location.reload());
     }
 };
 
@@ -129,23 +154,16 @@ window.logout = () => {
     window.location.href = 'index.html';
 };
 
-function getUsuario() {
-    return JSON.parse(localStorage.getItem('usuario_logado'));
-}
-
-function isAdmin() {
-    const user = getUsuario();
-    return user && user.role === 'admin';
-}
+function getUsuario() { return JSON.parse(localStorage.getItem('usuario_logado')); }
+function isAdmin() { const user = getUsuario(); return user && user.role === 'admin'; }
 
 function atualizarAuthUI() {
     const container = document.getElementById('auth-container');
     if (!container) return;
-    
     const user = getUsuario();
     
     if (user) {
-        const badgeAdmin = user.role === 'admin' ? '<span class="badge bg-warning text-dark ms-2" style="font-size: 0.7em;">ADMIN</span>' : '';
+        const badgeAdmin = user.role === 'admin' ? '<span class="badge bg-warning text-dark ms-2">ADMIN</span>' : '';
         container.innerHTML = `
             <div class="dropdown">
                 <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="dropdown">
@@ -163,35 +181,31 @@ function atualizarAuthUI() {
     }
 }
 
-// --- 3. RENDERIZAÇÃO DE INTERFACE ---
+// --- 3. LÓGICA DE PÁGINAS ---
 
-// Função principal executada ao carregar a página
 document.addEventListener('DOMContentLoaded', async () => {
     atualizarAuthUI();
     
-    // Atualiza Navbar Ativa
     const path = window.location.pathname;
     document.querySelectorAll('.nav-link').forEach(link => {
         if(link.getAttribute('href') && path.includes(link.getAttribute('href'))) link.classList.add('active');
     });
 
-    // PROTEÇÃO DE ROTAS ADMIN
+    // Proteção de Rotas
     if ((path.includes('cadastro.html') || path.includes('editar.html')) && !isAdmin()) {
         Swal.fire({ icon: 'error', title: 'Acesso Negado', text: 'Apenas administradores podem acessar esta página.' })
         .then(() => window.location.href = 'index.html');
         return;
     }
 
-    // CONTROLE DE VISIBILIDADE DE BOTÕES (ADMIN)
     const btnCadastrar = document.getElementById('btn-cadastrar-home');
     if(btnCadastrar) btnCadastrar.style.display = isAdmin() ? 'inline-flex' : 'none';
 
-    // A. CARROSSEL (HOME)
+    // Carrossel (Home)
     const containerDestaques = document.getElementById('lista-destaques');
     if (containerDestaques) {
         const db = await carregarBanco();
         const destaques = db.eventos.filter(r => r.destaque).slice(0, 3);
-        
         if(destaques.length > 0) {
             containerDestaques.innerHTML = destaques.map((r, i) => `
                 <div class="carousel-item ${i === 0 ? 'active' : ''}" style="height: 500px;">
@@ -203,14 +217,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <h2 class="fw-bold text-white display-5">${r.nome}</h2>
                         <a href="detalhes.html?id=${r.id}" class="btn btn-light rounded-pill mt-2 fw-bold">Ver Detalhes</a>
                     </div>
-                </div>
-            `).join('');
-        } else {
-            containerDestaques.innerHTML = '<div class="carousel-item active" style="height:500px;"><div class="d-flex h-100 align-items-center justify-content-center text-white"><h3>Sem destaques no momento.</h3></div></div>';
+                </div>`).join('');
         }
     }
 
-    // B. CATEGORIAS (HOME)
+    // Categorias (Home)
     const listaCat = document.getElementById('lista-de-categorias');
     if(listaCat) {
         const db = await carregarBanco();
@@ -224,17 +235,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>`).join('');
     }
 
-    // C. LISTAS DE EVENTOS (Index, Todos, Categoria, Favoritos)
-    if (document.getElementById('lista-roles-por-categoria')) {
-        carregarListaEventos();
+    // --- PÁGINAS ESPECÍFICAS ---
+    if (document.getElementById('lista-roles-por-categoria')) carregarListaEventos();
+    if (document.getElementById('detalhe-do-evento')) carregarDetalhesEvento();
+    
+    // Preencher select de categorias (Cadastro e Edição)
+    const selectCat = document.getElementById('categoria_principal_id');
+    if(selectCat) {
+        const db = await carregarBanco();
+        selectCat.innerHTML = '<option value="">Selecione...</option>' + 
+            db.categorias_principais.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+            
+        // Se for página de edição, carregar dados
+        if(path.includes('editar.html')) carregarDadosEdicao();
     }
 
-    // D. PÁGINA DE DETALHES
-    if (document.getElementById('detalhe-do-evento')) {
-        carregarDetalhesEvento();
-    }
+    // Handlers de Formulário
+    const formCadastro = document.getElementById('form-cadastro');
+    if(formCadastro) formCadastro.addEventListener('submit', (e) => salvarFormulario(e, 'criar'));
 
-    // E. BUSCA GLOBAL
+    const formEdicao = document.getElementById('form-edicao');
+    if(formEdicao) formEdicao.addEventListener('submit', (e) => salvarFormulario(e, 'editar'));
+
+    // Busca Global
     const formBusca = document.getElementById('form-busca');
     if(formBusca) {
         formBusca.addEventListener('submit', (e) => {
@@ -245,79 +268,120 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Renderiza os cards nas páginas de listagem
-async function carregarListaEventos() {
-    const containerLista = document.getElementById('lista-roles-por-categoria');
-    if (!containerLista) return;
+// --- 4. FUNÇÕES DE CRUD SIMULADO ---
 
-    containerLista.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-light"></div></div>';
+async function salvarFormulario(e, modo) {
+    e.preventDefault();
+    
+    const formId = modo === 'criar' ? 'form-cadastro' : 'form-edicao';
+    const campos = ['nome', 'imagem_principal', 'descricao', 'conteudo', 'local', 'lat', 'lng', 'data', 'horario', 'atracoes_principais', 'ingressos', 'categoria_principal_id'];
+    
+    const novoEvento = {};
+    campos.forEach(campo => {
+        const el = document.getElementById(campo);
+        if(el) novoEvento[campo] = el.value;
+    });
+    
+    novoEvento.destaque = document.getElementById('destaque').checked;
+
+    // Geração de ID ou Recuperação
+    if(modo === 'criar') {
+        novoEvento.id = 'evt_local_' + Date.now(); // ID único baseado em tempo
+    } else {
+        novoEvento.id = document.getElementById('id').value;
+    }
+
+    // Salva no LocalStorage
+    salvarEventoLocalmente(novoEvento);
+
+    await Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: `Evento ${modo === 'criar' ? 'cadastrado' : 'atualizado'} com sucesso! (Modo Simulação)`,
+        confirmButtonColor: '#7B2CBF'
+    });
+
+    window.location.href = 'todos.html';
+}
+
+async function carregarDadosEdicao() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if(!id) return;
+
+    const db = await carregarBanco();
+    const evento = db.eventos.find(e => e.id == id);
+
+    if(evento) {
+        document.getElementById('id').value = evento.id;
+        document.getElementById('nome').value = evento.nome;
+        document.getElementById('imagem_principal').value = evento.imagem_principal;
+        document.getElementById('descricao').value = evento.descricao;
+        document.getElementById('conteudo').value = evento.conteudo;
+        document.getElementById('local').value = evento.local;
+        document.getElementById('lat').value = evento.lat;
+        document.getElementById('lng').value = evento.lng;
+        document.getElementById('data').value = evento.data;
+        document.getElementById('horario').value = evento.horario;
+        document.getElementById('atracoes_principais').value = evento.atracoes_principais;
+        document.getElementById('ingressos').value = evento.ingressos;
+        document.getElementById('categoria_principal_id').value = evento.categoria_principal_id;
+        document.getElementById('destaque').checked = evento.destaque;
+    } else {
+        Swal.fire('Erro', 'Evento não encontrado', 'error');
+    }
+}
+
+// --- 5. LISTAGEM E DETALHES ---
+
+async function carregarListaEventos() {
+    const container = document.getElementById('lista-roles-por-categoria');
+    if (!container) return;
+    container.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-light"></div></div>';
 
     const db = await carregarBanco();
     const params = new URLSearchParams(window.location.search);
     const path = window.location.pathname;
     let eventos = db.eventos || [];
     let titulo = "Todos os Rolezinhos";
-    let descricao = "Confira a programação completa da cidade.";
 
-    // Lógica de Filtro
     if (path.includes('favoritos.html')) {
         const favs = getFavoritos();
         eventos = eventos.filter(e => favs.includes(e.id));
         titulo = "Meus Favoritos";
-        descricao = "Seus eventos salvos.";
         if(eventos.length === 0) {
-            containerLista.innerHTML = `
-                <div class="col-12 text-center py-5">
-                    <i class="bi bi-heartbreak display-1 text-muted"></i>
-                    <h3 class="text-white mt-3">Você ainda não tem favoritos.</h3>
-                    <a href="todos.html" class="btn btn-outline-light mt-3">Explorar Rolezinhos</a>
-                </div>`;
+            container.innerHTML = '<div class="col-12 text-center py-5 text-white"><h3>Você ainda não tem favoritos.</h3></div>';
             return;
         }
     } 
     else if (params.get('id')) {
         eventos = eventos.filter(e => e.categoria_principal_id == params.get('id'));
         const cat = db.categorias_principais.find(c => c.id == params.get('id'));
-        if(cat) {
-            titulo = cat.nome;
-            descricao = cat.descricao;
-        }
+        if(cat) titulo = cat.nome;
     } 
     else if (params.get('busca')) {
         const termo = params.get('busca').toLowerCase();
         eventos = eventos.filter(e => e.nome.toLowerCase().includes(termo));
         titulo = `Busca: "${params.get('busca')}"`;
-        descricao = `${eventos.length} resultado(s) encontrado(s).`;
     }
 
-    // Atualiza Títulos
     const elTitulo = document.getElementById('categoria-titulo');
-    const elDesc = document.getElementById('categoria-descricao');
     if(elTitulo) elTitulo.innerText = titulo;
-    if(elDesc) elDesc.innerText = descricao;
 
-    // Gera HTML dos Cards
     if(eventos.length > 0) {
         const favs = getFavoritos();
-
-        containerLista.innerHTML = eventos.map(r => {
+        container.innerHTML = eventos.map(r => {
             const catNome = db.categorias_principais.find(c => c.id == r.categoria_principal_id)?.nome || 'Geral';
             const isFav = favs.includes(r.id);
             const favClass = isFav ? 'active' : '';
             const iconClass = isFav ? 'bi-heart-fill' : 'bi-heart';
-            const img = r.imagem_principal || 'imgs/logo.png';
-
             return `
             <div class="col">
-                <div class="card-role h-100">
-                    <!-- Botão Favoritar (canto superior direito) -->
-                    <button class="btn-fav-card ${favClass}" id="fav-btn-${r.id}" onclick="toggleFavorito('${r.id}')" title="Favoritar">
-                        <i class="bi ${iconClass}"></i>
-                    </button>
-
+                <div class="card-role h-100 position-relative">
+                    <button class="btn-fav-card ${favClass}" id="fav-btn-${r.id}" onclick="toggleFavorito('${r.id}')"><i class="bi ${iconClass}"></i></button>
                     <a href="detalhes.html?id=${r.id}" class="text-decoration-none d-flex flex-column h-100">
                         <div class="card-img-wrapper" style="height: 200px;">
-                            <img src="${img}" class="w-100 h-100 object-fit-cover" onerror="this.src='imgs/logo.png'">
+                            <img src="${r.imagem_principal}" class="w-100 h-100 object-fit-cover" onerror="this.src='imgs/logo.png'">
                         </div>
                         <div class="card-body-custom">
                             <span class="badge bg-primary mb-2 w-auto align-self-start">${catNome}</span>
@@ -329,29 +393,27 @@ async function carregarListaEventos() {
             </div>`;
         }).join('');
     } else {
-        containerLista.innerHTML = '<div class="col-12 text-center py-5"><h4 class="text-muted">Nenhum evento encontrado.</h4></div>';
+        container.innerHTML = '<div class="col-12 text-center py-5"><h4 class="text-muted">Nenhum evento encontrado.</h4></div>';
     }
 }
 
 async function carregarDetalhesEvento() {
     const params = new URLSearchParams(window.location.search);
-    const idDetalhe = params.get('id');
-    
-    if(!idDetalhe) return;
+    const id = params.get('id');
+    if(!id) return;
 
     const db = await carregarBanco();
-    const evt = db.eventos.find(e => e.id == idDetalhe);
+    const evt = db.eventos.find(e => e.id == id);
 
     if(evt) {
         document.getElementById('loading-msg').style.display = 'none';
         document.getElementById('content-area').style.display = 'block';
 
-        // Preenche dados
         document.getElementById('detalhe-titulo').innerText = evt.nome;
         document.getElementById('detalhe-descricao').innerText = evt.descricao;
         document.getElementById('detalhe-conteudo').innerText = evt.conteudo;
         document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logo.png';
-        document.getElementById('detalhe-data').innerText = evt.data ? new Date(evt.data + 'T12:00:00').toLocaleDateString('pt-BR') : 'A definir';
+        document.getElementById('detalhe-data').innerText = evt.data;
         document.getElementById('detalhe-horario').innerText = evt.horario;
         document.getElementById('detalhe-local').innerText = evt.local;
         document.getElementById('detalhe-ingressos').innerText = evt.ingressos;
@@ -360,30 +422,25 @@ async function carregarDetalhesEvento() {
         const cat = db.categorias_principais.find(c => c.id == evt.categoria_principal_id);
         if(cat) document.getElementById('detalhe-categoria').innerText = cat.nome;
 
-        // Botão Favoritar Detalhes
         const btnFav = document.getElementById('btn-fav-detail');
-        // Remove listeners antigos clonando
         const newBtnFav = btnFav.cloneNode(true);
         btnFav.parentNode.replaceChild(newBtnFav, btnFav);
-        
         newBtnFav.onclick = () => toggleFavorito(evt.id);
         atualizarBotoesFavUI(evt.id);
 
-        // Botões Admin (Editar/Excluir)
         const containerAdmin = document.getElementById('admin-buttons-container');
         if(containerAdmin) {
             if(isAdmin()) {
                 containerAdmin.style.display = 'flex';
                 document.getElementById('btn-editar').href = `editar.html?id=${evt.id}`;
                 document.getElementById('btn-excluir').onclick = () => {
-                    Swal.fire('Aviso', 'A exclusão é desabilitada neste modo de demonstração.', 'warning');
+                    Swal.fire({ title: 'Excluir?', text: "Isso é apenas uma simulação!", icon: 'warning' });
                 };
             } else {
                 containerAdmin.style.display = 'none';
             }
         }
         
-        // Mapa Leaflet
         if (evt.lat && evt.lng && typeof L !== 'undefined') {
              const mapDiv = document.getElementById('map-detail');
              mapDiv.innerHTML = ""; 
@@ -391,18 +448,15 @@ async function carregarDetalhesEvento() {
              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
              L.marker([evt.lat, evt.lng]).addTo(map).bindPopup(evt.nome).openPopup();
         }
-    } else {
-        document.getElementById('loading-msg').innerHTML = '<h3 class="text-white">Evento não encontrado.</h3><a href="index.html" class="btn btn-light mt-3">Voltar</a>';
     }
 }
 
-// Busca de Endereço (Cadastro/Edição)
+// Busca Geo (Nominatim)
 window.buscarEndereco = async () => {
     const end = document.getElementById('local').value;
     if(!end) return Swal.fire('Ops', 'Digite um endereço!', 'warning');
     
     const btn = document.getElementById('btn-buscar-geo');
-    const oldHtml = btn.innerHTML;
     btn.innerHTML = '<div class="spinner-border spinner-border-sm"></div>';
     
     try {
@@ -414,5 +468,5 @@ window.buscarEndereco = async () => {
             Swal.fire({ toast:true, icon:'success', title:'Local encontrado!', position:'top-end', timer:2000, showConfirmButton:false });
         } else { Swal.fire('Erro', 'Endereço não encontrado.', 'error'); }
     } catch(e) { Swal.fire('Erro', 'Falha na conexão.', 'error'); }
-    finally { btn.innerHTML = oldHtml; }
+    finally { btn.innerHTML = 'Buscar'; }
 };
