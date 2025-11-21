@@ -1,29 +1,27 @@
 /* =========================================
-   MAPA DOS ROLEZINHOS - CORREÇÃO VERCEL
+   MAPA DOS ROLEZINHOS - VERCEL FIXED
    ========================================= */
 
-const DATA_URL = "db/db.json";
+const DATA_URL = "/db/db.json"; // Caminho absoluto para evitar erros em subpastas
 
-// --- 1. CARREGAMENTO DE DADOS (HÍBRIDO) ---
+// --- 1. GESTÃO DE DADOS ---
+
 async function carregarBanco() {
     try {
-        // 1. Tenta buscar o JSON estático (original)
         const response = await fetch(DATA_URL);
-        if (!response.ok) throw new Error('Erro ao carregar db.json');
+        if (!response.ok) throw new Error('Erro HTTP: ' + response.status);
         const dadosEstaticos = await response.json();
 
-        // 2. Busca dados salvos no navegador (novos cadastros)
         const dadosLocais = JSON.parse(localStorage.getItem('mapa_dados_locais')) || { eventos: [] };
 
-        // 3. Junta tudo (Prioriza o local se houver edição)
         let listaFinal = [...dadosEstaticos.eventos];
 
         dadosLocais.eventos.forEach(eventoLocal => {
             const index = listaFinal.findIndex(e => e.id === eventoLocal.id);
             if (index !== -1) {
-                listaFinal[index] = eventoLocal; // Substitui se foi editado
+                listaFinal[index] = eventoLocal; 
             } else {
-                listaFinal.push(eventoLocal); // Adiciona se é novo
+                listaFinal.push(eventoLocal); 
             }
         });
 
@@ -32,7 +30,8 @@ async function carregarBanco() {
             categorias_principais: dadosEstaticos.categorias_principais 
         };
     } catch (error) {
-        console.error("Erro fatal:", error);
+        console.error("Erro ao carregar dados:", error);
+        // Retorna estrutura vazia para não quebrar a UI
         return { eventos: [], categorias_principais: [] };
     }
 }
@@ -42,21 +41,26 @@ function salvarEventoLocalmente(evento) {
     const index = dadosLocais.eventos.findIndex(e => e.id === evento.id);
     
     if (index !== -1) {
-        dadosLocais.eventos[index] = evento; // Atualiza
+        dadosLocais.eventos[index] = evento;
     } else {
-        dadosLocais.eventos.push(evento); // Novo
+        dadosLocais.eventos.push(evento);
     }
 
     localStorage.setItem('mapa_dados_locais', JSON.stringify(dadosLocais));
 }
 
 // --- 2. FAVORITOS ---
+
 function getFavoritos() {
     return JSON.parse(localStorage.getItem('meus_favoritos')) || [];
 }
 
-window.toggleFavorito = (id) => {
-    if(event) event.preventDefault();
+// Tornar global de forma segura
+window.toggleFavorito = function(id) {
+    // Captura o evento de forma segura ou ignora se não existir
+    const e = window.event;
+    if(e) { e.preventDefault(); e.stopPropagation(); }
+
     let favs = getFavoritos();
     let acao = '';
 
@@ -71,8 +75,10 @@ window.toggleFavorito = (id) => {
     localStorage.setItem('meus_favoritos', JSON.stringify(favs));
     atualizarBotoesFavUI(id);
     
-    const msg = acao === 'adicionado' ? 'Salvo!' : 'Removido!';
-    Swal.fire({ toast: true, icon: 'success', title: msg, position: 'top-end', showConfirmButton: false, timer: 1500 });
+    if(typeof Swal !== 'undefined') {
+        const msg = acao === 'adicionado' ? 'Salvo!' : 'Removido!';
+        Swal.fire({ toast: true, icon: 'success', title: msg, position: 'top-end', showConfirmButton: false, timer: 1500 });
+    }
 
     if(window.location.pathname.includes('favoritos.html')) carregarListaEventos(); 
 };
@@ -81,34 +87,39 @@ function atualizarBotoesFavUI(id) {
     const favs = getFavoritos();
     const isFav = favs.includes(id);
 
-    // Botão no Card
     const btnCard = document.getElementById(`fav-btn-${id}`);
     if (btnCard) {
         const icon = btnCard.querySelector('i');
         if (isFav) {
             btnCard.classList.add('active');
-            icon.classList.replace('bi-heart', 'bi-heart-fill');
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
         } else {
             btnCard.classList.remove('active');
-            icon.classList.replace('bi-heart-fill', 'bi-heart');
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
         }
     }
     
-    // Botão na página de Detalhes
     const btnDetail = document.getElementById('btn-fav-detail');
     if (btnDetail) {
         const icon = btnDetail.querySelector('i');
         if (isFav) {
-            btnDetail.classList.replace('btn-outline-danger', 'btn-danger');
-            icon.classList.replace('bi-heart', 'bi-heart-fill');
+            btnDetail.classList.remove('btn-outline-danger');
+            btnDetail.classList.add('btn-danger');
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
         } else {
-            btnDetail.classList.replace('btn-danger', 'btn-outline-danger');
-            icon.classList.replace('bi-heart-fill', 'bi-heart');
+            btnDetail.classList.remove('btn-danger');
+            btnDetail.classList.add('btn-outline-danger');
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
         }
     }
 }
 
-// --- 3. LOGIN MOCK ---
+// --- 3. AUTH (MOCK) ---
+
 window.login = async () => {
     const { value: tipo } = await Swal.fire({
         title: 'Login',
@@ -122,7 +133,7 @@ window.login = async () => {
     });
 
     if (tipo === true) {
-        localStorage.setItem('usuario_logado', JSON.stringify({ id: 'admin', nome: 'Admin User', role: 'admin', photoURL: 'imgs/foto-perfil.webp' }));
+        localStorage.setItem('usuario_logado', JSON.stringify({ id: 'admin', nome: 'Admin', role: 'admin', photoURL: 'imgs/foto-perfil.webp' }));
         window.location.reload();
     } else if (tipo === false) {
         localStorage.setItem('usuario_logado', JSON.stringify({ id: 'guest', nome: 'Visitante', role: 'user', photoURL: 'imgs/logo.png' }));
@@ -136,48 +147,58 @@ window.logout = () => {
 };
 
 function isAdmin() {
-    const user = JSON.parse(localStorage.getItem('usuario_logado'));
-    return user && user.role === 'admin';
+    try {
+        const user = JSON.parse(localStorage.getItem('usuario_logado'));
+        return user && user.role === 'admin';
+    } catch(e) { return false; }
 }
 
 function atualizarAuthUI() {
     const container = document.getElementById('auth-container');
     if (!container) return;
-    const user = JSON.parse(localStorage.getItem('usuario_logado'));
+    
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem('usuario_logado')); } catch(e) {}
     
     if (user) {
         const badge = user.role === 'admin' ? '<span class="badge bg-warning text-dark ms-1">ADM</span>' : '';
         container.innerHTML = `
-            <button class="btn btn-sm btn-dark border-secondary dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
-                <img src="${user.photoURL}" class="rounded-circle" style="width:24px; height:24px; object-fit: cover;" onerror="this.src='imgs/logo.png'">
-                <span class="d-none d-md-inline">${user.nome.split(' ')[0]}</span> ${badge}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
-                <li><a class="dropdown-item" href="favoritos.html">Meus Favoritos</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><button class="dropdown-item text-warning" onclick="logout()">Sair</button></li>
-            </ul>`;
+            <div class="dropdown">
+                <button class="btn btn-sm btn-dark border-secondary dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                    <img src="${user.photoURL}" class="rounded-circle" style="width:24px; height:24px; object-fit: cover;" onerror="this.src='imgs/logo.png'">
+                    <span class="d-none d-md-inline">${user.nome.split(' ')[0]}</span> ${badge}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
+                    <li><a class="dropdown-item" href="favoritos.html">Meus Favoritos</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><button class="dropdown-item text-warning" onclick="logout()">Sair</button></li>
+                </ul>
+            </div>`;
     } else {
         container.innerHTML = `<button onclick="login()" class="btn btn-outline-light btn-sm rounded-pill px-3">Entrar</button>`;
     }
 }
 
-// --- 4. INICIALIZAÇÃO E LÓGICA DE PÁGINAS ---
-document.addEventListener('DOMContentLoaded', async () => {
+// --- 4. INICIALIZAÇÃO ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("App iniciado");
+    
+    // Carrega UI de Auth imediatamente
     atualizarAuthUI();
+    
     const path = window.location.pathname;
 
-    // Proteção de Rotas
+    // Proteção simples de rotas
     if ((path.includes('cadastro.html') || path.includes('editar.html')) && !isAdmin()) {
         window.location.href = 'index.html';
         return;
     }
 
-    // Botão Cadastrar na Home
     const btnCad = document.getElementById('btn-cadastrar-home');
     if(btnCad) btnCad.style.display = isAdmin() ? 'inline-flex' : 'none';
 
-    // Carregamento condicional
+    // Carregamento de Conteúdo
     if (document.getElementById('lista-destaques')) carregarDestaques();
     if (document.getElementById('lista-de-categorias')) carregarCategorias();
     if (document.getElementById('lista-roles-por-categoria')) carregarListaEventos();
@@ -185,12 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Select de Categorias
     const selectCat = document.getElementById('categoria_principal_id');
-    if(selectCat) {
-        const db = await carregarBanco();
-        selectCat.innerHTML = '<option value="">Selecione...</option>' + 
-            db.categorias_principais.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
-        if(path.includes('editar.html')) carregarDadosEdicao();
-    }
+    if(selectCat) preencherCategorias(selectCat, path.includes('editar.html'));
 
     // Formulários
     const formCadastro = document.getElementById('form-cadastro');
@@ -210,14 +226,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- 5. FUNÇÕES ESPECÍFICAS ---
+// --- FUNÇÕES AUXILIARES ---
+
+async function preencherCategorias(selectEl, isEdit) {
+    const db = await carregarBanco();
+    if(db.categorias_principais.length > 0) {
+        selectEl.innerHTML = '<option value="">Selecione...</option>' + 
+            db.categorias_principais.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+    }
+    if(isEdit) carregarDadosEdicao();
+}
 
 async function carregarDestaques() {
     const container = document.getElementById('lista-destaques');
     const db = await carregarBanco();
     const destaques = db.eventos.filter(r => r.destaque).slice(0, 3);
     
-    if(destaques.length) {
+    if(destaques.length > 0) {
         container.innerHTML = destaques.map((r, i) => `
             <div class="carousel-item ${i === 0 ? 'active' : ''}" style="height: 500px;">
                 <div class="w-100 h-100 bg-black"><img src="${r.imagem_principal}" class="d-block w-100 h-100 object-fit-cover opacity-75" onerror="this.src='imgs/logo.png'"></div>
@@ -235,16 +260,21 @@ async function carregarDestaques() {
 async function carregarCategorias() {
     const lista = document.getElementById('lista-de-categorias');
     const db = await carregarBanco();
-    lista.innerHTML = db.categorias_principais.map(c => `
-        <div class="col"><a href="categoria.html?id=${c.id}" class="text-decoration-none">
-            <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
-                <h5 class="m-0 text-white">${c.nome}</h5>
-            </div>
-        </a></div>`).join('');
+    if(db.categorias_principais.length > 0) {
+        lista.innerHTML = db.categorias_principais.map(c => `
+            <div class="col"><a href="categoria.html?id=${c.id}" class="text-decoration-none">
+                <div class="card card-category h-100 p-3 d-flex align-items-center justify-content-center text-center">
+                    <h5 class="m-0 text-white">${c.nome}</h5>
+                </div>
+            </a></div>`).join('');
+    } else {
+        lista.innerHTML = '<p class="text-white ms-3">Categorias indisponíveis.</p>';
+    }
 }
 
 async function carregarListaEventos() {
     const container = document.getElementById('lista-roles-por-categoria');
+    // Limpa spinner se já foi renderizado antes
     container.innerHTML = '<div class="col-12 text-center text-white py-5"><div class="spinner-border"></div></div>';
     
     const db = await carregarBanco();
@@ -313,7 +343,8 @@ async function carregarDetalhesEvento() {
         document.getElementById('loading-msg').style.display = 'none';
         document.getElementById('content-area').style.display = 'block';
         
-        ['titulo','descricao','conteudo','data','horario','local','ingressos','atracoes'].forEach(field => {
+        const fields = ['titulo','descricao','conteudo','data','horario','local','ingressos','atracoes'];
+        fields.forEach(field => {
             const el = document.getElementById(`detalhe-${field}`);
             const val = evt[field === 'atracoes' ? 'atracoes_principais' : field];
             if(el) el.innerText = val || '';
@@ -321,22 +352,23 @@ async function carregarDetalhesEvento() {
         
         document.getElementById('detalhe-imagem').src = evt.imagem_principal || 'imgs/logo.png';
         
-        // Favorito
+        const cat = db.categorias_principais.find(c => c.id == evt.categoria_principal_id);
+        if(cat) document.getElementById('detalhe-categoria').innerText = cat.nome;
+
         const btnFav = document.getElementById('btn-fav-detail');
+        // Remove listeners antigos
         const clone = btnFav.cloneNode(true);
         btnFav.parentNode.replaceChild(clone, btnFav);
         clone.onclick = () => toggleFavorito(evt.id);
         atualizarBotoesFavUI(evt.id);
 
-        // Admin Buttons
         const adminDiv = document.getElementById('admin-buttons-container');
         if(adminDiv) {
             adminDiv.style.display = isAdmin() ? 'flex' : 'none';
             document.getElementById('btn-editar').href = `editar.html?id=${evt.id}`;
-            document.getElementById('btn-excluir').onclick = () => Swal.fire('Aviso', 'Exclusão desabilitada no modo demonstração.', 'info');
+            document.getElementById('btn-excluir').onclick = () => Swal.fire('Aviso', 'A exclusão está desabilitada no modo demonstração.', 'info');
         }
 
-        // Mapa
         if(evt.lat && evt.lng && typeof L !== 'undefined') {
             document.getElementById('map-detail').innerHTML = "";
             const map = L.map('map-detail').setView([evt.lat, evt.lng], 15);

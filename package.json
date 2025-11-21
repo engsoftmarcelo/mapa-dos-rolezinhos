@@ -3,11 +3,8 @@
   "version": "1.0.0",
   "description": "Plataforma web para gestão e descoberta de eventos locais.",
   "scripts": {
-    "dev": "json-server --watch ./db/db.json",
-    "build": "echo 'Build script executado com sucesso'"
+    "build": "echo 'Build executado (Static Site)'"
   },
-  "dependencies": {
-    "json-server": "^0.17.0"
-  },
+  "dependencies": {},
   "license": "ISC"
 }
