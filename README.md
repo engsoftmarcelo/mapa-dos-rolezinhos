@@ -23,9 +23,9 @@ Diferente de uma página estática comum, esta aplicação consome dados dinamic
 ## 📸 Capturas de Ecrã (Screenshots)
 
 <p align="center">
-  <img src="imgs/Hype1.webp" alt="Página Inicial" height="350px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
-  &nbsp;&nbsp; <img src="imgs/CinemaContemporâneo.jpg" alt="Página de Detalhes com Mapa" height="350px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
-   &nbsp;&nbsp; <img src="imgs/logo.png" alt="Vista Mobile" height="350px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
+  <img src="imgs/painel_principal.jpg" alt="Página Inicial" height="400px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
+  &nbsp;&nbsp; <img src="imgs/detalhes_evento.jpg" alt="Página de Detalhes" height="400px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
+   &nbsp;&nbsp; <img src="imgs/responsividade_mobile.jpg" alt="Vista Mobile" height="400px" style="margin: 5px; border: 1px solid #ddd; border-radius: 8px;">
 </p>
 <p align="center">
   <i>Visualização do painel principal, detalhes do evento e responsividade mobile.</i>
@@ -92,8 +92,29 @@ Diferente de uma página estática comum, esta aplicação consome dados dinamic
 ## 📂 Estrutura do Projeto
 
 A organização do código segue uma estrutura MVC simplificada voltada para front-end:
-mapa-dos-rolezinhos/ │ ├── assets/ │ ├── css/ │ │ └── style.css # Estilos globais, variáveis CSS e animações │ └── scripts/ │ ├── app.js # Controlador principal: manipulação do DOM e eventos │ └── firebase.js # Configuração e inicialização do Firebase │ ├── db/ │ └── db.json # "Backend" simulado: contém os dados dos eventos e categorias │ ├── imgs/ # Imagens dos eventos, ícones e assets do sistema │ ├── index.html # Página Inicial (Dashboard, Destaques e Barra de Busca) ├── todos.html # Listagem completa dos eventos (View "Ver Todos") ├── detalhes.html # Visualização única do evento (inclui o mapa Leaflet) ├── favoritos.html # Página com os eventos salvos no LocalStorage ├── categoria.html # Template para listagem filtrada por categoria ├── cadastro.html # (Admin) Formulário para adicionar novo evento ├── editar.html # (Admin) Formulário para alterar evento existente └── 404.html # Página de erro personalizada
----
+
+mapa-dos-rolezinhos/
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css       \# Estilos globais, variáveis CSS e animações
+│   └── scripts/
+│       ├── app.js          \# Controlador principal: manipulação do DOM e eventos
+│       └── firebase.js     \# Configuração e inicialização do Firebase
+│
+├── db/
+│   └── db.json             \# "Backend" simulado: contém os dados dos eventos e categorias
+│
+├── imgs/                   \# Imagens dos eventos, ícones e assets do sistema
+│
+├── index.html              \# Página Inicial (Dashboard, Destaques e Barra de Busca)
+├── todos.html              \# Listagem completa dos eventos (View "Ver Todos")
+├── detalhes.html           \# Visualização única do evento (inclui o mapa Leaflet)
+├── favoritos.html          \# Página com os eventos salvos no LocalStorage
+├── categoria.html          \# Template para listagem filtrada por categoria
+├── cadastro.html           \# (Admin) Formulário para adicionar novo evento
+├── editar.html             \# (Admin) Formulário para alterar evento existente
+└── 404.html                \# Página de erro personalizada
 
 ## 👨‍💻 Desenvolvedor
 
@@ -116,3 +137,4 @@ mapa-dos-rolezinhos/ │ ├── assets/ │ ├── css/ │ │ └── 
 <p align="center">
   Desenvolvido com 💜 em Belo Horizonte, MG.
 </p>
+```
