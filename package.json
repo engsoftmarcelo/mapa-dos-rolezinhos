@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "json-server --watch ./db/db.json"
   },
-  "dependencies": {},
+  "dependencies": {
+    "json-server": "^0.17.0"
+  },
   "license": "ISC"
 }
